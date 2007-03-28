@@ -1,0 +1,68 @@
+<tr bgcolor=ffffff>
+    <td align="right" valign="top" bgcolor="fffff0">
+        <span class="label">This date:</span>
+    </td>
+    <td bgcolor="ffffff" nowrap>
+        <select id="date1FieldsList" name="date1FieldsList">
+            #foreach ($val in ${val-date1FieldsList})
+	                <option value="${val.id}"
+	                #if(${val.id.equals($val-date1Selected.id)})
+	                    SELECTED
+	                #end
+                >${val.name}</option>
+            #end
+        </select>
+		        <br><font size="1">Choose a date field.</font>
+    </td>
+</tr>
+<tr bgcolor=ffffff>
+    <td align="right" valign="top" bgcolor="fffff0">
+        <span class="label">Condition:</span>
+    </td>
+    <td bgcolor="ffffff" nowrap>
+        <select id="conditionList" name="conditionList">
+            #foreach ($val in ${val-conditionList})
+                <option value="${val.id}"
+                #if(${val.equals($val-conditionSelected)})
+	                    SELECTED
+	                #end
+	                >${val.value}</option>
+            #end
+        </select>
+		        <br><font size="1">Choose a condition for the comparison.</font>
+    </td>
+</tr>
+<tr bgcolor=ffffff>
+    <td align="right" valign="top" bgcolor="fffff0">
+        <span class="label">Compare with:</span>
+    </td>
+    <td bgcolor="ffffff" nowrap>
+        <select id="date2FieldsList" name="date2FieldsList">
+            #foreach ($val in ${val-date2FieldsList})
+	                <option value="${val.id}"
+                #if(${val.id.equals($val-date2Selected.id)})
+	                    SELECTED
+	                #end
+	                >${val.name}</option>
+            #end
+        </select>
+		        <br><font size="1">Choose a date field.</font>
+    </td>
+</tr>
+<tr bgcolor=ffffff>
+    <td align="right" valign="top" bgcolor="fffff0">
+        <span class="label">Include time part:</span>
+    </td>
+    <td bgcolor="ffffff" nowrap>
+        <select id="includeTimeList" name="includeTimeList">
+            #foreach ($val in ${val-includeTime})
+	                <option value="${val.id}"
+                #if(${val.equals($val-includeTimeSelected)})
+	                    SELECTED
+	                #end
+	                >${val.value}</option>
+            #end
+        </select>
+		        <br><font size="1">Choose 'Yes' to include time part for the comparison. If the field doesn't have time part, the time will be 00:00:00</font>
+    </td>
+</tr>

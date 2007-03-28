@@ -1,0 +1,76 @@
+<tr bgcolor=ffffff>
+    <td align="right" valign="top" bgcolor="fffff0">
+        <span class="label">Fields required during this action:</span>
+    </td>
+    <td bgcolor="ffffff" nowrap>
+    	    <table width=100%>
+    	        <tr align="center">
+		                <td align="center" width=50% valign="top">
+		                    <span class="label">Available fields:</span><br>
+                    <select id="fieldsList" name="fieldsList" multiple size="10" width=90%>
+	                        #foreach ($val in ${val-fieldsList})
+	                            <option value="${val.id}">${val.name}</option>
+	                        #end
+	                    </select>
+		        
+					                    <br><input id="hidFieldsList" name="hidFieldsList" type="hidden" value="">
+			                </td>
+		    
+		                <td align="center" width=50% valign="top">
+			                    <span class="label">Required fields:</span><br>
+			                    <select id="fieldsListSelected" name="fieldsListSelected" multiple size="10" width=90%>
+		                        #if(${val-fieldsListSelected})
+			                            #foreach ($val in ${val-fieldsListSelected})
+		                                <option value="${val.id}">${val.name}</option>
+			                            #end
+				                        #end
+	                    </select>
+	
+		                </td>
+		    	        </tr>
+		    	        
+			    	        <tr align="center" valign="center">
+		                <td align="center" width=50% valign="top">
+		                    <button type=button onclick="transfer('fieldsList', 'fieldsListSelected'); storeSelectedItems('fieldsListSelected', 'hidFieldsList')">Add &gt;&gt;</button>
+	                </td>
+                <td align="center" width=50% valign="top">
+				    <button type=button onclick="transfer('fieldsListSelected', 'fieldsList'); storeSelectedItems('fieldsListSelected', 'hidFieldsList')">&lt;&lt; Remove</button>
+		                </td>
+			    	        </tr>
+    	    </table>
+    </td>
+</tr>
+
+<script type="text/javascript">
+	function transfer(srcList, destList) {
+        var src = document.getElementById(srcList);
+        var dest = document.getElementById(destList);
+
+		while (src.selectedIndex >= 0) {
+			var selectedOption = src.options[src.selectedIndex];
+			var newOption = document.createElement('option');
+			
+			newOption.text = selectedOption.text;
+			newOption.value = selectedOption.value;
+			
+			try {
+				dest.add(newOption, null); // standards compliant; doesn't work in IE
+			} catch(ex) {
+				dest.add(newOption, 0); // IE only
+			}
+
+			src.remove(src.selectedIndex);		
+		}
+	}
+
+	function storeSelectedItems(srcList, storage) {
+        var src = document.getElementById(srcList);
+        var selected = document.getElementById(storage);
+
+        selected.value = "";
+
+        for (i = 0; i < src.length ; i++) {
+            selected.value += src[i].value + "${val-splitter}";
+        }
+	}
+</script>

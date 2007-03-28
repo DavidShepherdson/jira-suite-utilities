@@ -1,0 +1,11 @@
+#if (${val-groupsListSelected})
+  #if (${val-groupsListSelected.isEmpty()})
+    You have not selected groups. Nobody will be able to execute this transition.
+  #else
+    Only users in any of following groups 
+    #foreach ($singleValue in ${val-groupsListSelected})
+      <b>$!singleValue.getName()</b>#if ($velocityCount != ${val-groupsListSelected.size()}), #end
+    #end
+     can execute this transition.
+  #end
+#end

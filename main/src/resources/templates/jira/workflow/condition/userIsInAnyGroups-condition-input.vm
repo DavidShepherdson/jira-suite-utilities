@@ -1,0 +1,95 @@
+<tr bgcolor=ffffff>
+    <td align="right" valign="top" bgcolor="fffff0">
+        <span class="label">Groups allowed to execute this action:</span>
+    </td>
+    <td bgcolor="ffffff" nowrap>
+    	    <table width=100%>
+    	        <tr align="center">
+		                <td align="center" width=50% valign="top">
+		                    <span class="label">Available groups:</span><br>
+                    <select id="groupsList" name="groupsList" multiple size="10" width=90%>
+	                        #foreach ($val in ${val-groupsList})
+	                            <option value="${val.name}">${val.name}</option>
+	                        #end
+	                    </select>
+		        
+					                    <br><input id="hidGroupsList" name="hidGroupsList" type="hidden" value="">
+			                </td>
+		    
+		                <td align="center" width=50% valign="top">
+			                    <span class="label">Allowed groups:</span><br>
+			                    <select id="groupsListSelected" name="groupsListSelected" multiple size="10" width=90%>
+		                        #if(${val-groupsListSelected})
+			                            #foreach ($val in ${val-groupsListSelected})
+		                                <option value="${val.name}">${val.name}</option>
+			                            #end
+				                        #end
+	                    </select>
+	
+		                </td>
+		    	        </tr>
+		    	        
+    	        <tr align="center" valign="center">
+		                <td align="center" width=50% valign="top">
+		                    <button type=button onclick="transferItemAdd('groupsList', 'groupsListSelected', 'hidGroupsList')">Add &gt;&gt;</button>
+	                </td>
+                <td align="center" width=50% valign="top">
+				                    <button type=button onclick="transferItemRemove('groupsListSelected', 'groupsList', 'hidGroupsList')">&lt;&lt; Remove</button>
+		                </td>
+			    	        </tr>
+    	    </table>
+    </td>
+</tr>
+<tr>
+    <td colspan="2">
+    	    <div style="width: 70%;" class="infoBox centred">
+    	        If you do not select a group, nobody will be able to execute this Transition.
+    	    </div>
+    	</td>
+</tr>
+
+<script type="text/javascript">
+    function transferItemAdd(inListaSrc, inListaDes, inSeleccion){
+        var listaSrc = document.getElementById(inListaSrc);
+        var listaDes = document.getElementById(inListaDes);
+        var seleccion = document.getElementById(inSeleccion);
+
+        for (i=0 ; i < listaSrc.length ; i++){
+            if(listaSrc[i].selected){
+                try {
+                    listaDes.add(listaSrc[i], null); // standards compliant; doesn't work in IE
+                } catch(ex) {
+                    listaDes.add(listaSrc[i]); // IE only
+                }
+                i--;
+            }
+        }
+
+        seleccion.value = "";
+        for (i=0 ; i < listaDes.length ; i++){
+            seleccion.value = seleccion.value + listaDes[i].value + "${val-splitter}"
+        }
+    }
+
+    function transferItemRemove(inListaSrc, inListaDes, inSeleccion){
+        var listaSrc = document.getElementById(inListaSrc);
+        var listaDes = document.getElementById(inListaDes);
+        var seleccion = document.getElementById(inSeleccion);
+
+        for (i=0 ; i < listaSrc.length ; i++){
+            if(listaSrc[i].selected){
+                try {
+                    listaDes.add(listaSrc[i], null); // standards compliant; doesn't work in IE
+                } catch(ex) {
+                    listaDes.add(listaSrc[i]); // IE only
+                }
+                i--;
+            }
+        }
+
+        seleccion.value = "";
+        for (i=0 ; i < listaSrc.length ; i++){
+            seleccion.value = seleccion.value + listaSrc[i].value + "${val-splitter}"
+        }
+    }
+</script>

@@ -1,0 +1,6 @@
+Fields required for this transition: 
+#if (${val-fieldsListSelected})
+    #foreach ($singleValue in ${val-fieldsListSelected})
+      <b>$!singleValue.getName()</b>#if ($velocityCount != ${val-fieldsListSelected.size()}), #end
+    #end
+#end

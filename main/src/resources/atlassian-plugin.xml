@@ -1,0 +1,117 @@
+<atlassian-plugin key="com.atlassian.jira.plugin.jirasuite" 
+		  name="JIRA Suite Utilities">
+    <plugin-info>
+        <description>Many objects to extend JIRA</description>
+        <version>0.5.3</version>
+        <application-version min="3.5" max="3.7"/>
+        <vendor name="Quadratica SRL" url="http://www.quadratica.com.ar"/>
+    </plugin-info>   
+    
+
+	<!-- Custom Fields -->
+
+	<!-- Searches -->
+
+	<!-- Conditions -->
+	<workflow-condition key="userIsInAnyGroups-condition" name="User Is In Any Groups" 
+        class="com.atlassian.jira.plugin.workflow.WorkflowUserIsInAnyGroupsConditionPluginFactory">
+        <description>It allows only users in any given groups to execute the transition.</description>
+
+		<condition-class>
+			com.atlassian.jira.plugin.workflow.condition.UserIsInAnyGroupsCondition
+		</condition-class>
+
+        <resource type="velocity" name="view" location="templates/jira/workflow/condition/userIsInAnyGroups-condition-view.vm"/>
+        <resource type="velocity" name="input-parameters" location="templates/jira/workflow/condition/userIsInAnyGroups-condition-input.vm"/>
+        <resource type="velocity" name="edit-parameters" location="templates/jira/workflow/condition/userIsInAnyGroups-condition-edit.vm"/>
+	</workflow-condition>
+    
+	<workflow-condition key="valueField-condition" name="Value Field" 
+        class="com.atlassian.jira.plugin.workflow.WorkflowValueFieldConditionPluginFactory">
+        <description>It allows to only execute the transition if the given value of the field is equal to a specified value.</description>
+
+		<condition-class>
+			com.atlassian.jira.plugin.workflow.condition.ValueFieldCondition
+		</condition-class>
+
+        <resource type="velocity" name="view" location="templates/jira/workflow/condition/fieldvalue-condition-view.vm"/>
+        <resource type="velocity" name="input-parameters" location="templates/jira/workflow/condition/fieldvalue-condition-input.vm"/>
+        <resource type="velocity" name="edit-parameters" location="templates/jira/workflow/condition/fieldvalue-condition-edit.vm"/>
+	</workflow-condition>
+    
+	<!-- Validators -->
+	<workflow-validator key="dateCompare-validator" name="Date Compare" 
+		class="com.atlassian.jira.plugin.workflow.WorkflowDateCompareValidatorPluginFactory">
+		<description>Compare two date fields during a workflow transition.</description>
+		
+		<validator-class>
+			com.atlassian.jira.plugin.workflow.validator.DateCompareValidator
+		</validator-class>
+		
+		<resource type="velocity" name="view" location="templates/jira/workflow/validator/datecompare-validator-view.vm"/>
+		<resource type="velocity" name="input-parameters" location="templates/jira/workflow/validator/datecompare-validator-input.vm"/>
+		<resource type="velocity" name="edit-parameters" location="templates/jira/workflow/validator/datecompare-validator-edit.vm"/>
+	</workflow-validator>  
+
+	<workflow-validator key="fieldsRequired-validator" name="Fields Required" 
+		class="com.atlassian.jira.plugin.workflow.WorkflowFieldsRequiredValidatorPluginFactory">
+		<description>Fields required during a workflow transition.</description>
+		
+		<validator-class>
+			com.atlassian.jira.plugin.workflow.validator.FieldsRequiredValidator
+		</validator-class>
+		
+		<resource type="velocity" name="view" location="templates/jira/workflow/validator/fieldsrequired-validator-view.vm"/>
+		<resource type="velocity" name="input-parameters" location="templates/jira/workflow/validator/fieldsrequired-validator-input.vm"/>
+		<resource type="velocity" name="edit-parameters" location="templates/jira/workflow/validator/fieldsrequired-validator-edit.vm"/>
+	</workflow-validator>  
+
+	<workflow-validator key="windowsDate-validator" name="Window Dates" 
+		class="com.atlassian.jira.plugin.workflow.WorkflowWindowsDateValidatorPluginFactory">
+		<description>It compares two fields dates, adding a window of days to one of them.</description>
+		
+		<validator-class>
+			com.atlassian.jira.plugin.workflow.validator.WindowsDateValidator
+		</validator-class>
+		
+		<resource type="velocity" name="view" location="templates/jira/workflow/validator/windowsdate-validator-view.vm"/>
+		<resource type="velocity" name="input-parameters" location="templates/jira/workflow/validator/windowsdate-validator-input.vm"/>
+		<resource type="velocity" name="edit-parameters" location="templates/jira/workflow/validator/windowsdate-validator-edit.vm"/>
+	</workflow-validator>  
+
+	<!-- Functions -->
+	<!-- <workflow-function key="copyValueFromOtherField-function" name="Copy Value From Other Field" 
+		class="com.atlassian.jira.plugin.workflow.WorkflowCopyValueFromOtherFieldPostFunctionPluginFactory">
+        <description>It copies the value of one field to another.</description>
+
+        <function-class>
+        	com.atlassian.jira.plugin.workflow.function.CopyValueFromOtherFieldPostFunction
+        </function-class>
+
+        <orderable>true</orderable>
+        <unique>false</unique>
+        <deletable>true</deletable>        
+        <default>false</default>
+
+		<resource type="velocity" name="view" location="templates/jira/workflow/function/copyvaluefromfield-function-view.vm"/>
+		<resource type="velocity" name="input-parameters" location="templates/jira/workflow/function/copyvaluefromfield-function-input.vm"/>
+		<resource type="velocity" name="edit-parameters" location="templates/jira/workflow/function/copyvaluefromfield-function-edit.vm"/>
+    </workflow-function> -->
+    
+	<!-- Reports -->
+
+	<!-- Portlets -->
+
+	<!-- Issue Panels -->
+	
+    <issue-tabpanel key="transitions-summary-tabpanel" name="Transitions Summary Tab Panel" 
+    	class="com.atlassian.jira.plugin.transitionssummary.issuetabpanel.TransitionsSummaryTabPanel">
+
+        <description>Show how much time was spent in executing each transition.</description>
+        
+        <label>Transitions Summary</label>
+        
+        <resource type="velocity" name="view" location="templates/jira/issuetabpanel/transitionssummary/transitions-summary-view.vm"/>
+    </issue-tabpanel>
+    
+</atlassian-plugin>

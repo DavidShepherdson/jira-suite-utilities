@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project>
+    <extend>C:/Java/jira-development-kit-3.7.1/common/project.xml</extend>
+    <pomVersion>3</pomVersion>
+    <id>jira_suite_utilities</id>
+    <artifactId>jira_suite_utilities</artifactId>
+    <currentVersion>0.5.3</currentVersion>
+    <name>JIRA Suite Utilities</name>
+    <organization>
+        <name>Quadratica SRL</name>
+        <url>www.quadratica.com.ar</url>
+    </organization>
+    <inceptionYear>2007</inceptionYear>
+
+    <developers>
+      <developer>
+        <name>Gustavo Martin</name>
+        <id>gmartin</id>
+        <email>gmartin@quadratica.com.ar</email>
+        <organization>Quadratica SRL</organization>
+        <roles>
+          <role>Developer</role>
+        </roles>
+      </developer>
+      <developer>
+	<name>Bettina Zucker</name>
+	<id>bettina</id>
+	<email>bettina.zucker@eu.panasonic.com</email>
+	<organization>PASE GmbH</organization>
+	<roles>
+	  <role>Developer</role>
+	</roles>
+      </developer>
+      <developer>
+	<name>Alexey Abashev</name>
+	<id>abashev</id>
+	<email>no_spam@no_spam.com</email>
+	<organization>EPAM Systems</organization>
+	<roles>
+	  <role>Developer</role>
+	</roles>
+      </developer>
+    </developers>
+    
+    <package>com.atlassian.jira.plugin</package>
+
+    <description></description>
+    <shortDescription>A collection of utilities to extends JIRA functionality.</shortDescription>
+
+    <build>
+        <sourceDirectory>main/src/</sourceDirectory>
+        <resources>
+            <resource>
+                <directory>main/src/resources</directory>
+                <includes>
+                    <include>atlassian-plugin.xml</include>
+                </includes>
+            </resource>
+            <resource>
+                <targetPath>templates</targetPath>
+                <directory>main/src/resources/templates</directory>
+                <includes>
+                    <include>**/*.vm</include>
+                </includes>
+            </resource>
+        </resources>
+        <unitTestSourceDirectory>test/java</unitTestSourceDirectory>
+        <unitTest>
+            <includes>
+                <include>**/*Test.java</include>
+                <include>**/Test*.java</include>
+            </includes>
+            <excludes>
+                <exclude>**/Abstract*.java</exclude>
+            </excludes>
+            <resources>
+                <resource>
+                    <directory>test/etc</directory>
+                </resource>
+            </resources>
+        </unitTest>
+    </build>
+</project>

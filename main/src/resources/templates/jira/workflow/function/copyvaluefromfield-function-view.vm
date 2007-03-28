@@ -1,0 +1,9 @@
+The Field 
+#if(${val-destinationFieldSelected})
+    <b>${val-destinationFieldSelected.name}</b>
+#end
+ will take the value from 
+#if(${val-sourceFieldSelected})
+    <b>${val-sourceFieldSelected.name}</b>
+#end
+.

@@ -1,0 +1,86 @@
+#include()
+<table width="100%">
+    <tr>
+        <td bgcolor="#f0f0f0" width=34%><b>Transition</b></td>
+        <td bgcolor="#f0f0f0" width=15%><b>Time Spent</b></td>
+        <td bgcolor="#f0f0f0" width=15% align=center><b>Execution Times</b></td>
+        <td bgcolor="#f0f0f0" width=18%><b>Last Executer</b></td>
+        <td bgcolor="#f0f0f0" width=18%><b>Last Execution Date</b></td>
+    </tr>
+    #foreach ($tran in ${action.getTransitions()})
+		    		    <tr>
+		            <td bgcolor="#ffffff" width=34% valign=top>
+		                <table width="100%">
+		                    <tr>
+		                        <td width=7% valign=center>
+		                            #set ($status = ${tran.getFromStatus()})
+				                            #set ($iconurl = $status.getIconUrl())
+				                
+				                            #if ($iconurl.startsWith('http://') || $iconurl.startsWith('https://'))
+				                                <img src="$iconurl" height="16" width="16" alt="$status.getNameTranslation()" title="$status.getNameTranslation() - $!status.getDescTranslation()" />
+				                            #else
+				                                <img src="${req.getContextPath()}${iconurl}" height="16" width="16" alt="$status.getNameTranslation()" title="$status.getNameTranslation() - $!status.getDescTranslation()" />
+				                            #end
+                       </td>
+		                       <td width=40% valign=top>
+		                            ${tran.getFromStatus().nameTranslation}
+				                       </td>
+		                       <td align="center" nowrap="nowrap" width=6% valign=top>
+		                           <img src="${req.getContextPath()}/images/icons/arrow_right_small.gif" align="absmiddle" border="0" height="16" width="16">
+		                       </td>
+                       <td width=7% valign=center>
+                            #set ($status = ${tran.getToStatus()})
+				                            #set ($iconurl = $status.getIconUrl())
+				                
+				                            #if ($iconurl.startsWith('http://') || $iconurl.startsWith('https://'))
+				                                <img src="$iconurl" height="16" width="16" alt="$status.getNameTranslation()" title="$status.getNameTranslation() - $!status.getDescTranslation()" />
+				                            #else
+				                                <img src="${req.getContextPath()}${iconurl}" height="16" width="16" alt="$status.getNameTranslation()" title="$status.getNameTranslation() - $!status.getDescTranslation()" />
+				                            #end
+                       </td>
+						                       <td width=40% valign=top>
+		                            ${tran.getToStatus().nameTranslation}
+				                       </td>
+		                    </tr>
+				                </table>
+            </td>
+				            <td bgcolor="#ffffff" width=15% valign=top align=right>
+                <table width="100%">
+		                    <tr>
+		                        <td valign=top>
+		                				            ${tran.getDurationAsString()}
+				                        </td>
+				                    </tr>
+				                </table>
+		            </td>
+				            <td bgcolor="#ffffff" width=15% valign=top align=center>
+				                <table width="100%">
+		                    <tr>
+		                        <td valign=top align="center">
+		                				            ${tran.getTimesToTransition()}
+				                        </td>
+				                    </tr>
+				                </table>
+		            </td>
+						            <td bgcolor="#ffffff" width=18% valign=top>
+                <table width="100%">
+		                    <tr>
+		                        <td valign=top>
+		                				            #authorlink (${tran.getLastUpdater()})
+				                        </td>
+				                    </tr>
+				                </table>
+		            </td>
+						            </td>
+						            <td bgcolor="#ffffff" width=18% valign=top align=right>
+                <table width="100%">
+		                    <tr>
+		                        <td valign=top align=right>
+		                				            ${tran.getLastupdate()}
+				                        </td>
+				                    </tr>
+				                </table>
+            </td>
+		        </tr>
+		    #end
+				</table>

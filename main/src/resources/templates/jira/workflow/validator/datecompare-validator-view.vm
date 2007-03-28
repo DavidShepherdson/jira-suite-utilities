@@ -1,0 +1,17 @@
+It must fulfill that 
+#if (${val-date1Selected})
+	<b>${val-date1Selected.name}</b>
+#end
+ is 
+#if (${val-conditionSelected})
+	<b>${val-conditionSelected.toString()}</b>
+#end
+ value of 
+#if (${val-date2Selected})
+	<b>${val-date2Selected.name}</b>
+#end
+#if (${val-includeTimeSelected.value}=="Yes")
+	. Including time part.
+#else
+	. Only date part.
+#end

@@ -1,0 +1,19 @@
+The field 
+#if (${val-fieldSelected})
+	<b>${val-fieldSelected.name}</b>
+#end 
+ will have to be 
+#if (${val-conditionSelected})
+	<b>${val-conditionSelected.toString()}</b>
+#end
+ value 
+#if (!${val-fieldValue.equals("")})
+	<b>${val-fieldValue.toString()}</b>
+	#else
+	<b>NULL</b>
+	#end
+. Compared like 
+#if (${val-comparisonTypeSelected})
+	<b>${val-comparisonTypeSelected.value}</b>
+#end
+.

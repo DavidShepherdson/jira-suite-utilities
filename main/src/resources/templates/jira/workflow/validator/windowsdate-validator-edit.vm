@@ -1,0 +1,54 @@
+<tr bgcolor=ffffff>
+    <td align="right" valign="top" bgcolor="fffff0">
+        <span class="label">Date to validate:</span>
+    </td>
+    <td bgcolor="ffffff" nowrap>
+        <select id="date1FieldsList" name="date1FieldsList">
+            #foreach ($val in ${val-date1FieldsList})
+	                <option value="${val.id}"
+	                #if(${val.id.equals($val-date1Selected.id)})
+	                    SELECTED
+	                #end
+                >${val.name}</option>
+            #end
+        </select>
+		        <br><font size="1">Choose a date field.</font>
+    </td>
+</tr>
+<tr bgcolor=ffffff>
+    <td align="right" valign="top" bgcolor="fffff0">
+        <span class="label">Window days:</span>
+    </td>
+    <td bgcolor="ffffff" nowrap>
+        #if (${val-windowsDays})
+	            <input type="text" id="windowsDays" name="windowsDays" value="$val-windowsDays"/>
+        #else
+		            <input type="text" id="windowsDays" name="windowsDays" value=""/>
+        #end
+        <br><font size="1">Amount of allowed days (later to the date <b>With respect to</b>).</font>
+    </td>
+</tr>
+<tr bgcolor=ffffff>
+    <td align="right" valign="top" bgcolor="fffff0">
+        <span class="label">With respect to:</span>
+    </td>
+    <td bgcolor="ffffff" nowrap>
+        <select id="date2FieldsList" name="date2FieldsList">
+            #foreach ($val in ${val-date2FieldsList})
+	                <option value="${val.id}"
+                #if(${val.id.equals($val-date2Selected.id)})
+	                    SELECTED
+	                #end
+	                >${val.name}</option>
+            #end
+        </select>
+		        <br><font size="1">Choose a date field.</font>
+    </td>
+</tr>
+<tr>
+    <td colspan="2">
+    	    <div style="width: 70%;" class="infoBox centred">
+    	        If you do not specified Windows day, it will be considered like 0.
+    	    </div>
+    	</td>
+</tr>
