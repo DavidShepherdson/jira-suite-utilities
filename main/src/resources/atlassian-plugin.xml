@@ -80,7 +80,7 @@
 	</workflow-validator>  
 
 	<!-- Functions -->
-	<!-- <workflow-function key="copyValueFromOtherField-function" name="Copy Value From Other Field" 
+	<workflow-function key="copyValueFromOtherField-function" name="Copy Value From Other Field" 
 		class="com.atlassian.jira.plugin.workflow.WorkflowCopyValueFromOtherFieldPostFunctionPluginFactory">
         <description>It copies the value of one field to another.</description>
 
@@ -96,7 +96,7 @@
 		<resource type="velocity" name="view" location="templates/jira/workflow/function/copyvaluefromfield-function-view.vm"/>
 		<resource type="velocity" name="input-parameters" location="templates/jira/workflow/function/copyvaluefromfield-function-input.vm"/>
 		<resource type="velocity" name="edit-parameters" location="templates/jira/workflow/function/copyvaluefromfield-function-edit.vm"/>
-    </workflow-function> -->
+    </workflow-function>
     
 	<!-- Reports -->
 
