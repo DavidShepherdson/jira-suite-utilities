@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project>
-    <extend>C:/Java/jira-development-kit-3.7.1/common/project.xml</extend>
+    <extend>${maven.repo.local}/../common/project.xml</extend>
     <pomVersion>3</pomVersion>
     <id>jira_suite_utilities</id>
     <artifactId>jira_suite_utilities</artifactId>
-    <currentVersion>0.5.3</currentVersion>
+    <currentVersion>0.5.4</currentVersion>
     <name>JIRA Suite Utilities</name>
     <organization>
         <name>Quadratica SRL</name>
@@ -23,22 +23,22 @@
         </roles>
       </developer>
       <developer>
-	<name>Bettina Zucker</name>
-	<id>bettina</id>
-	<email>bettina.zucker@eu.panasonic.com</email>
-	<organization>PASE GmbH</organization>
-	<roles>
-	  <role>Developer</role>
-	</roles>
+		<name>Bettina Zucker</name>
+		<id>bettina</id>
+		<email>bettina.zucker@eu.panasonic.com</email>
+		<organization>PASE GmbH</organization>
+		<roles>
+	  	  <role>Developer</role>
+		</roles>
       </developer>
       <developer>
-	<name>Alexey Abashev</name>
-	<id>abashev</id>
-	<email>no_spam@no_spam.com</email>
-	<organization>EPAM Systems</organization>
-	<roles>
-	  <role>Developer</role>
-	</roles>
+		<name>Alexey Abashev</name>
+		  <id>abashev</id>
+		  <email>no_spam@no_spam.com</email>
+		  <organization>EPAM Systems</organization>
+		  <roles>
+	  		<role>Developer</role>
+		  </roles>
       </developer>
     </developers>
     
