@@ -2,8 +2,8 @@
 <project>
     <extend>${maven.repo.local}/../common/project.xml</extend>
     <pomVersion>3</pomVersion>
-    <id>jira_suite_utilities</id>
-    <artifactId>jira_suite_utilities</artifactId>
+    <id>jira-suite-utilities</id>
+    <artifactId>jira-suite-utilities</artifactId>
     <currentVersion>0.5.4</currentVersion>
     <name>JIRA Suite Utilities</name>
     <organization>
