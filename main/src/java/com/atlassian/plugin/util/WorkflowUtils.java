@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
 import java.util.StringTokenizer;
 
 import org.ofbiz.core.entity.GenericEntityException;
@@ -19,10 +18,9 @@ import com.atlassian.jira.issue.fields.CustomField;
 import com.atlassian.jira.issue.fields.Field;
 import com.atlassian.jira.issue.fields.FieldManager;
 import com.atlassian.jira.issue.fields.screen.FieldScreen;
-import com.atlassian.jira.issue.fields.screen.FieldScreenManager;
 import com.atlassian.jira.issue.worklog.WorkRatio;
+import com.atlassian.jira.workflow.WorkflowActionsBean;
 import com.opensymphony.user.Group;
-import com.opensymphony.util.TextUtils;
 import com.opensymphony.workflow.loader.ActionDescriptor;
 
 /**
@@ -48,6 +46,8 @@ public class WorkflowUtils {
 	public static final String COMPARISON_TYPE_STRING = "String";
 	public static final String COMPARISON_TYPE_NUMBER = "Number";
 	public static final String COMPARISON_TYPE_DATE = "Date";
+	
+	private static final WorkflowActionsBean workflowActionsBean = new WorkflowActionsBean();
 	
 	/**
 	 * @param text
@@ -488,18 +488,6 @@ public class WorkflowUtils {
 	 * 
 	 */
 	public static FieldScreen getFieldScreen(ActionDescriptor actionDescriptor){
-		FieldScreen fieldScreen = null;
-		
-		if (TextUtils.stringSet(actionDescriptor.getView())){
-			Map metaAttributes = actionDescriptor.getMetaAttributes();
-			String str = metaAttributes.get("jira.fieldscreen.id").toString();
-			Long screenId = new Long(str);
-			
-			FieldScreenManager fieldScreenManager = ComponentManager.getInstance().getFieldScreenManager();
-			fieldScreen = fieldScreenManager.getFieldScreen(screenId);
-		}
-		
-		return fieldScreen;
+		return workflowActionsBean.getFieldScreenForView(actionDescriptor);
 	}
-	
 }

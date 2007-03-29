@@ -24,16 +24,13 @@ import com.opensymphony.workflow.loader.WorkflowDescriptor;
  *  
  */
 public class FieldsRequiredValidator implements Validator {
-	
-	Issue issue = null;
-	InvalidInputException invIn = null;
-	WorkflowException invWork = null;
-	boolean isNew = false;
-	boolean hasViewScreen = false;
-	FieldScreen fieldScreen = null;
+	private Issue issue = null;
+	private InvalidInputException invIn = null;
+	private WorkflowException invWork = null;
+	private boolean isNew = false;
+	private boolean hasViewScreen = false;
 	
 	public FieldsRequiredValidator() {
-		
 	}
 	
 	/**
@@ -72,24 +69,24 @@ public class FieldsRequiredValidator implements Validator {
 		Integer actionId = (Integer)transientVars.get("actionId");
 		ActionDescriptor actionDescriptor = workflowDescriptor.getAction(actionId.intValue());
 		
-		fieldScreen = WorkflowUtils.getFieldScreen(actionDescriptor);
-		if (fieldScreen!=null){
-			hasViewScreen = true;
-		}
+		FieldScreen fieldScreen = WorkflowUtils.getFieldScreen(actionDescriptor);
+		
+		this.hasViewScreen = (fieldScreen != null); 
 		
 		// It obtains the fields that are required for the transition.
 		String strFieldsSelected = (String)args.get("hidFieldsList");
 		Collection fieldsSelected = WorkflowUtils.getFields(strFieldsSelected, WorkflowUtils.SPLITTER);
 		
 		Iterator it = fieldsSelected.iterator();
+		
 		while(it.hasNext()){
 			Field field = (Field) it.next();
 			
 			Object fieldValue = WorkflowUtils.getFieldValueFromIssue(issue, field);
 			
-			if(fieldValue==null && !CommonPluginUtils.isFieldHidden(issue, field)){
+			if (fieldValue==null && !CommonPluginUtils.isFieldHidden(issue, field)) {
 				// Sets Exception message.
-				if(hasViewScreen){
+				if (hasViewScreen) {
 					if(CommonPluginUtils.isFieldOnScreen(issue, field, fieldScreen)){
 						setError(field, field.getName() + " is required.");
 					}else{
