@@ -221,8 +221,9 @@ public class CommonPluginUtils {
 	/**
 	 * @return a list of fields that could be chosen to copy their value.
 	 */
-	public static List getCopyFromFields(){
-		List allFields = getAllFields();
+	public static List<Field> getCopyFromFields(){
+		List<Field> allFields = getAllFields();
+		
 		allFields.removeAll(getNonCopyFromFields());
 		
 		return allFields;
@@ -231,8 +232,8 @@ public class CommonPluginUtils {
 	/**
 	 * @return a list of fields that will be eliminated from getCopyFromFields().
 	 */
-	private static List getNonCopyFromFields(){
-		List fields = new ArrayList();
+	private static List<Field> getNonCopyFromFields(){
+		List<Field> fields = new ArrayList<Field>();
 		
 		Field attachment = ManagerFactory.getFieldManager().getField("attachment");
 		Field comment = ManagerFactory.getFieldManager().getField("comment");
@@ -329,8 +330,9 @@ public class CommonPluginUtils {
 	/**
 	 * @return a list of fields that could be chosen like required.
 	 */
-	public static List getRequirableFields(){
-		List allFields = getAllFields();
+	public static List<Field> getRequirableFields(){
+		List<Field> allFields = getAllFields();
+		
 		allFields.removeAll(getNonRequirableFields());
 		
 		return allFields;
@@ -339,8 +341,8 @@ public class CommonPluginUtils {
 	/**
 	 * @return a list of fields that will be eliminated from getRequirableFields().
 	 */
-	private static List getNonRequirableFields(){
-		List fields = new ArrayList();
+	private static List<Field> getNonRequirableFields(){
+		List<Field> fields = new ArrayList<Field>();
 		
 		Field attachment = ManagerFactory.getFieldManager().getField("attachment");
 		Field comment = ManagerFactory.getFieldManager().getField("comment");
@@ -384,8 +386,9 @@ public class CommonPluginUtils {
 	/**
 	 * @return a list of fields that could be chosen in Value-Field Condition.
 	 */
-	public static List getValueFieldConditionFields(){
-		List allFields = getAllFields();
+	public static List<Field> getValueFieldConditionFields(){
+		List<Field> allFields = getAllFields();
+		
 		allFields.removeAll(getNonValueFieldConditionFields());
 		// Date fields are removed, because date comparison is not implemented yet.
 		allFields.removeAll(getAllDateFields());
@@ -396,8 +399,8 @@ public class CommonPluginUtils {
 	/**
 	 * @return a list of fields that will be eliminated from getValueFieldConditionFields().
 	 */
-	private static List getNonValueFieldConditionFields(){
-		List fields = new ArrayList();
+	private static List<Field> getNonValueFieldConditionFields(){
+		List<Field> fields = new ArrayList<Field>();
 		
 		Field attachment = ManagerFactory.getFieldManager().getField("attachment");
 		Field versions = ManagerFactory.getFieldManager().getField("versions");
@@ -436,7 +439,7 @@ public class CommonPluginUtils {
 	 * Clear the time part from a given Calendar.
 	 * 
 	 */
-	public static void clearCalendarTimePart (Calendar cal){
+	public static void clearCalendarTimePart(Calendar cal) {
 		cal.clear(Calendar.HOUR_OF_DAY);
 		cal.clear(Calendar.HOUR);
 		cal.clear(Calendar.MINUTE);
