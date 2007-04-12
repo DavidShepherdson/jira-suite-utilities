@@ -1,5 +1,7 @@
 package com.atlassian.jira.plugin.workflow;
 
+import static com.atlassian.plugin.util.WorkflowFactoryUtils.getFieldByName;
+
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -7,29 +9,23 @@ import java.util.Map;
 
 import com.atlassian.jira.issue.fields.Field;
 import com.atlassian.plugin.util.CommonPluginUtils;
-import com.atlassian.plugin.util.WorkflowUtils;
 import com.opensymphony.workflow.loader.AbstractDescriptor;
-import com.opensymphony.workflow.loader.FunctionDescriptor;
 
 /**
- * @author Gustavo Martin.
- * 
  * This class defines the parameters available for Copy Value From Other Field Post Function.
- * Cooming soon...
  * 
+ * @author Gustavo Martin.
  */
 public class WorkflowCopyValueFromOtherFieldPostFunctionPluginFactory extends AbstractWorkflowPluginFactory implements WorkflowPluginFunctionFactory {
-	
 	/* (non-Javadoc)
 	 * @see com.atlassian.jira.plugin.workflow.AbstractWorkflowPluginFactory#getVelocityParamsForInput(java.util.Map)
 	 */
 	protected void getVelocityParamsForInput(Map velocityParams) {
-		List sourceFields = CommonPluginUtils.getCopyFromFields();
-		List destinationFields = CommonPluginUtils.getCopyToFields();
+		List<Field> sourceFields = CommonPluginUtils.getCopyFromFields();
+		List<Field> destinationFields = CommonPluginUtils.getCopyToFields();
 		
 		velocityParams.put("val-sourceFieldsList", Collections.unmodifiableList(sourceFields));
 		velocityParams.put("val-destinationFieldsList", Collections.unmodifiableList(destinationFields));
-		
 	}
 	
 	/* (non-Javadoc)
@@ -38,43 +34,29 @@ public class WorkflowCopyValueFromOtherFieldPostFunctionPluginFactory extends Ab
 	protected void getVelocityParamsForEdit(Map velocityParams, AbstractDescriptor descriptor) {
 		getVelocityParamsForInput(velocityParams);
 		
-		FunctionDescriptor functionDescriptor = (FunctionDescriptor) descriptor;
-		Map args = functionDescriptor.getArgs();
-		
-		String sourceFieldKey = (String) args.get("sourceField");
-		String destinationFieldKey = (String) args.get("destinationField");
-		
-		Field sourceFieldId = (Field) WorkflowUtils.getFieldFromKey(sourceFieldKey);
-		Field destinationField = (Field) WorkflowUtils.getFieldFromKey(destinationFieldKey);
+		Field sourceFieldId = getFieldByName(descriptor, "sourceField");
+		Field destinationField = getFieldByName(descriptor, "destinationField");
 		
 		velocityParams.put("val-sourceFieldSelected", sourceFieldId);
 		velocityParams.put("val-destinationFieldSelected", destinationField);
-		
 	}
 	
 	/* (non-Javadoc)
 	 * @see com.atlassian.jira.plugin.workflow.AbstractWorkflowPluginFactory#getVelocityParamsForView(java.util.Map, com.opensymphony.workflow.loader.AbstractDescriptor)
 	 */
 	protected void getVelocityParamsForView(Map velocityParams, AbstractDescriptor descriptor) {
-		FunctionDescriptor functionDescriptor = (FunctionDescriptor) descriptor;
-		Map args = functionDescriptor.getArgs();
-		
-		String sourceFieldKey = (String) args.get("sourceField");
-		String destinationFieldKey = (String) args.get("destinationField");
-		
-		Field sourceFieldId = (Field) WorkflowUtils.getFieldFromKey(sourceFieldKey);
-		Field destinationField = (Field) WorkflowUtils.getFieldFromKey(destinationFieldKey);
+		Field sourceFieldId = getFieldByName(descriptor, "sourceField");
+		Field destinationField = getFieldByName(descriptor, "destinationField");
 		
 		velocityParams.put("val-sourceFieldSelected", sourceFieldId);
 		velocityParams.put("val-destinationFieldSelected", destinationField);
-		
 	}
 	
 	/* (non-Javadoc)
 	 * @see com.atlassian.jira.plugin.workflow.WorkflowPluginFactory#getDescriptorParams(java.util.Map)
 	 */
-	public Map getDescriptorParams(Map conditionParams) {
-		Map params = new HashMap();
+	public Map<String, String> getDescriptorParams(Map conditionParams) {
+		Map<String, String> params = new HashMap<String, String>();
 		
 		try{
 			String sourceField = extractSingleParam(conditionParams, "sourceFieldsList");
@@ -82,12 +64,10 @@ public class WorkflowCopyValueFromOtherFieldPostFunctionPluginFactory extends Ab
 			
 			params.put("sourceField", sourceField);
 			params.put("destinationField", destinationField);
-			
-		}catch(IllegalArgumentException iae){
+		} catch (IllegalArgumentException iae) {
 			// Aggregate so that Transitions can be added.
 		}
 		
 		return params;
 	}
-	
 }
