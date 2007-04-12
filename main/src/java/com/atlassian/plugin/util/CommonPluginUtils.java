@@ -46,16 +46,15 @@ public class CommonPluginUtils {
 	/**
 	 * @return a complete list of fields, including custom fields.
 	 */
-	public static List getAllFields() {
-		List allFields = new ArrayList();
-		Set allFieldsSet = new TreeSet();
+	public static List<Field> getAllFields() {
+		List<Field> allFields = new ArrayList<Field>();
+		Set<Field> allFieldsSet = new TreeSet<Field>();
 		
 		allFieldsSet.addAll(getOrderableFields());
 		allFieldsSet.addAll(getAllAvailableNavigableFields());
 		
-		Iterator it = allFieldsSet.iterator();
-		while(it.hasNext()){
-			allFields.add(it.next());
+		for (Field f : allFieldsSet) {
+			allFields.add(f);
 		}
 		
 		return sortFields(allFields);
@@ -64,12 +63,11 @@ public class CommonPluginUtils {
 	/**
 	 * @return a list of fields, including custom fields, which could be modified. 
 	 */
-	public static List getAllEditableFields(){
-		List allFields = new ArrayList();
+	public static List<Field> getAllEditableFields(){
+		List<Field> allFields = new ArrayList<Field>();
 		
-		Iterator it = getAllAvailableNavigableFields().iterator();
-		while(it.hasNext()){
-			allFields.add(it.next());
+		for (Field f : getAllAvailableNavigableFields()) {
+			allFields.add(f);
 		}
 		
 		return sortFields(allFields);
@@ -79,7 +77,7 @@ public class CommonPluginUtils {
 	 * @param allFields list of fields to be sorted.
 	 * @return a list with fields sorted by name.
 	 */
-	public static List sortFields(List allFields) {
+	public static List<Field> sortFields(List<Field> allFields) {
 		ApplicationProperties ap = new ApplicationPropertiesImpl();
 		I18nBean i18n = new I18nBean(ap.getDefaultLocale().getDisplayName());
 		NameComparatorEx nameComparator = new NameComparatorEx(i18n); 
@@ -92,21 +90,26 @@ public class CommonPluginUtils {
 	/**
 	 * @return all orderable fields
 	 */
-	private static Set getOrderableFields() {
-		Set orderableFields = ManagerFactory.getFieldManager().getOrderableFields();
+	@SuppressWarnings("unchecked")
+	private static Set<Field> getOrderableFields() {
+		Set<Field> orderableFields = ManagerFactory.getFieldManager().getOrderableFields();
+		
 		return orderableFields;
 	}
 	
 	/**
 	 * @return all navigable fields, include custom fields.
 	 */
-	private static Set getAllAvailableNavigableFields() {
-		Set navigableFields = Collections.EMPTY_SET;
+	@SuppressWarnings("unchecked")
+	private static Set<Field> getAllAvailableNavigableFields() {
+		Set<Field> navigableFields = Collections.EMPTY_SET;
+		
 		try {
 			navigableFields = ManagerFactory.getFieldManager().getAllAvailableNavigableFields();
 		} catch (FieldException e) {
 			e.printStackTrace();
 		}
+		
 		return navigableFields;
 	}
 	
@@ -259,8 +262,8 @@ public class CommonPluginUtils {
 	/**
 	 * @return a list of fields that could be chosen to copy their value.
 	 */
-	public static List getCopyToFields(){
-		List allFields = getAllEditableFields();
+	public static List<Field> getCopyToFields(){
+		List<Field> allFields = getAllEditableFields();
 		allFields.removeAll(getNonCopyToFields());
 		
 		return allFields;
@@ -269,8 +272,8 @@ public class CommonPluginUtils {
 	/**
 	 * @return a list of fields that will be eliminated from getCopyFromFields().
 	 */
-	private static List getNonCopyToFields(){
-		List fields = new ArrayList();
+	private static List<Field> getNonCopyToFields(){
+		List<Field> fields = new ArrayList<Field>();
 		
 		Field attachment = ManagerFactory.getFieldManager().getField("attachment");
 		Field comment = ManagerFactory.getFieldManager().getField("comment");
