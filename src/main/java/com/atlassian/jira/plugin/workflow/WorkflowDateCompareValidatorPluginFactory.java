@@ -9,8 +9,8 @@ import com.atlassian.jira.plugin.helpers.ConditionManager;
 import com.atlassian.jira.plugin.helpers.ConditionType;
 import com.atlassian.jira.plugin.helpers.YesNoManager;
 import com.atlassian.jira.plugin.helpers.YesNoType;
-import com.atlassian.plugin.util.CommonPluginUtils;
-import com.atlassian.plugin.util.WorkflowUtils;
+import com.atlassian.jira.plugin.util.CommonPluginUtils;
+import com.atlassian.jira.plugin.util.WorkflowUtils;
 import com.opensymphony.workflow.loader.AbstractDescriptor;
 import com.opensymphony.workflow.loader.ValidatorDescriptor;
 

@@ -5,8 +5,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import com.atlassian.plugin.util.CommonPluginUtils;
-import com.atlassian.plugin.util.WorkflowUtils;
+import com.atlassian.jira.plugin.util.CommonPluginUtils;
+import com.atlassian.jira.plugin.util.WorkflowUtils;
 import com.opensymphony.workflow.loader.AbstractDescriptor;
 import com.opensymphony.workflow.loader.ValidatorDescriptor;
 

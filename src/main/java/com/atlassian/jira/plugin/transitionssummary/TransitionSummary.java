@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.atlassian.jira.issue.status.Status;
-import com.atlassian.plugin.util.CommonPluginUtils;
+import com.atlassian.jira.plugin.util.CommonPluginUtils;
 
 /**
  * @author Gustavo Martin

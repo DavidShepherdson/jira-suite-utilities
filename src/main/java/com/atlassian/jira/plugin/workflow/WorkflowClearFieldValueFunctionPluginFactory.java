@@ -1,6 +1,6 @@
 package com.atlassian.jira.plugin.workflow;
 
-import static com.atlassian.plugin.util.WorkflowFactoryUtils.getFieldByName;
+import static com.atlassian.jira.plugin.util.WorkflowFactoryUtils.getFieldByName;
 
 import java.util.Collections;
 import java.util.HashMap;
@@ -8,7 +8,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.atlassian.jira.issue.fields.Field;
-import com.atlassian.plugin.util.CommonPluginUtils;
+import com.atlassian.jira.plugin.util.CommonPluginUtils;
 import com.opensymphony.workflow.loader.AbstractDescriptor;
 
 /**

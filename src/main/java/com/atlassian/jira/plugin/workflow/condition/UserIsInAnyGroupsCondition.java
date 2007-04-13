@@ -5,8 +5,8 @@ import java.util.Iterator;
 import java.util.Map;
 
 import com.atlassian.jira.issue.Issue;
+import com.atlassian.jira.plugin.util.WorkflowUtils;
 import com.atlassian.jira.workflow.condition.AbstractJiraCondition;
-import com.atlassian.plugin.util.WorkflowUtils;
 import com.opensymphony.module.propertyset.PropertySet;
 import com.opensymphony.user.EntityNotFoundException;
 import com.opensymphony.user.Group;

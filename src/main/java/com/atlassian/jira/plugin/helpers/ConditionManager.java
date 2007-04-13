@@ -5,7 +5,7 @@ import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.List;
 
-import com.atlassian.plugin.util.WorkflowUtils;
+import com.atlassian.jira.plugin.util.WorkflowUtils;
 
 /**
  * @author Gustavo Martin

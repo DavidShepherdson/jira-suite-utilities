@@ -8,8 +8,8 @@ import com.atlassian.jira.plugin.helpers.ComparisonManager;
 import com.atlassian.jira.plugin.helpers.ComparisonType;
 import com.atlassian.jira.plugin.helpers.ConditionManager;
 import com.atlassian.jira.plugin.helpers.ConditionType;
+import com.atlassian.jira.plugin.util.WorkflowUtils;
 import com.atlassian.jira.workflow.condition.AbstractJiraCondition;
-import com.atlassian.plugin.util.WorkflowUtils;
 import com.opensymphony.module.propertyset.PropertySet;
 
 /**
