@@ -98,6 +98,42 @@
 		<resource type="velocity" name="edit-parameters" location="templates/jira/workflow/function/copyvaluefromfield-function-edit.vm"/>
     </workflow-function>
     
+    <workflow-function key="updateIssueCustomField-function" 
+    				   name="Update Issue Custom Field" 
+    				   class="com.atlassian.jira.plugin.workflow.WorkflowUpdateIssueCustomFieldFunctionPluginFactory">
+        <description>Updates an issue custom field to a given value.</description>
+
+        <function-class>
+        	com.atlassian.jira.plugin.workflow.function.UpdateIssueCustomFieldPostFunction
+        </function-class>
+
+        <orderable>true</orderable>
+        <unique>false</unique>
+        <deletable>true</deletable>
+
+        <resource type="velocity" name="view" location="templates/jira/workflow/function/updateissuefield-function-view.vm"/>
+        <resource type="velocity" name="input-parameters" location="templates/jira/workflow/function/updateissuefield-function-input.vm"/>
+        <resource type="velocity" name="edit-parameters" location="templates/jira/workflow/function/updateissuefield-function-input.vm"/>
+    </workflow-function>
+
+    <workflow-function key="clearFieldValue-function" 
+    				   name="Clear Field Value" 
+    				   class="com.atlassian.jira.plugin.workflow.WorkflowClearFieldValueFunctionPluginFactory">
+        <description>Clear field value.</description>
+
+        <function-class>
+        	com.atlassian.jira.plugin.workflow.function.ClearFieldValuePostFunction
+        </function-class>
+
+        <orderable>true</orderable>
+        <unique>false</unique>
+        <deletable>true</deletable>
+
+        <resource type="velocity" name="view" location="templates/jira/workflow/function/clearfieldvalue-function-view.vm"/>
+        <resource type="velocity" name="input-parameters" location="templates/jira/workflow/function/clearfieldvalue-function-edit.vm"/>
+        <resource type="velocity" name="edit-parameters" location="templates/jira/workflow/function/clearfieldvalue-function-edit.vm"/>
+    </workflow-function>
+    
 	<!-- Reports -->
 
 	<!-- Portlets -->
