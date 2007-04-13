@@ -1,7 +1,9 @@
 <tr bgcolor=ffffff>
-    <td align="right" valign="top" bgcolor="fffff0">
+    <td align="center" valign="top" bgcolor="fffff0">
         <span class="label">Fields required during this action:</span>
     </td>
+</tr>
+<tr bgcolor=ffffff>
     <td bgcolor="ffffff" nowrap>
     	    <table width=100%>
     	        <tr align="center">

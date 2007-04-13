@@ -21,10 +21,13 @@ import com.atlassian.jira.config.properties.ApplicationPropertiesImpl;
 import com.atlassian.jira.issue.customfields.CustomFieldType;
 import com.atlassian.jira.issue.customfields.impl.DateCFType;
 import com.atlassian.jira.issue.customfields.impl.DateTimeCFType;
+import com.atlassian.jira.issue.customfields.impl.ImportIdLinkCFType;
+import com.atlassian.jira.issue.customfields.impl.ReadOnlyCFType;
 import com.atlassian.jira.issue.Issue;
 import com.atlassian.jira.issue.fields.CustomField;
 import com.atlassian.jira.issue.fields.Field;
 import com.atlassian.jira.issue.fields.FieldException;
+import com.atlassian.jira.issue.fields.FieldManager;
 import com.atlassian.jira.issue.fields.layout.field.FieldLayoutItem;
 import com.atlassian.jira.issue.fields.layout.field.FieldLayoutManager;
 import com.atlassian.jira.issue.fields.layout.field.FieldLayoutStorageException;
@@ -156,16 +159,29 @@ public class CommonPluginUtils {
 	 * @return if a field is displayed in a screen.
 	 */
 	public static boolean isFieldOnScreen(Issue issue, Field field, FieldScreen fieldScreen){
-		boolean retVal = false;
+		final FieldManager fieldManager = ComponentManager.getInstance().getFieldManager();
+
+		if (fieldManager.isCustomField(field)) {
+			CustomFieldType type = ((CustomField) field).getCustomFieldType(); 
+			
+			if ((type instanceof ReadOnlyCFType) || 
+					(type instanceof ImportIdLinkCFType)) {
+				return false;
+			}
+		}
 		
-		Iterator itTabs = fieldScreen.getTabs().iterator();
+		boolean retVal = false;
+		Iterator<FieldScreenTab> itTabs = fieldScreen.getTabs().iterator();
+		
 		while(itTabs.hasNext() && !retVal){
-			FieldScreenTab tab = (FieldScreenTab) itTabs.next();
-			Iterator itFields = tab.getFieldScreenLayoutItems().iterator();
+			FieldScreenTab tab = itTabs.next();
+			Iterator<FieldScreenLayoutItem> itFields = tab.getFieldScreenLayoutItems().iterator();
+
 			while(itFields.hasNext() && !retVal){
-				FieldScreenLayoutItem fieldScreenLayoutItem = (FieldScreenLayoutItem) itFields.next();
-				
-				if(field.getId().equals(fieldScreenLayoutItem.getFieldId()) && !isFieldHidden(issue, field)){
+				FieldScreenLayoutItem fieldScreenLayoutItem = itFields.next();
+
+				if (field.getId().equals(fieldScreenLayoutItem.getFieldId()) && 
+						!isFieldHidden(issue, field)) {
 					retVal = true;
 				}
 			}
@@ -179,18 +195,35 @@ public class CommonPluginUtils {
 	 * @param field: wished field
 	 * @return if a field is hidden.
 	 */
-	public static boolean isFieldHidden(Issue issue, Field field){
+	public static boolean isFieldHidden(Issue issue, Field field) {
 		boolean retVal = false;
+		final FieldManager fieldManager = ComponentManager.getInstance().getFieldManager();
+		
+		if (fieldManager.isCustomField(field)) {
+			List<CustomField> customFields = ManagerFactory.getCustomFieldManager().getCustomFieldObjects(issue);
+			boolean isForIssue = false;
+			
+			for (CustomField cField : customFields) {
+				if (cField.getId().equals(field.getId())) {
+					isForIssue = true;
+					break;
+				}
+			}
+
+			if (!isForIssue) {
+				return true;
+			}
+		}
 		
 		try {
 			FieldLayoutManager fieldLayoutManager = ComponentManager.getInstance().getFieldLayoutManager();
 			// Change by Bettina Zucker
 			//FieldLayoutItem layoutItem = fieldLayoutManager.getFieldLayout().getFieldLayoutItem(field.getId());
 			FieldLayoutItem layoutItem = fieldLayoutManager.getFieldLayout(issue.getProject(), issue.getIssueTypeObject().getId()).getFieldLayoutItem(field.getId());		
+
 			retVal = layoutItem.isHidden();
-			
 		} catch (FieldLayoutStorageException e) {
-			e.printStackTrace();
+			LogUtils.getGeneral().error("Field layout exception", e);
 		}
 		
 		return retVal;
