@@ -4,7 +4,7 @@
     <pomVersion>3</pomVersion>
     <id>jira-suite-utilities</id>
     <artifactId>jira-suite-utilities</artifactId>
-    <currentVersion>0.5.4</currentVersion>
+    <currentVersion>0.6</currentVersion>
     <name>JIRA Suite Utilities</name>
     <organization>
         <name>Quadratica SRL</name>
@@ -33,9 +33,17 @@
       </developer>
       <developer>
 		<name>Alexey Abashev</name>
-		  <id>abashev</id>
+		  <id>aabashev</id>
 		  <email>no_spam@no_spam.com</email>
 		  <organization>EPAM Systems</organization>
+		  <roles>
+	  		<role>Developer</role>
+		  </roles>
+      </developer>
+      <developer>
+		<name>Cristiane Fontana</name>
+		  <id>cfontana</id>
+		  <email>no_spam@no_spam.com</email>
 		  <roles>
 	  		<role>Developer</role>
 		  </roles>
