@@ -1,10 +1,10 @@
 package com.atlassian.jira.plugin.util;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
-import java.util.Iterator;
+import java.util.Collections;
 import java.util.List;
-import java.util.StringTokenizer;
 
 import org.ofbiz.core.entity.GenericEntityException;
 import org.ofbiz.core.entity.GenericValue;
@@ -14,11 +14,14 @@ import com.atlassian.jira.ComponentManager;
 import com.atlassian.jira.ManagerFactory;
 import com.atlassian.jira.issue.Issue;
 import com.atlassian.jira.issue.IssueRelationConstants;
+import com.atlassian.jira.issue.MutableIssue;
 import com.atlassian.jira.issue.fields.CustomField;
 import com.atlassian.jira.issue.fields.Field;
 import com.atlassian.jira.issue.fields.FieldManager;
 import com.atlassian.jira.issue.fields.screen.FieldScreen;
 import com.atlassian.jira.issue.worklog.WorkRatio;
+import com.atlassian.jira.project.version.Version;
+import com.atlassian.jira.project.version.VersionManager;
 import com.atlassian.jira.workflow.WorkflowActionsBean;
 import com.opensymphony.user.Group;
 import com.opensymphony.workflow.loader.ActionDescriptor;
@@ -50,28 +53,10 @@ public class WorkflowUtils {
 	private static final WorkflowActionsBean workflowActionsBean = new WorkflowActionsBean();
 	
 	/**
-	 * @param text
-	 * @param splitter
-	 * @return a List of Strings
-	 * 
-	 * Parse de string parameter, and split it by splitter param.
-	 * 
-	 */
-	public static List parseStringParam(String text, String splitter){
-		StringTokenizer token = new StringTokenizer(text, splitter);
-		List retList = new ArrayList();
-		
-		while (token.hasMoreTokens())
-			retList.add(token.nextToken());
-		
-		return retList;
-	}
-	
-	/**
 	 * @return a list of boolean values.
 	 */
-	public static List getBooleanList(){
-		List booleanList = new ArrayList();
+	public static List<String> getBooleanList(){
+		List<String> booleanList = new ArrayList<String>();
 		
 		booleanList.add(BOOLEAN_YES);
 		booleanList.add(BOOLEAN_NO);
@@ -82,8 +67,8 @@ public class WorkflowUtils {
 	/**
 	 * @return a list of comparison types.
 	 */
-	public static List getComparisonList(){
-		List comparisonList = new ArrayList();
+	public static List<String> getComparisonList(){
+		List<String> comparisonList = new ArrayList<String>();
 		
 		comparisonList.add(COMPARISON_TYPE_STRING);
 		comparisonList.add(COMPARISON_TYPE_NUMBER);
@@ -96,8 +81,8 @@ public class WorkflowUtils {
 	/**
 	 * @return  a list of conditions types.
 	 */
-	public static List getConditionList(){
-		List conditionList = new ArrayList();
+	public static List<String> getConditionList(){
+		List<String> conditionList = new ArrayList<String>();
 		
 		conditionList.add(CONDITION_MAJOR);
 		conditionList.add(CONDITION_MAJOR_EQUAL);
@@ -261,12 +246,162 @@ public class WorkflowUtils {
 					retVal = gvIssue.get(fieldId);
 				}
 			}
-		}catch (NullPointerException e){
+		} catch (NullPointerException e){
 			retVal = null;
-			//log.error(e);
+			LogUtils.getGeneral().error("Unable to get field value", e);
 		}
 		
 		return retVal;
+	}
+	
+	/**
+	 * Sets specified value to the field for the issue.
+	 * 
+	 * @param issue
+	 * @param field
+	 * @param value
+	 */
+	public static void setFieldValue(MutableIssue issue, Field field, Object value) {
+		FieldManager fldManager = ManagerFactory.getFieldManager();
+		
+		if (fldManager.isCustomField(field)) {
+			CustomField customField = (CustomField) field;
+
+			issue.setCustomFieldValue(customField, value);
+		} else {
+			final String fieldId = field.getId();
+			
+			// Special treatment of fields.
+			if (fieldId.equals("attachment")) {
+				throw new IllegalArgumentException("Not implemented");
+//				// return a collection with the attachments associated to given issue.
+//				retCollection = (Collection)issue.getExternalFieldValue(fieldId);
+//				if(retCollection==null || retCollection.isEmpty()){
+//					isEmpty = true;
+//				}else{
+//					retVal = retCollection;
+//				}
+			} else if (fieldId.equals("versions")){
+				if (value == null) {
+					issue.setAffectedVersions(Collections.EMPTY_SET);
+				} else if (value instanceof String) {
+					VersionManager versionManager = ComponentManager.getInstance().getVersionManager();
+					Version v = versionManager.getVersion(issue.getProjectObject().getId(), (String) value);
+					
+					if (v != null) {
+						issue.setAffectedVersions(Arrays.asList(v));
+					} else {
+						throw new IllegalArgumentException("Wrong affected version value");
+					}
+				} else if (value instanceof Version) {
+					issue.setAffectedVersions(Arrays.asList(value));
+				} else {
+					throw new IllegalArgumentException("Wrong affected version value");
+				}
+			} else if (fieldId.equals("comment")){
+				throw new IllegalArgumentException("Not implemented");
+
+				//				// return a list with the comments of a given issue.
+//				try {
+//					retCollection = ManagerFactory.getIssueManager().getEntitiesByIssue(IssueRelationConstants.COMMENTS, issue.getGenericValue());
+//					if(retCollection==null || retCollection.isEmpty()){
+//						isEmpty = true;
+//					}else{
+//						retVal = retCollection;
+//					}
+//				} catch (GenericEntityException e) {
+//					retVal = null;
+//				}
+			} else if (fieldId.equals("components")){
+				throw new IllegalArgumentException("Not implemented");
+
+//				retCollection = issue.getComponents();
+//				if(retCollection==null || retCollection.isEmpty()){
+//					isEmpty = true;
+//				}else{
+//					retVal = retCollection;
+//				}
+			} else if (fieldId.equals("fixVersions")) {
+				if (value == null) {
+					issue.setFixVersions(Collections.EMPTY_SET);
+				} else if (value instanceof String) {
+					VersionManager versionManager = ComponentManager.getInstance().getVersionManager();
+					Version v = versionManager.getVersion(issue.getProjectObject().getId(), (String) value);
+					
+					if (v != null) {
+						issue.setFixVersions(Arrays.asList(v));
+					}
+				} else if (value instanceof Version) {
+					issue.setFixVersions(Arrays.asList(value));
+				} else {
+					throw new IllegalArgumentException("Wrong fix version value");
+				}
+			} else if (fieldId.equals("thumbnail")){
+				throw new IllegalArgumentException("Not implemented");
+
+//				// Not implemented, yet.
+//				isEmpty = true;
+			} else if (fieldId.equals("issuetype")){
+				throw new IllegalArgumentException("Not implemented");
+//
+//				retVal = issue.getIssueTypeObject();
+			} else if (fieldId.equals("timetracking")){
+				throw new IllegalArgumentException("Not implemented");
+//
+//				// Not implemented, yet.
+//				isEmpty = true;
+			} else if (fieldId.equals("issuelinks")){
+				throw new IllegalArgumentException("Not implemented");
+//
+//				retVal = ComponentManager.getInstance().getIssueLinkManager().getIssueLinks(issue.getId());
+			} else if (fieldId.equals("workratio")){
+				throw new IllegalArgumentException("Not implemented");
+//
+//				retVal = String.valueOf(WorkRatio.getWorkRatio(issue));
+			} else if (fieldId.equals("issuekey")){
+				throw new IllegalArgumentException("Not implemented");
+//
+//				retVal = issue.getKey();
+			} else if (fieldId.equals("subtasks")){
+				throw new IllegalArgumentException("Not implemented");
+//
+//				retCollection = issue.getSubTasks();
+//				if(retCollection==null || retCollection.isEmpty()){
+//					isEmpty = true;
+//				}else{
+//					retVal = retCollection;
+//				}
+			} else if (fieldId.equals("priority")){
+				throw new IllegalArgumentException("Not implemented");
+//
+//				retVal = issue.getPriorityObject();
+			} else if (fieldId.equals("resolution")){
+				throw new IllegalArgumentException("Not implemented");
+//
+//				retVal = issue.getResolutionObject();
+			} else if (fieldId.equals("status")){
+				throw new IllegalArgumentException("Not implemented");
+//				retVal = issue.getStatusObject();
+			} else if (fieldId.equals("project")){
+				throw new IllegalArgumentException("Not implemented");
+//				retVal = issue.getProject();
+			} else if (fieldId.equals("security")){
+				throw new IllegalArgumentException("Not implemented");
+//				retVal = issue.getSecurityLevel();
+			}
+		}
+	}
+	
+	/**
+	 * Method sets value for issue field. Field was defined as string 
+	 * @param issue Muttable issue for changing
+	 * @param fieldKey Field name
+	 * @param value Value for setting
+	 */
+	public static void setFieldValue(MutableIssue issue, String fieldKey, Object value) {
+		final Field field = (Field) WorkflowUtils.getFieldFromKey(fieldKey);
+		
+		setFieldValue(issue, field, value);
 	}
 	
 	/**
@@ -343,8 +478,8 @@ public class WorkflowUtils {
 					}
 				}
 				if(fieldId.equals("project")){
-					if(issue.getProject()!=null){
-						retVal = issue.getProject().getString("name");
+					if (issue.getProjectObject() != null){
+						retVal = issue.getProjectObject().getName();
 					}else{
 						retVal = "";
 					}
@@ -408,14 +543,13 @@ public class WorkflowUtils {
 	 * Get Groups from a string.
 	 * 
 	 */
-	public static List getGroups(String strGroups, String splitter){
+	public static List<Group> getGroups(String strGroups, String splitter){
+		String[] groups = strGroups.split("\\Q" + splitter + "\\E");
+		List<Group> groupList = new ArrayList<Group>(groups.length);
 		
-		List groups = parseStringParam(strGroups, splitter);
-		List groupList = new ArrayList(groups.size());
-		
-		Iterator it = groups.iterator();
-		while(it.hasNext()){
-			Group group = GroupUtils.getGroup((String) it.next());
+		for (String s : groups) {
+			Group group = GroupUtils.getGroup(s);
+
 			groupList.add(group);
 		}
 		
@@ -430,14 +564,14 @@ public class WorkflowUtils {
 	 * Get Groups as String.
 	 * 
 	 */
-	public static String getStringGroup(Collection group, String splitter){
-		String retString = "";
+	public static String getStringGroup(Collection<Group> groups, String splitter) {
+		StringBuilder sb = new StringBuilder();
 		
-		Iterator it = group.iterator();
-		while(it.hasNext()){
-			retString = retString + ((Group) it.next()).getName() + splitter;
+		for (Group g : groups) {
+			sb.append(g.getName()).append(splitter);
 		}
-		return retString;
+
+		return sb.toString();
 	}
 	
 	/**
@@ -448,14 +582,13 @@ public class WorkflowUtils {
 	 * Get Fields from a string.
 	 * 
 	 */
-	public static List getFields(String strFields, String splitter){
+	public static List<Field> getFields(String strFields, String splitter){
+		String[] fields = strFields.split("\\Q" + splitter + "\\E");
+		List<Field> fieldList = new ArrayList<Field>(fields.length);
 		
-		List fields = parseStringParam(strFields, splitter);
-		List fieldList = new ArrayList(fields.size());
-		
-		Iterator it = fields.iterator();
-		while(it.hasNext()){
-			Field field = ManagerFactory.getFieldManager().getField((String) it.next());
+		for (String s : fields) {
+			Field field = ManagerFactory.getFieldManager().getField(s);
+			
 			fieldList.add(field);
 		}
 		
@@ -470,14 +603,14 @@ public class WorkflowUtils {
 	 * Get Fields as String.
 	 * 
 	 */
-	public static String getStringField(Collection fields, String splitter){
-		String retString = "";
+	public static String getStringField(Collection<Field> fields, String splitter){
+		StringBuilder sb = new StringBuilder();
 		
-		Iterator it = fields.iterator();
-		while(it.hasNext()){
-			retString = retString + ((Field) it.next()).getId() + splitter;
+		for (Field f : fields) {
+			sb.append(f.getId()).append(splitter);
 		}
-		return retString;
+
+		return sb.toString();
 	}	
 	
 	/**
