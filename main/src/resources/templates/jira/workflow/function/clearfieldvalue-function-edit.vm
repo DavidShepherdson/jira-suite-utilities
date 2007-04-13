@@ -1,0 +1,17 @@
+<tr bgcolor=ffffff>
+    <td align="right" valign="top" bgcolor="fffff0">
+        <span class="label">Field:</span>
+    </td>
+    <td bgcolor="ffffff" nowrap>
+		<select id="field" name="field">
+	    	#foreach ($val in $fieldList)
+	        	<option value="${val.id}"
+	                #if(${val.id.equals($selectedField.id)})
+	                    SELECTED
+	                #end
+                >${val.name}</option>
+	        #end
+	        </select>
+        <br><font size="1">Choose the field.</font>
+    </td>
+</tr>
