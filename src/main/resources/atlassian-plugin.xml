@@ -62,7 +62,7 @@
 		</validator-class>
 		
 		<resource type="velocity" name="view" location="templates/jira/workflow/validator/fieldsrequired-validator-view.vm"/>
-		<resource type="velocity" name="input-parameters" location="templates/jira/workflow/validator/fieldsrequired-validator-input.vm"/>
+		<resource type="velocity" name="input-parameters" location="templates/jira/workflow/validator/fieldsrequired-validator-edit.vm"/>
 		<resource type="velocity" name="edit-parameters" location="templates/jira/workflow/validator/fieldsrequired-validator-edit.vm"/>
 	</workflow-validator>  
 
