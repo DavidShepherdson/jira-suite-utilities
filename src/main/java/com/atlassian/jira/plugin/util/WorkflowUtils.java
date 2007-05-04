@@ -14,11 +14,15 @@ import com.atlassian.jira.ComponentManager;
 import com.atlassian.jira.ManagerFactory;
 import com.atlassian.jira.issue.Issue;
 import com.atlassian.jira.issue.IssueRelationConstants;
+import com.atlassian.jira.issue.ModifiedValue;
 import com.atlassian.jira.issue.MutableIssue;
 import com.atlassian.jira.issue.fields.CustomField;
 import com.atlassian.jira.issue.fields.Field;
 import com.atlassian.jira.issue.fields.FieldManager;
+import com.atlassian.jira.issue.fields.layout.field.FieldLayoutItem;
+import com.atlassian.jira.issue.fields.layout.field.FieldLayoutStorageException;
 import com.atlassian.jira.issue.fields.screen.FieldScreen;
+import com.atlassian.jira.issue.util.DefaultIssueChangeHolder;
 import com.atlassian.jira.issue.worklog.WorkRatio;
 import com.atlassian.jira.project.version.Version;
 import com.atlassian.jira.project.version.VersionManager;
@@ -266,8 +270,22 @@ public class WorkflowUtils {
 		
 		if (fldManager.isCustomField(field)) {
 			CustomField customField = (CustomField) field;
+			Object oldValue = issue.getCustomFieldValue(customField);
+			
+			try {
+				FieldLayoutItem fieldLayoutItem = CommonPluginUtils.getFieldLayoutItem(issue, field);
 
-			issue.setCustomFieldValue(customField, value);
+				customField.updateValue(
+						fieldLayoutItem, 
+						issue, 
+						new ModifiedValue(oldValue, value),
+						new DefaultIssueChangeHolder()
+				);
+			} catch (FieldLayoutStorageException e) {
+				LogUtils.getGeneral().error("Unable to get field layout item", e);
+
+				throw new IllegalStateException(e);
+			}
 		} else {
 			final String fieldId = field.getId();
 			

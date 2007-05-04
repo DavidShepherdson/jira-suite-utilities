@@ -216,17 +216,23 @@ public class CommonPluginUtils {
 		}
 		
 		try {
-			FieldLayoutManager fieldLayoutManager = ComponentManager.getInstance().getFieldLayoutManager();
-			// Change by Bettina Zucker
-			//FieldLayoutItem layoutItem = fieldLayoutManager.getFieldLayout().getFieldLayoutItem(field.getId());
-			FieldLayoutItem layoutItem = fieldLayoutManager.getFieldLayout(issue.getProject(), issue.getIssueTypeObject().getId()).getFieldLayoutItem(field.getId());		
-
-			retVal = layoutItem.isHidden();
+			retVal = getFieldLayoutItem(issue, field).isHidden();
 		} catch (FieldLayoutStorageException e) {
 			LogUtils.getGeneral().error("Field layout exception", e);
 		}
 		
 		return retVal;
+	}
+	
+	public static FieldLayoutItem getFieldLayoutItem(Issue issue, Field field) throws FieldLayoutStorageException {
+		final FieldLayoutManager fieldLayoutManager = ComponentManager.getInstance().getFieldLayoutManager();
+
+		// Change by Bettina Zucker
+		//FieldLayoutItem layoutItem = fieldLayoutManager.getFieldLayout().getFieldLayoutItem(field.getId());
+		return fieldLayoutManager.getFieldLayout(
+				issue.getProject(), 
+				issue.getIssueTypeObject().getId()).getFieldLayoutItem(field.getId()
+		);		
 	}
 	
 	/**
