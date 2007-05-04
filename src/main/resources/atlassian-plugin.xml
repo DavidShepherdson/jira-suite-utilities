@@ -2,7 +2,7 @@
 		  name="JIRA Suite Utilities">
     <plugin-info>
         <description>Many objects to extend JIRA</description>
-        <version>0.5.3</version>
+        <version>0.6</version>
         <application-version min="3.5" max="3.7"/>
         <vendor name="Quadratica SRL" url="http://www.quadratica.com.ar"/>
     </plugin-info>   
