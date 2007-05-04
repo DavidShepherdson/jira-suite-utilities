@@ -27,18 +27,20 @@ public class CopyValueFromOtherFieldPostFunction implements FunctionProvider {
 		String destinationFieldKey = (String) args.get("destinationField");
 		
 		Field fieldFrom = (Field) WorkflowUtils.getFieldFromKey(sourceFieldKey);
+
+		try {
+			// It gives the value from the source field.
+			Object sourceValue = WorkflowUtils.getFieldValueFromIssue(issueObject, fieldFrom);
 		
-		// It gives the value from the source field.
-		Object sourceValue = WorkflowUtils.getFieldValueFromIssueAsString(issueObject, fieldFrom);
-		
-		// It set the value to field.
-		try{
+			// It set the value to field.
 			WorkflowUtils.setFieldValue(issueObject, destinationFieldKey, sourceValue);
 		} catch (Exception e) {
-			LogUtils.getGeneral().error(
-					"Unable to copy value from " + sourceFieldKey + " to " + destinationFieldKey,
-					e
-			);
+			final Field destField = (Field) WorkflowUtils.getFieldFromKey(destinationFieldKey);
+			final String message = "Unable to copy value from " + fieldFrom.getName() + " to " + destField.getName();
+			
+			LogUtils.getGeneral().error(message, e);
+			
+			throw new WorkflowException(message);
 		}
 	}
 }
