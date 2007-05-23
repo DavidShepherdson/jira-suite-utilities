@@ -140,14 +140,18 @@
 
 	<!-- Issue Panels -->
 	
-    <issue-tabpanel key="transitions-summary-tabpanel" name="Transitions Summary Tab Panel" 
-    	class="com.atlassian.jira.plugin.transitionssummary.issuetabpanel.TransitionsSummaryTabPanel">
+    <issue-tabpanel key="transitions-summary-tabpanel" 
+    				name="Transitions Summary Tab Panel" 
+    				class="com.atlassian.jira.plugin.transitionssummary.issuetabpanel.TransitionsSummaryTabPanel">
 
-        <description>Show how much time was spent in executing each transition.</description>
-        
-        <label>Transitions Summary</label>
-        
-        <resource type="velocity" name="view" location="templates/jira/issuetabpanel/transitionssummary/transitions-summary-view.vm"/>
+		<description key="transition.summary.description" />
+		<label key="transition.summary.transitions" />
+
+    	<resource type="i18n" 
+    			  name="i18n" 
+    			  location="com.atlassian.jira.plugin.transitionssummary.transitionssummary" />
+        <resource type="velocity" 
+        		  name="view" 
+        		  location="templates/jira/issuetabpanel/transitionssummary/transitions-summary-view.vm" />
     </issue-tabpanel>
-    
 </atlassian-plugin>

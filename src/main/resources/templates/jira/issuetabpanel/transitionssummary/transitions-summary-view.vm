@@ -1,11 +1,11 @@
 #include()
 <table width="100%">
     <tr>
-        <td bgcolor="#f0f0f0" width=34%><b>Transition</b></td>
-        <td bgcolor="#f0f0f0" width=15%><b>Time Spent</b></td>
-        <td bgcolor="#f0f0f0" width=15% align=center><b>Execution Times</b></td>
-        <td bgcolor="#f0f0f0" width=18%><b>Last Executer</b></td>
-        <td bgcolor="#f0f0f0" width=18%><b>Last Execution Date</b></td>
+        <td bgcolor="#f0f0f0" width=34%><b>$i18n.getText("transition.summary.transition")</b></td>
+        <td bgcolor="#f0f0f0" width=15%><b>$i18n.getText("transition.summary.timespent")</b></td>
+        <td bgcolor="#f0f0f0" width=15% align=center><b>$i18n.getText("transition.summary.occurence.nb")</b></td>
+        <td bgcolor="#f0f0f0" width=18%><b>$i18n.getText("transition.summary.last.executer")</b></td>
+        <td bgcolor="#f0f0f0" width=18%><b>$i18n.getText("transition.summary.last.occurence.date")</b></td>
     </tr>
     #foreach ($tran in ${action.getTransitions()})
 		    		    <tr>
