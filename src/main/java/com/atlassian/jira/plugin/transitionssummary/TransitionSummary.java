@@ -17,15 +17,13 @@ import com.atlassian.jira.plugin.util.CommonPluginUtils;
  * 
  */
 public class TransitionSummary {
-	
-	String id;
-	Status fromStatus;
-	Status toStatus;
-	Long duration;
-	String lastUpdater;
-	Timestamp lastUpdate;
-	
-	List transitions = null;
+	private String id;
+	private Status fromStatus;
+	private Status toStatus;
+	private Long duration;
+	private String lastUpdater;
+	private Timestamp lastUpdate;
+	private List<Transition> transitions = new ArrayList<Transition>();
 	
 	/**
 	 * @param id an external ID generate.
@@ -36,9 +34,7 @@ public class TransitionSummary {
 		setId(id);
 		setFromStatus(fromStatus);
 		setToStatus(toStatus);
-		
 		setDuration(new Long("0"));
-		transitions = new ArrayList();
 	}
 	
 	/**

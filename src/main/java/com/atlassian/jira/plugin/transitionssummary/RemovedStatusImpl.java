@@ -1,9 +1,10 @@
-package com.atlassian.jira.issue.status;
+package com.atlassian.jira.plugin.transitionssummary;
 
 import java.util.Locale;
 
 import org.ofbiz.core.entity.GenericValue;
 
+import com.atlassian.jira.issue.status.Status;
 import com.atlassian.jira.util.I18nHelper;
 import com.opensymphony.module.propertyset.PropertySet;
 

@@ -23,7 +23,6 @@ import com.opensymphony.workflow.InvalidInputException;
 import com.opensymphony.workflow.Validator;
 import com.opensymphony.workflow.WorkflowException;
 import com.opensymphony.workflow.loader.ActionDescriptor;
-import com.opensymphony.workflow.loader.ValidatorDescriptor;
 import com.opensymphony.workflow.loader.WorkflowDescriptor;
 
 /**
@@ -43,31 +42,7 @@ public class DateCompareValidator implements Validator {
 	FieldScreen fieldScreen = null;
 	
 	public DateCompareValidator() {
-		
 	}
-	
-	/**
-	 * @param param
-	 * @return
-	 */
-	public static ValidatorDescriptor makeDescriptor(String param) {
-		if (param==null) {
-			return makeDescriptor();
-		}
-		return makeDescriptor();
-	}
-	
-	/**
-	 * @return
-	 */
-	public static ValidatorDescriptor makeDescriptor()
-	{
-		ValidatorDescriptor dateCondValidator = new ValidatorDescriptor();
-		dateCondValidator.setType("class");
-		dateCondValidator.getArgs().put("class.name", DateCompareValidator.class.getName());
-		return dateCondValidator;
-	}
-	
 	
 	/* (non-Javadoc)
 	 * @see com.opensymphony.workflow.Validator#validate(java.util.Map, java.util.Map, com.opensymphony.module.propertyset.PropertySet)

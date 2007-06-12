@@ -103,14 +103,13 @@ public class CommonPluginUtils {
 	/**
 	 * @return all navigable fields, include custom fields.
 	 */
-	@SuppressWarnings("unchecked")
 	private static Set<Field> getAllAvailableNavigableFields() {
-		Set<Field> navigableFields = Collections.EMPTY_SET;
+		Set<Field> navigableFields = Collections.emptySet();
 		
 		try {
 			navigableFields = ManagerFactory.getFieldManager().getAllAvailableNavigableFields();
 		} catch (FieldException e) {
-			e.printStackTrace();
+			LogUtils.getGeneral().error("Unable to load field list", e);
 		}
 		
 		return navigableFields;
@@ -248,10 +247,10 @@ public class CommonPluginUtils {
 			// Change by Bettina Zucker
 			//FieldLayoutItem layoutItem = fieldLayoutManager.getFieldLayout().getFieldLayoutItem(field.getId());
 			FieldLayoutItem layoutItem = fieldLayoutManager.getFieldLayout(issue.getProject(), issue.getIssueTypeObject().getId()).getFieldLayoutItem(field.getId());		
+
 			retVal = layoutItem.isRequired();
-			
 		} catch (FieldLayoutStorageException e) {
-			e.printStackTrace();
+			LogUtils.getGeneral().error("Unable to check is field required", e);
 		}
 		
 		return retVal;
@@ -479,11 +478,10 @@ public class CommonPluginUtils {
 	 * 
 	 */
 	public static void clearCalendarTimePart(Calendar cal) {
-		cal.clear(Calendar.HOUR_OF_DAY);
-		cal.clear(Calendar.HOUR);
-		cal.clear(Calendar.MINUTE);
-		cal.clear(Calendar.SECOND);
-		cal.clear(Calendar.MILLISECOND);
+		cal.set(Calendar.HOUR_OF_DAY, 0);
+		cal.set(Calendar.MINUTE, 0);
+		cal.set(Calendar.SECOND, 0);
+		cal.set(Calendar.MILLISECOND, 0);
 	}
 	
 	/**

@@ -11,28 +11,22 @@ import com.atlassian.jira.web.bean.I18nBean;
  * This Comparator is used to compare two fields by its internationalized name.
  *  
  */
-public class NameComparatorEx implements Comparator
-{
+public class NameComparatorEx implements Comparator<Field> {
     private final I18nBean i18nBean;
 
-    public NameComparatorEx(I18nBean i18nBean)
-    {
+    public NameComparatorEx(I18nBean i18nBean) {
         this.i18nBean = i18nBean;
     }
 
-    public int compare(Object o1, Object o2)
-    {
+    public int compare(Field o1, Field o2) {
         if (o1 == null)
             throw new IllegalArgumentException("The first parameter is null");
-        if (!(o1 instanceof Field))
-            throw new IllegalArgumentException("The first parameter " + o1 + " is not an instance of Field");
         if (o2 == null)
             throw new IllegalArgumentException("The second parameter is null");
-        if (!(o2 instanceof Field))
-            throw new IllegalArgumentException("The second parameter " + o2 + " is not an instance of Field");
 
-        String name1 = i18nBean.getText(((Field) o1).getName());
-        String name2 = i18nBean.getText(((Field) o2).getName());
+        String name1 = i18nBean.getText(o1.getName());
+        String name2 = i18nBean.getText(o2.getName());
+
         return name1.compareTo(name2);
     }
 }

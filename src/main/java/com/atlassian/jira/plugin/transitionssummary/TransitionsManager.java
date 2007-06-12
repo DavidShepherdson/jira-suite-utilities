@@ -37,7 +37,7 @@ public class TransitionsManager {
 		List<Transition> statusChanges = getStatusChanges(issue, tsCreated);
 		
 		if (statusChanges.isEmpty()) {
-			return Collections.EMPTY_LIST;
+			return Collections.emptyList();
 		}
 
 		Map<String, TransitionSummary> summary = new TreeMap<String, TransitionSummary>();

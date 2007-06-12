@@ -19,7 +19,6 @@ import com.opensymphony.workflow.InvalidInputException;
 import com.opensymphony.workflow.Validator;
 import com.opensymphony.workflow.WorkflowException;
 import com.opensymphony.workflow.loader.ActionDescriptor;
-import com.opensymphony.workflow.loader.ValidatorDescriptor;
 import com.opensymphony.workflow.loader.WorkflowDescriptor;
 
 /**
@@ -41,29 +40,6 @@ public class WindowsDateValidator implements Validator {
 	FieldScreen fieldScreen = null;
 	
 	public WindowsDateValidator() {
-		
-	}
-	
-	/**
-	 * @param param
-	 * @return
-	 */
-	public static ValidatorDescriptor makeDescriptor(String param) {
-		if (param==null) {
-			return makeDescriptor();
-		}
-		return makeDescriptor();
-	}
-	
-	/**
-	 * @return
-	 */
-	public static ValidatorDescriptor makeDescriptor()
-	{
-		ValidatorDescriptor windowsDateCondValidator = new ValidatorDescriptor();
-		windowsDateCondValidator.setType("class");
-		windowsDateCondValidator.getArgs().put("class.name", WindowsDateValidator.class.getName());
-		return windowsDateCondValidator;
 	}
 	
 	/* (non-Javadoc)

@@ -3,7 +3,6 @@ package com.atlassian.jira.plugin.transitionssummary;
 import java.sql.Timestamp;
 
 import com.atlassian.jira.ManagerFactory;
-import com.atlassian.jira.issue.status.RemovedStatusImpl;
 import com.atlassian.jira.issue.status.Status;
 
 /**
@@ -14,16 +13,16 @@ import com.atlassian.jira.issue.status.Status;
  *  
  */
 public class Transition {
-	
-	String changedBy;
-	Timestamp changedAt;
-	Status fromStatus;
-	Status toStatus;
-	Timestamp startAt;
-	final private Status removedStatus = new RemovedStatusImpl();  
+	private final Status removedStatus = new RemovedStatusImpl();  
+
+	private String changedBy;
+	private Timestamp changedAt;
+	private Status fromStatus;
+	private Status toStatus;
+	private Timestamp startAt;
 	private Long duration;
 	
-	public Transition (){
+	public Transition () {
 		this.startAt = null;
 	}
 	
@@ -35,7 +34,7 @@ public class Transition {
 		Long retVal = new Long("-1");
 		
 		// It calculates the duration since the transition began until the next one is executed.
-		if(this.startAt!=null){
+		if (this.startAt != null) {
 			retVal = new Long(this.changedAt.getTime() - this.startAt.getTime());
 		}
 		
@@ -73,5 +72,4 @@ public class Transition {
 		this.startAt = startAt;
 		setDuration();
 	}
-	
 }
