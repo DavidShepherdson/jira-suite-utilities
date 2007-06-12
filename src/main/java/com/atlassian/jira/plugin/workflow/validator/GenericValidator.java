@@ -2,12 +2,14 @@ package com.atlassian.jira.plugin.workflow.validator;
 
 import java.util.Map;
 
+import com.atlassian.jira.issue.Issue;
 import com.atlassian.jira.issue.fields.Field;
 import com.atlassian.jira.issue.fields.screen.FieldScreen;
 import com.atlassian.jira.plugin.annotation.AnnotationProcessor;
 import com.atlassian.jira.plugin.annotation.Argument;
 import com.atlassian.jira.plugin.annotation.MapFieldProcessor;
 import com.atlassian.jira.plugin.annotation.TransientVariable;
+import com.atlassian.jira.plugin.util.CommonPluginUtils;
 import com.atlassian.jira.plugin.util.ValidatorErrorsBuilder;
 import com.atlassian.jira.plugin.util.WorkflowUtils;
 import com.opensymphony.module.propertyset.PropertySet;
@@ -64,20 +66,26 @@ public abstract class GenericValidator implements Validator {
 	}
 	
 	/**
-	 * Adding error message for the field.
+	 * Setting error message for validator.
+	 * 
+	 * @param issue
 	 * @param field
-	 * @param message
+	 * @param messageIfOnScreen
+	 * @param messageIfHidden
 	 */
-	protected void addError(Field field, String message) {
-		errorBuilder.addError(field, message);
-	}
-
-	/**
-	 * Addind common error message.
-	 * @param message
-	 */
-	protected void addError(String message) {
-		errorBuilder.addError(message);
+	protected void setExceptionMessage(
+			Issue issue, Field field,
+			String messageIfOnScreen, String messageIfHidden
+	) {
+		if (hasViewScreen()) {
+			if (CommonPluginUtils.isFieldOnScreen(issue, field, getFieldScreen())) {
+				this.errorBuilder.addError(field, messageIfOnScreen);
+			} else {
+				this.errorBuilder.addError(messageIfHidden);
+			}
+		} else {
+			this.errorBuilder.addError(messageIfOnScreen);
+		}
 	}
 	
 	private FieldScreen initScreen(Map<String, Object> vars) {

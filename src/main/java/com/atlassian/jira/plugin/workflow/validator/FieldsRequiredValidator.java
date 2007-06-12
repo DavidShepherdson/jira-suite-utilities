@@ -35,15 +35,11 @@ public class FieldsRequiredValidator extends GenericValidator {
 			
 			if ((fieldValue == null) && !CommonPluginUtils.isFieldHidden(issue, field)) {
 				// Sets Exception message.
-				if (hasViewScreen()) {
-					if (CommonPluginUtils.isFieldOnScreen(issue, field, getFieldScreen())) {
-						addError(field, field.getName() + " is required.");
-					} else {
-						addError(field.getName() + " is required. But it is not present on screen.");
-					}
-				} else {
-					addError(field.getName() + " is required.");
-				}
+				this.setExceptionMessage(
+						issue, field, 
+						field.getName() + " is required.", 
+						field.getName() + " is required. But it is not present on screen."
+				);
 			}
 		}
 	}
