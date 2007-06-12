@@ -11,7 +11,7 @@ import java.lang.annotation.Target;
  * This annotation is used for marking fields as container for transient field in validators,
  * conditions and post-function.
  * 
- * @author <A href="mailto:Alexey_Abashev@epam.com">Alexey Abashev</A>
+ * @author <A href="mailto:abashev at gmail dot com">Alexey Abashev</A>
  * @version $Id$
  */
 @Documented

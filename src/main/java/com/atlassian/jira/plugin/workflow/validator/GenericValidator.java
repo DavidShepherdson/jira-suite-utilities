@@ -18,7 +18,7 @@ import com.opensymphony.workflow.loader.ActionDescriptor;
 import com.opensymphony.workflow.loader.WorkflowDescriptor;
 
 /**
- * @author <A href="mailto:Alexey_Abashev@epam.com">Alexey Abashev</A>
+ * @author <A href="mailto:abashev at gmail dot com">Alexey Abashev</A>
  * @version $Id$
  */
 public abstract class GenericValidator implements Validator {

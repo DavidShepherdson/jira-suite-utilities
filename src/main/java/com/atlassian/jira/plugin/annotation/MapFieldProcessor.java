@@ -9,7 +9,7 @@ import java.util.Map;
 import com.atlassian.jira.plugin.util.LogUtils;
 
 /**
- * @author <A href="mailto:Alexey_Abashev@epam.com">Alexey Abashev</A>
+ * @author <A href="mailto:abashev at gmail dot com">Alexey Abashev</A>
  * @version $Id$
  */
 public class MapFieldProcessor extends AbstractVisitor {

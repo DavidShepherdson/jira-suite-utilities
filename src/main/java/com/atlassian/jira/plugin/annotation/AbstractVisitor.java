@@ -4,7 +4,7 @@ import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 
 /**
- * @author <A href="mailto:Alexey_Abashev@epam.com">Alexey Abashev</A>
+ * @author <A href="mailto:abashev at gmail dot com">Alexey Abashev</A>
  * @version $Id$
  */
 public abstract class AbstractVisitor {

@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * @author <A href="mailto:Alexey_Abashev@epam.com">Alexey Abashev</A>
+ * @author <A href="mailto:abashev at gmail dot com">Alexey Abashev</A>
  * @version $Id$
  */
 public class AnnotationProcessor {
