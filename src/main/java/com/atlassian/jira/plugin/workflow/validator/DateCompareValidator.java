@@ -8,10 +8,8 @@ import java.util.Locale;
 import com.atlassian.jira.ManagerFactory;
 import com.atlassian.jira.config.properties.APKeys;
 import com.atlassian.jira.config.properties.ApplicationProperties;
-import com.atlassian.jira.issue.Issue;
 import com.atlassian.jira.issue.fields.Field;
 import com.atlassian.jira.plugin.annotation.Argument;
-import com.atlassian.jira.plugin.annotation.TransientVariable;
 import com.atlassian.jira.plugin.helpers.ConditionManager;
 import com.atlassian.jira.plugin.helpers.ConditionType;
 import com.atlassian.jira.plugin.helpers.YesNoManager;
@@ -29,9 +27,6 @@ import com.opensymphony.workflow.WorkflowException;
  *  
  */
 public class DateCompareValidator extends GenericValidator {
-	@TransientVariable
-	private Issue issue;
-
 	@Argument("date1Selected")
 	private String date1;
 	
@@ -70,8 +65,8 @@ public class DateCompareValidator extends GenericValidator {
 	private void checkDatesCondition(Field fldDate1, Field fldDate2, String cond, String includeTime) {
 		boolean condOK = false;
 		
-		Object objDate1 = WorkflowUtils.getFieldValueFromIssue(issue, fldDate1);
-		Object objDate2 = WorkflowUtils.getFieldValueFromIssue(issue, fldDate2);
+		Object objDate1 = WorkflowUtils.getFieldValueFromIssue(getIssue(), fldDate1);
+		Object objDate2 = WorkflowUtils.getFieldValueFromIssue(getIssue(), fldDate2);
 		
 		if ((objDate1!=null) && (objDate2!=null)) {
 			// It Takes the Locale for inicialize dates.
@@ -142,7 +137,7 @@ public class DateCompareValidator extends GenericValidator {
 				}
 				
 				this.setExceptionMessage(
-						issue, fldDate1,
+						fldDate1,
 						fldDate1.getName() + " isn't " + condString + " " + fldDate2.getName() + errorMsg, 
 						fldDate1.getName() + " isn't " + condString + " " + fldDate2.getName() + errorMsg
 				);
@@ -165,9 +160,9 @@ public class DateCompareValidator extends GenericValidator {
 	 * Throws an Exception if the field is null, but it is required.
 	 */
 	private void validateRequired(Field fldDate){
-		if(CommonPluginUtils.isFieldRequired(issue, fldDate)){
+		if(CommonPluginUtils.isFieldRequired(getIssue(), fldDate)){
 			this.setExceptionMessage(
-					issue, fldDate, 
+					fldDate, 
 					fldDate.getName() + " is required.", 
 					fldDate.getName() + " is required."
 			);

@@ -26,7 +26,8 @@ import com.opensymphony.workflow.loader.WorkflowDescriptor;
 public abstract class GenericValidator implements Validator {
 	private ValidatorErrorsBuilder errorBuilder;
 	private FieldScreen fieldScreen = null;
-	
+	private Issue issue = null;
+
 	protected abstract void validate() throws InvalidInputException, WorkflowException;
 	
 	@SuppressWarnings("unchecked")
@@ -37,6 +38,7 @@ public abstract class GenericValidator implements Validator {
 
 		this.fieldScreen = initScreen(transientVars);
 		this.errorBuilder = new ValidatorErrorsBuilder(hasViewScreen());
+		this.issue = (Issue) transientVars.get("issue");
 		
 		this.validate();
 		
@@ -57,11 +59,15 @@ public abstract class GenericValidator implements Validator {
 		processor.processAnnotations(this);
 	}
 
-	protected boolean hasViewScreen() {
+	protected final Issue getIssue() {
+		return this.issue;
+	}
+	
+	protected final boolean hasViewScreen() {
 		return (fieldScreen != null); 
 	}
 
-	protected FieldScreen getFieldScreen() {
+	protected final FieldScreen getFieldScreen() {
 		return this.fieldScreen; 
 	}
 	
@@ -73,12 +79,12 @@ public abstract class GenericValidator implements Validator {
 	 * @param messageIfOnScreen
 	 * @param messageIfHidden
 	 */
-	protected void setExceptionMessage(
-			Issue issue, Field field,
+	protected final void setExceptionMessage(
+			Field field,
 			String messageIfOnScreen, String messageIfHidden
 	) {
 		if (hasViewScreen()) {
-			if (CommonPluginUtils.isFieldOnScreen(issue, field, getFieldScreen())) {
+			if (CommonPluginUtils.isFieldOnScreen(this.issue, field, getFieldScreen())) {
 				this.errorBuilder.addError(field, messageIfOnScreen);
 			} else {
 				this.errorBuilder.addError(messageIfHidden);
