@@ -60,12 +60,29 @@
     <plugins>
       <plugin>
         <artifactId>maven-compiler-plugin</artifactId>
-        <version>2.0</version>
         <configuration>
-          <verbose>true</verbose>
           <source>1.5</source>
           <target>1.5</target>          
         </configuration>
+      </plugin>
+	  <plugin>
+		<groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-antrun-plugin</artifactId>
+        <executions>
+          <execution>
+            <phase>process-classes</phase>
+            <goals>
+              <goal>run</goal>
+            </goals>
+            <configuration>
+              <tasks>
+                <replace file="target/classes/atlassian-plugin.xml"
+                         token="@VERSION-REPLACED-BY-MAVEN@"
+                         value="${project.version}"/>
+              </tasks>
+            </configuration>
+          </execution>
+        </executions>
       </plugin>
     </plugins>
   </build>
