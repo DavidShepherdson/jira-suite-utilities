@@ -8,6 +8,7 @@ import com.atlassian.jira.plugin.helpers.ComparisonManager;
 import com.atlassian.jira.plugin.helpers.ComparisonType;
 import com.atlassian.jira.plugin.helpers.ConditionManager;
 import com.atlassian.jira.plugin.helpers.ConditionType;
+import com.atlassian.jira.plugin.util.LogUtils;
 import com.atlassian.jira.plugin.util.WorkflowUtils;
 import com.atlassian.jira.workflow.condition.AbstractJiraCondition;
 import com.opensymphony.module.propertyset.PropertySet;
@@ -19,18 +20,13 @@ import com.opensymphony.module.propertyset.PropertySet;
  *  
  */
 public class ValueFieldCondition extends AbstractJiraCondition {
-	
-	Issue issueObject = null;
-	
-	public ValueFieldCondition() {
-		
-	}
+	private Issue issueObject = null;
 	
 	/* (non-Javadoc)
 	 * @see com.opensymphony.workflow.Condition#passesCondition(java.util.Map, java.util.Map, com.opensymphony.module.propertyset.PropertySet)
 	 */
 	public boolean passesCondition(Map transientVars, Map args, PropertySet ps) {
-		issueObject = (Issue) transientVars.get("issue");
+		this.issueObject = getIssue(transientVars);
 		
 		String sField = (String) args.get("fieldsList");
 		String fieldCondition = (String) args.get("conditionList");
@@ -91,10 +87,10 @@ public class ValueFieldCondition extends AbstractJiraCondition {
 					
 					//comparison = originalValue.compareTo(Timestamp.valueOf(fieldValue));
 				}
-			}catch (ClassCastException cce){
+			} catch (ClassCastException cce) {
 				// It could be that you try to make a comparison type with wrong data types.
 				// But the user does not receive notifications on the happened thing.
-				cce.printStackTrace();
+				LogUtils.getGeneral().error("Unable to compare fields", cce);
 				comparison = -111;
 			}
 			
