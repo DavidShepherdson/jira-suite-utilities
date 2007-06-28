@@ -8,7 +8,7 @@
   <groupId>jira-suite-utilities</groupId>
   <artifactId>jira-suite-utilities</artifactId>
   <name>JIRA Suite Utilities</name>
-  <version>0.6-EA4</version>
+  <version>0.6-EA5</version>
   <packaging>jar</packaging>
 
   <organization>
