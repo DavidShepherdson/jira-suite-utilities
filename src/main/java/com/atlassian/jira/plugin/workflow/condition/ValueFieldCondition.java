@@ -70,27 +70,40 @@ public class ValueFieldCondition extends AbstractJiraCondition {
 				}
 			}
 			
-		}else{
+		} else if (comparisonType.equals(WorkflowUtils.COMPARISON_TYPE_NUMBER)){
 			int comparison = -111;
-			
+
+			Object value = WorkflowUtils.getFieldValueFromIssue(issueObject, field);
+
 			try{
-				// Makes the comparison between the fields passed like parameters.
-				if(comparisonType.equals(WorkflowUtils.COMPARISON_TYPE_NUMBER)){
-					Double originalValue = Double.valueOf(WorkflowUtils.getFieldValueFromIssueAsString(issueObject, field));
+				if (fieldValue.trim().equals("")) {
+					if (value == null) {
+						comparison = 0;
+					}
+				} else {
+					Double expectingValue = Double.valueOf(fieldValue);
 					
-					comparison = originalValue.compareTo(Double.valueOf(fieldValue));
-				}
-				
-				if(comparisonType.equals(WorkflowUtils.COMPARISON_TYPE_DATE)){
-					// Not implemented yet.
-					//Timestamp originalValue = (Timestamp)WorkflowUtils.getFieldValueFromIssue(issueObject, field);
-					
-					//comparison = originalValue.compareTo(Timestamp.valueOf(fieldValue));
+					if (value != null) {
+						Double numberValue;
+						
+						if (value instanceof String) {
+							numberValue = Double.valueOf((String) value);
+						} else if (value instanceof Number) {
+							numberValue = ((Number) value).doubleValue();
+						} else {
+							throw new NumberFormatException();
+						}
+						
+						comparison = expectingValue.compareTo(numberValue);
+					}
 				}
 			} catch (ClassCastException cce) {
 				// It could be that you try to make a comparison type with wrong data types.
 				// But the user does not receive notifications on the happened thing.
 				LogUtils.getGeneral().error("Unable to compare fields", cce);
+				comparison = -111;
+			} catch (NumberFormatException nfe) {
+				LogUtils.getGeneral().error("Wrong number format", nfe);
 				comparison = -111;
 			}
 			
@@ -111,6 +124,12 @@ public class ValueFieldCondition extends AbstractJiraCondition {
 					condOK = true;
 				
 			}
+
+		} else if(comparisonType.equals(WorkflowUtils.COMPARISON_TYPE_DATE)){
+			// Not implemented yet.
+			//Timestamp originalValue = (Timestamp)WorkflowUtils.getFieldValueFromIssue(issueObject, field);
+			
+			//comparison = originalValue.compareTo(Timestamp.valueOf(fieldValue));
 		}
 		
 		return condOK;
