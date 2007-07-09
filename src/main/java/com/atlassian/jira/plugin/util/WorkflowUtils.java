@@ -13,6 +13,7 @@ import com.atlassian.core.user.GroupUtils;
 import com.atlassian.jira.ComponentManager;
 import com.atlassian.jira.ManagerFactory;
 import com.atlassian.jira.issue.Issue;
+import com.atlassian.jira.issue.IssueFieldConstants;
 import com.atlassian.jira.issue.IssueRelationConstants;
 import com.atlassian.jira.issue.ModifiedValue;
 import com.atlassian.jira.issue.MutableIssue;
@@ -244,7 +245,9 @@ public class WorkflowUtils {
 				if(fieldId.equals("security")){
 					retVal = issue.getSecurityLevel();
 				}
-				
+				if (fieldId.equals(IssueFieldConstants.TIME_ESTIMATE)) {
+					retVal = issue.getEstimate();
+				}
 				if(retVal==null && !isEmpty){
 					GenericValue gvIssue = issue.getGenericValue();
 					retVal = gvIssue.get(fieldId);

@@ -28,6 +28,7 @@ import com.atlassian.jira.issue.fields.CustomField;
 import com.atlassian.jira.issue.fields.Field;
 import com.atlassian.jira.issue.fields.FieldException;
 import com.atlassian.jira.issue.fields.FieldManager;
+import com.atlassian.jira.issue.fields.layout.field.FieldLayout;
 import com.atlassian.jira.issue.fields.layout.field.FieldLayoutItem;
 import com.atlassian.jira.issue.fields.layout.field.FieldLayoutManager;
 import com.atlassian.jira.issue.fields.layout.field.FieldLayoutStorageException;
@@ -103,6 +104,7 @@ public class CommonPluginUtils {
 	/**
 	 * @return all navigable fields, include custom fields.
 	 */
+	@SuppressWarnings("unchecked")
 	private static Set<Field> getAllAvailableNavigableFields() {
 		Set<Field> navigableFields = Collections.emptySet();
 		
@@ -226,12 +228,13 @@ public class CommonPluginUtils {
 	public static FieldLayoutItem getFieldLayoutItem(Issue issue, Field field) throws FieldLayoutStorageException {
 		final FieldLayoutManager fieldLayoutManager = ComponentManager.getInstance().getFieldLayoutManager();
 
-		// Change by Bettina Zucker
-		//FieldLayoutItem layoutItem = fieldLayoutManager.getFieldLayout().getFieldLayoutItem(field.getId());
-		return fieldLayoutManager.getFieldLayout(
-				issue.getProject(), 
-				issue.getIssueTypeObject().getId()).getFieldLayoutItem(field.getId()
-		);		
+		FieldLayout layout = fieldLayoutManager.getFieldLayout(issue.getProject(), issue.getIssueTypeObject().getId());
+		
+		if (layout.getId() == null) {
+			layout = fieldLayoutManager.getEditableDefaultFieldLayout();
+		}
+		
+		return layout.getFieldLayoutItem(field.getId());		
 	}
 	
 	/**
@@ -243,12 +246,7 @@ public class CommonPluginUtils {
 		boolean retVal = false;
 		
 		try {
-			FieldLayoutManager fieldLayoutManager = ComponentManager.getInstance().getFieldLayoutManager();
-			// Change by Bettina Zucker
-			//FieldLayoutItem layoutItem = fieldLayoutManager.getFieldLayout().getFieldLayoutItem(field.getId());
-			FieldLayoutItem layoutItem = fieldLayoutManager.getFieldLayout(issue.getProject(), issue.getIssueTypeObject().getId()).getFieldLayoutItem(field.getId());		
-
-			retVal = layoutItem.isRequired();
+			retVal = getFieldLayoutItem(issue, field).isRequired();
 		} catch (FieldLayoutStorageException e) {
 			LogUtils.getGeneral().error("Unable to check is field required", e);
 		}
@@ -390,7 +388,7 @@ public class CommonPluginUtils {
 		Field issuelinks = ManagerFactory.getFieldManager().getField("issuelinks");
 		Field issuetype = ManagerFactory.getFieldManager().getField("issuetype");
 		Field project = ManagerFactory.getFieldManager().getField("project");
-		Field remaining = ManagerFactory.getFieldManager().getField("timeestimate");
+//		Field remaining = ManagerFactory.getFieldManager().getField("timeestimate");
 		Field status = ManagerFactory.getFieldManager().getField("status");
 		Field subtasks = ManagerFactory.getFieldManager().getField("subtasks");
 		Field thumbnail = ManagerFactory.getFieldManager().getField("thumbnail");
@@ -408,7 +406,7 @@ public class CommonPluginUtils {
 		fields.add(issuelinks);
 		fields.add(issuetype);
 		fields.add(project);
-		fields.add(remaining);
+//		fields.add(remaining);
 		fields.add(status);
 		fields.add(subtasks);
 		fields.add(thumbnail);
