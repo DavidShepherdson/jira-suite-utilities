@@ -17,8 +17,8 @@ import com.opensymphony.workflow.loader.ValidatorDescriptor;
  * This class defines the parameters available for Fields Required Validator.
  * 
  */
-public class WorkflowFieldsRequiredValidatorPluginFactory extends
-AbstractWorkflowPluginFactory implements WorkflowPluginValidatorFactory {
+public class WorkflowFieldsRequiredValidatorPluginFactory extends AbstractWorkflowPluginFactory 
+		implements WorkflowPluginValidatorFactory {
 	
 	/* (non-Javadoc)
 	 * @see com.atlassian.jira.plugin.workflow.AbstractWorkflowPluginFactory#getVelocityParamsForInput(java.util.Map)
@@ -28,7 +28,6 @@ AbstractWorkflowPluginFactory implements WorkflowPluginValidatorFactory {
 		
 		velocityParams.put("val-fieldsList", Collections.unmodifiableCollection(allFields));
 		velocityParams.put("val-splitter", WorkflowUtils.SPLITTER);
-		
 	}
 	
 	/* (non-Javadoc)
@@ -52,7 +51,6 @@ AbstractWorkflowPluginFactory implements WorkflowPluginValidatorFactory {
 		velocityParams.put("val-fieldsListSelected", Collections.unmodifiableCollection(fieldsSelected));
 		velocityParams.put("val-hidFieldsList", WorkflowUtils.getStringField(fieldsSelected, WorkflowUtils.SPLITTER));
 		velocityParams.put("val-fieldsList", Collections.unmodifiableCollection(allFields));
-		
 	}
 	
 	/* (non-Javadoc)
@@ -67,7 +65,6 @@ AbstractWorkflowPluginFactory implements WorkflowPluginValidatorFactory {
 		Collection fieldsSelected = WorkflowUtils.getFields(strFieldsSelected, WorkflowUtils.SPLITTER);
 		
 		velocityParams.put("val-fieldsListSelected", Collections.unmodifiableCollection(fieldsSelected));
-		
 	}
 	
 	/* (non-Javadoc)
