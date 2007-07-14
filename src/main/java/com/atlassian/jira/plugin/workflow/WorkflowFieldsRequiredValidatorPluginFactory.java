@@ -71,15 +71,14 @@ public class WorkflowFieldsRequiredValidatorPluginFactory extends AbstractWorkfl
 	 * @see com.atlassian.jira.plugin.workflow.WorkflowPluginFactory#getDescriptorParams(java.util.Map)
 	 */
 	public Map getDescriptorParams(Map validatorParams) {
-		Map params = new HashMap();
+		Map<String, String> params = new HashMap<String, String>();
+		String strFieldsSelected = extractSingleParam(validatorParams, "hidFieldsList");
 		
-		try{
-			String strFieldsSelected = extractSingleParam(validatorParams, "hidFieldsList");
-			params.put("hidFieldsList", strFieldsSelected);
-			
-		}catch(IllegalArgumentException iae){
-			// Aggregate so that Transitions can be added.
+		if ("".equals(strFieldsSelected)) {
+			throw new IllegalArgumentException("At least one field must be selected");
 		}
+		
+		params.put("hidFieldsList", strFieldsSelected);
 		
 		return params;
 	}

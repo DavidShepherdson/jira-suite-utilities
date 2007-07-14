@@ -2,7 +2,9 @@ package com.atlassian.jira.plugin.util;
 
 import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.Date;
 import java.util.Iterator;
@@ -16,14 +18,16 @@ import org.ofbiz.core.entity.model.ModelField;
 import com.atlassian.core.ofbiz.CoreFactory;
 import com.atlassian.jira.ComponentManager;
 import com.atlassian.jira.ManagerFactory;
+import com.atlassian.jira.config.properties.APKeys;
 import com.atlassian.jira.config.properties.ApplicationProperties;
 import com.atlassian.jira.config.properties.ApplicationPropertiesImpl;
+import com.atlassian.jira.issue.Issue;
+import com.atlassian.jira.issue.IssueFieldConstants;
 import com.atlassian.jira.issue.customfields.CustomFieldType;
 import com.atlassian.jira.issue.customfields.impl.DateCFType;
 import com.atlassian.jira.issue.customfields.impl.DateTimeCFType;
 import com.atlassian.jira.issue.customfields.impl.ImportIdLinkCFType;
 import com.atlassian.jira.issue.customfields.impl.ReadOnlyCFType;
-import com.atlassian.jira.issue.Issue;
 import com.atlassian.jira.issue.fields.CustomField;
 import com.atlassian.jira.issue.fields.Field;
 import com.atlassian.jira.issue.fields.FieldException;
@@ -37,6 +41,7 @@ import com.atlassian.jira.issue.fields.screen.FieldScreenLayoutItem;
 import com.atlassian.jira.issue.fields.screen.FieldScreenTab;
 import com.atlassian.jira.plugin.issue.fields.NameComparatorEx;
 import com.atlassian.jira.util.I18nHelper;
+import com.atlassian.jira.web.bean.FieldVisibilityBean;
 import com.atlassian.jira.web.bean.I18nBean;
 
 /**
@@ -46,6 +51,12 @@ import com.atlassian.jira.web.bean.I18nBean;
  * 
  */
 public class CommonPluginUtils {
+	private static final Collection<String> TIME_TRACKING_FIELDS = Arrays.asList(
+			IssueFieldConstants.TIME_ESTIMATE,
+			IssueFieldConstants.TIME_ORIGINAL_ESTIMATE,
+			IssueFieldConstants.TIME_SPENT,
+			IssueFieldConstants.TIMETRACKING
+	);
 	
 	/**
 	 * @return a complete list of fields, including custom fields.
@@ -197,32 +208,17 @@ public class CommonPluginUtils {
 	 * @return if a field is hidden.
 	 */
 	public static boolean isFieldHidden(Issue issue, Field field) {
-		boolean retVal = false;
-		final FieldManager fieldManager = ComponentManager.getInstance().getFieldManager();
+		final String fieldId = field.getId();
 		
-		if (fieldManager.isCustomField(field)) {
-			List<CustomField> customFields = ManagerFactory.getCustomFieldManager().getCustomFieldObjects(issue);
-			boolean isForIssue = false;
+		if (TIME_TRACKING_FIELDS.contains(fieldId)) {
+			ApplicationProperties applicationProperties = ManagerFactory.getApplicationProperties();
 			
-			for (CustomField cField : customFields) {
-				if (cField.getId().equals(field.getId())) {
-					isForIssue = true;
-					break;
-				}
-			}
+			return !applicationProperties.getOption(APKeys.JIRA_OPTION_TIMETRACKING);
+		} else {
+			FieldVisibilityBean fieldVisibilityBean = new FieldVisibilityBean();
 
-			if (!isForIssue) {
-				return true;
-			}
+	        return fieldVisibilityBean.isFieldHidden(field.getId(), issue.getGenericValue());
 		}
-		
-		try {
-			retVal = getFieldLayoutItem(issue, field).isHidden();
-		} catch (FieldLayoutStorageException e) {
-			LogUtils.getGeneral().error("Field layout exception", e);
-		}
-		
-		return retVal;
 	}
 	
 	public static FieldLayoutItem getFieldLayoutItem(Issue issue, Field field) throws FieldLayoutStorageException {

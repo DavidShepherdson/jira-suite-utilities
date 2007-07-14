@@ -4,6 +4,7 @@ import java.util.Collection;
 
 import com.atlassian.jira.issue.fields.Field;
 import com.atlassian.jira.plugin.annotation.Argument;
+import com.atlassian.jira.plugin.util.CommonPluginUtils;
 import com.atlassian.jira.plugin.util.WorkflowUtils;
 import com.opensymphony.workflow.InvalidInputException;
 import com.opensymphony.workflow.WorkflowException;
@@ -27,7 +28,7 @@ public class FieldsRequiredValidator extends GenericValidator {
 		for (Field field : fieldsSelected) {
 			Object fieldValue = WorkflowUtils.getFieldValueFromIssue(getIssue(), field);
 			
-			if (fieldValue == null) {
+			if ((fieldValue == null) && !CommonPluginUtils.isFieldHidden(getIssue(), field)) {
 				// Sets Exception message.
 				this.setExceptionMessage(
 						field, 
