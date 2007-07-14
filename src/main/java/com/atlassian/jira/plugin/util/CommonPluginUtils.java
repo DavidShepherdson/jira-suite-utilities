@@ -131,15 +131,12 @@ public class CommonPluginUtils {
 	/**
 	 * @return a list of all fields of type date and datetime.
 	 */
-	public static List getAllDateFields() {
-		List allDateFields = new ArrayList();
+	public static List<Field> getAllDateFields() {
+		List<Field> allDateFields = new ArrayList<Field>();
 		
-		CustomField cfDate = null;
-		Iterator it = ManagerFactory.getCustomFieldManager().getCustomFieldObjects().iterator();
+		List<CustomField> fields = ManagerFactory.getCustomFieldManager().getCustomFieldObjects();
 		
-		while(it.hasNext()){
-			cfDate = (CustomField) it.next(); 
-			
+		for (CustomField cfDate : fields) {
 			CustomFieldType customFieldType = cfDate.getCustomFieldType();
 			
 			if ((customFieldType instanceof DateCFType) || (customFieldType instanceof DateTimeCFType)){
@@ -149,16 +146,15 @@ public class CommonPluginUtils {
 		
 		// Obtain all fields type date from model.
 		ModelEntity modelIssue = CoreFactory.getGenericDelegator().getModelEntity("Issue");
-		Iterator it1 = modelIssue.getFieldsIterator();
+		Iterator<ModelField> modelFields = modelIssue.getFieldsIterator();
 		
-		while (it1.hasNext()){
-			ModelField modelField = (ModelField) it1.next();
+		while (modelFields.hasNext()) {
+			ModelField modelField = modelFields.next();
 			
 			if(modelField.getType().equals("date-time")){
 				Field fldDate = ManagerFactory.getFieldManager().getField(modelField.getName());
 				allDateFields.add(fldDate);
 			}
-			
 		}
 		
 		return sortFields(allDateFields);
