@@ -160,6 +160,11 @@
     </dependency>
   </dependencies>
   
+  <scm>
+    <connection>scm:svn:http://jira-suite-utilities.googlecode.com/svn/trunk/</connection>
+    <developerConnection>scm:svn:https://${scm.username}:${scm.password}@jira-suite-utilities.googlecode.com/svn/trunk/</developerConnection>
+  </scm>
+  
   <repositories>
   	<repository>
 	  <id>jiraDevKitRepository</id>
