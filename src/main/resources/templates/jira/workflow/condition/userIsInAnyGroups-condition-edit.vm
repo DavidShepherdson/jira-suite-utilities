@@ -1,7 +1,9 @@
 <tr bgcolor=ffffff>
-    <td align="right" valign="top" bgcolor="fffff0">
+    <td align="center" valign="center" bgcolor="fffff0">
         <span class="label">Groups allowed to execute this action:</span>
     </td>
+</tr>
+<tr>
     <td bgcolor="ffffff" nowrap>
     	    <table width=100%>
     	        <tr align="center">
@@ -13,7 +15,7 @@
 	                        #end
 	                    </select>
 		        
-					                    <br><input id="hidGroupsList" name="hidGroupsList" type="hidden" value="${val-hidGroupsList}">
+		                    <br><input id="hidGroupsList" name="hidGroupsList" type="hidden" value="$!{val-hidGroupsList}">
 			                </td>
 		    
 		                <td align="center" width=50% valign="top">
@@ -29,7 +31,7 @@
 		                </td>
 		    	        </tr>
 		    	        
-						    	        <tr align="center" valign="center">
+	   	        <tr align="center" valign="center">
 		                <td align="center" width=50% valign="top">
 		                    <button type=button onclick="transferItemAdd('groupsList', 'groupsListSelected', 'hidGroupsList')">Add &gt;&gt;</button>
 	                </td>
@@ -41,11 +43,11 @@
     </td>
 </tr>
 <tr>
-    <td colspan="2">
-    	    <div style="width: 70%;" class="infoBox centred">
-    	        If you do not select a group, nobody will be able to execute this Transition.
-    	    </div>
-    	</td>
+  <td colspan="2">
+    <div style="width: 70%;" class="infoBox centred">
+      If you do not select a group, nobody will be able to execute this Transition.
+    </div>
+  </td>
 </tr>
 
 <script type="text/javascript">
