@@ -55,21 +55,20 @@ public class ValueFieldCondition extends AbstractJiraCondition {
 		boolean condOK = false;
 		
 		// If the comparisson is by String.
-		if(comparisonType.equals(WorkflowUtils.COMPARISON_TYPE_STRING)){
+		if (comparisonType.equals(WorkflowUtils.COMPARISON_TYPE_STRING)) {
 			String originalValue = WorkflowUtils.getFieldValueFromIssueAsString(issueObject, field);
 			
 			condOK = originalValue.equals(fieldValue);
 			
-			if((condition.equals("="))){
+			if (condition.equals("=")) {
 				condOK = true && condOK;
-			}else{
-				if((condition.equals(WorkflowUtils.CONDITION_DIFFERENT))){
+			} else {
+				if (condition.equals(WorkflowUtils.CONDITION_DIFFERENT)) {
 					condOK = true && !condOK;
-				}else{
+				} else {
 					condOK = false;
 				}
 			}
-			
 		} else if (comparisonType.equals(WorkflowUtils.COMPARISON_TYPE_NUMBER)){
 			int comparison = -111;
 
@@ -109,7 +108,7 @@ public class ValueFieldCondition extends AbstractJiraCondition {
 			
 			// If there were no errors, verifies that the comparison between the fields 
 			// is same that the condition passed like parameter.
-			if(comparison!=-111){
+			if (comparison != (-111)) {
 				
 				if ((comparison == 0) && ((condition.equals("<=")) || (condition.equals("=")) || (condition.equals(">="))))
 					condOK = true;
