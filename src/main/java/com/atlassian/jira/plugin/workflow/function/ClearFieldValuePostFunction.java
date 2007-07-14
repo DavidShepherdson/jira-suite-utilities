@@ -2,12 +2,11 @@ package com.atlassian.jira.plugin.workflow.function;
 
 import java.util.Map;
 
-import com.atlassian.jira.issue.MutableIssue;
 import com.atlassian.jira.plugin.util.LogUtils;
 import com.atlassian.jira.plugin.util.WorkflowUtils;
 import com.atlassian.jira.plugin.workflow.WorkflowClearFieldValueFunctionPluginFactory;
+import com.atlassian.jira.workflow.function.issue.AbstractJiraFunctionProvider;
 import com.opensymphony.module.propertyset.PropertySet;
-import com.opensymphony.workflow.FunctionProvider;
 import com.opensymphony.workflow.WorkflowException;
 
 /**
@@ -15,15 +14,14 @@ import com.opensymphony.workflow.WorkflowException;
  * 
  * @author Alexey Abashev
  */
-public class ClearFieldValuePostFunction implements FunctionProvider {
+public class ClearFieldValuePostFunction extends AbstractJiraFunctionProvider {
 	@SuppressWarnings("unchecked")
 	public void execute(Map transientVars, Map args, PropertySet ps) throws WorkflowException {
-		MutableIssue issueObject = (MutableIssue) transientVars.get("issue");
 		String fieldKey = (String) args.get(WorkflowClearFieldValueFunctionPluginFactory.FIELD);
 		
 		// It set the value to field.
 		try {
-			WorkflowUtils.setFieldValue(issueObject, fieldKey, null);
+			WorkflowUtils.setFieldValue(getIssue(transientVars), fieldKey, null);
 		} catch (Exception e) {
 			LogUtils.getGeneral().error("Unable to set field - " + fieldKey, e);
 		}
