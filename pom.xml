@@ -4,7 +4,7 @@
   <groupId>jira-suite-utilities</groupId>
   <artifactId>jira-suite-utilities</artifactId>
   <name>JIRA Suite Utilities</name>
-  <version>0.6</version>
+  <version>0.7-SNAPSHOT</version>
   <packaging>jar</packaging>
 
   <organization>
@@ -154,8 +154,8 @@
   </dependencies>
   
   <scm>
-    <connection>scm:svn:http://jira-suite-utilities.googlecode.com/svn/tags/version_0_6</connection>
-    <developerConnection>scm:svn:https://abashev:t9p9h9c8@jira-suite-utilities.googlecode.com/svn/tags/version_0_6</developerConnection>
+    <connection>scm:svn:http://jira-suite-utilities.googlecode.com/svn/trunk/</connection>
+    <developerConnection>scm:svn:https://abashev:t9p9h9c8@jira-suite-utilities.googlecode.com/svn/trunk/</developerConnection>
   </scm>
   
   <repositories>
