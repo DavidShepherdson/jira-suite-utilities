@@ -1,14 +1,10 @@
-<?xml version="1.0" encoding="UTF-8"?>
-
-<project xmlns="http://maven.apache.org/POM/4.0.0" 
-		 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
-		 xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 		 
   <modelVersion>4.0.0</modelVersion>
   <groupId>jira-suite-utilities</groupId>
   <artifactId>jira-suite-utilities</artifactId>
   <name>JIRA Suite Utilities</name>
-  <version>0.6-EA5-SNAPSHOT</version>
+  <version>0.6</version>
   <packaging>jar</packaging>
 
   <organization>
@@ -75,9 +71,7 @@
             </goals>
             <configuration>
               <tasks>
-                <replace file="target/classes/atlassian-plugin.xml"
-                         token="@VERSION-REPLACED-BY-MAVEN@"
-                         value="${project.version}"/>
+                <replace file="target/classes/atlassian-plugin.xml" token="@VERSION-REPLACED-BY-MAVEN@" value="${project.version}" />
               </tasks>
             </configuration>
           </execution>
@@ -160,8 +154,8 @@
   </dependencies>
   
   <scm>
-    <connection>scm:svn:http://jira-suite-utilities.googlecode.com/svn/trunk/</connection>
-    <developerConnection>scm:svn:https://${scm.username}:${scm.password}@jira-suite-utilities.googlecode.com/svn/trunk/</developerConnection>
+    <connection>scm:svn:http://jira-suite-utilities.googlecode.com/svn/tags/version_0_6</connection>
+    <developerConnection>scm:svn:https://abashev:t9p9h9c8@jira-suite-utilities.googlecode.com/svn/tags/version_0_6</developerConnection>
   </scm>
   
   <repositories>
