@@ -155,7 +155,7 @@
   
   <scm>
     <connection>scm:svn:http://jira-suite-utilities.googlecode.com/svn/trunk/</connection>
-    <developerConnection>scm:svn:https://abashev:t9p9h9c8@jira-suite-utilities.googlecode.com/svn/trunk/</developerConnection>
+    <developerConnection>scm:svn:https://jira-suite-utilities.googlecode.com/svn/trunk/</developerConnection>
   </scm>
   
   <repositories>
