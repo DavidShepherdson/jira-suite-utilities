@@ -371,24 +371,26 @@ public class CommonPluginUtils {
 	 */
 	private static List<Field> getNonRequirableFields(){
 		List<Field> fields = new ArrayList<Field>();
+		final FieldManager fieldManager = ManagerFactory.getFieldManager();
 		
-		Field attachment = ManagerFactory.getFieldManager().getField("attachment");
-		Field comment = ManagerFactory.getFieldManager().getField("comment");
-		Field created = ManagerFactory.getFieldManager().getField("created");
-		Field estimate = ManagerFactory.getFieldManager().getField("timeoriginalestimate");
-		Field issuekey = ManagerFactory.getFieldManager().getField("issuekey");
-		Field issuelinks = ManagerFactory.getFieldManager().getField("issuelinks");
-		Field issuetype = ManagerFactory.getFieldManager().getField("issuetype");
-		Field project = ManagerFactory.getFieldManager().getField("project");
+		Field attachment = fieldManager.getField(IssueFieldConstants.ATTACHMENT);
+		Field comment = fieldManager.getField(IssueFieldConstants.COMMENT);
+		Field created = fieldManager.getField(IssueFieldConstants.CREATED);
+		Field estimate = fieldManager.getField(IssueFieldConstants.TIME_ORIGINAL_ESTIMATE);
+		Field issuekey = fieldManager.getField(IssueFieldConstants.ISSUE_KEY);
+		Field issuelinks = fieldManager.getField(IssueFieldConstants.ISSUE_LINKS);
+		Field issuetype = fieldManager.getField(IssueFieldConstants.ISSUE_TYPE);
+		Field project = fieldManager.getField(IssueFieldConstants.PROJECT);
 //		Field remaining = ManagerFactory.getFieldManager().getField("timeestimate");
-		Field status = ManagerFactory.getFieldManager().getField("status");
-		Field subtasks = ManagerFactory.getFieldManager().getField("subtasks");
-		Field thumbnail = ManagerFactory.getFieldManager().getField("thumbnail");
-		Field timeSpent = ManagerFactory.getFieldManager().getField("timespent");
-		Field timetracking = ManagerFactory.getFieldManager().getField("timetracking");
-		Field updated = ManagerFactory.getFieldManager().getField("updated");
-		Field votes = ManagerFactory.getFieldManager().getField("votes");
-		Field workratio = ManagerFactory.getFieldManager().getField("workratio");
+		Field status = fieldManager.getField(IssueFieldConstants.STATUS);
+		Field subtasks = fieldManager.getField(IssueFieldConstants.SUBTASKS);
+		Field thumbnail = fieldManager.getField(IssueFieldConstants.THUMBNAIL);
+		Field timeSpent = fieldManager.getField(IssueFieldConstants.TIME_SPENT);
+		Field timetracking = fieldManager.getField(IssueFieldConstants.TIMETRACKING);
+		Field updated = fieldManager.getField(IssueFieldConstants.UPDATED);
+		Field votes = fieldManager.getField(IssueFieldConstants.VOTES);
+		Field workratio = fieldManager.getField(IssueFieldConstants.WORKRATIO);
+		Field security = fieldManager.getField(IssueFieldConstants.SECURITY);
 		
 		fields.add(attachment);
 		fields.add(comment);
@@ -407,6 +409,7 @@ public class CommonPluginUtils {
 		fields.add(updated);
 		fields.add(votes);
 		fields.add(workratio);
+		fields.add(security);
 		
 		return fields;
 	}
