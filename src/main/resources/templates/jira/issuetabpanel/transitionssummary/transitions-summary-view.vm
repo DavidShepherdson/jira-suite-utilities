@@ -63,13 +63,18 @@
 				                </table>
 		            </td>
 						            <td bgcolor="#ffffff" width=18% valign=top>
-                <table width="100%">
-		                    <tr>
-		                        <td valign=top>
-		                				            #authorlink (${tran.getLastUpdater()})
-				                        </td>
-				                    </tr>
-				                </table>
+  <table width="100%">
+	<tr>
+	  <td valign=top>
+		#if (${action.isUserExists(${tran.getLastUpdater()})})
+	      #authorlink (${tran.getLastUpdater()})
+		#else
+		  ${tran.getLastUpdater()}
+		#end
+      </td>
+	</tr>
+  </table>
+				                
 		            </td>
 						            </td>
 						            <td bgcolor="#ffffff" width=18% valign=top align=right>
