@@ -10,7 +10,7 @@ import com.atlassian.jira.plugin.util.LogUtils;
 
 /**
  * @author <A href="mailto:abashev at gmail dot com">Alexey Abashev</A>
- * @version $Id$
+ * @version $Id: MapFieldProcessor.java 104 2007-10-04 13:30:08Z abashev $
  */
 public class MapFieldProcessor extends AbstractVisitor {
 	private final Class<? extends Annotation> annotation;

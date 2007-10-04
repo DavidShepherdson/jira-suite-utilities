@@ -11,7 +11,7 @@ import java.lang.annotation.Target;
  * This annotation is used for marking fields as container for arguments in validators,
  * conditions and post-function.
  * @author <A href="mailto:abashev at gmail dot com">Alexey Abashev</A>
- * @version $Id$
+ * @version $Id: Argument.java 104 2007-10-04 13:30:08Z abashev $
  */
 @Documented
 @Retention(RUNTIME)

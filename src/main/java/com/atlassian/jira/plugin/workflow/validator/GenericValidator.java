@@ -21,7 +21,7 @@ import com.opensymphony.workflow.loader.WorkflowDescriptor;
 
 /**
  * @author <A href="mailto:abashev at gmail dot com">Alexey Abashev</A>
- * @version $Id$
+ * @version $Id: GenericValidator.java 104 2007-10-04 13:30:08Z abashev $
  */
 public abstract class GenericValidator implements Validator {
 	private ValidatorErrorsBuilder errorBuilder;
