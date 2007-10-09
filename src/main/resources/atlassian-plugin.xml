@@ -1,12 +1,10 @@
-<atlassian-plugin key="com.atlassian.jira.plugin.jirasuite" 
-		  name="JIRA Suite Utilities">
+<atlassian-plugin key="com.googlecode.jira-suite-utilities" name="JIRA Suite Utilities">
     <plugin-info>
         <description>Many objects to extend JIRA</description>
         <version>@VERSION-REPLACED-BY-MAVEN@</version>
-        <application-version min="3.5" max="3.9"/>
+        <application-version min="3.5" max="3.11"/>
         <vendor name="Quadratica SRL" url="http://www.quadratica.com.ar"/>
     </plugin-info>   
-    
 
 	<!-- Custom Fields -->
 
@@ -14,11 +12,11 @@
 
 	<!-- Conditions -->
 	<workflow-condition key="userIsInAnyGroups-condition" name="User Is In Any Groups" 
-        class="com.atlassian.jira.plugin.workflow.WorkflowUserIsInAnyGroupsConditionPluginFactory">
+        class="com.googlecode.jsu.workflow.WorkflowUserIsInAnyGroupsConditionPluginFactory">
         <description>It allows only users in any given groups to execute the transition.</description>
 
 		<condition-class>
-			com.atlassian.jira.plugin.workflow.condition.UserIsInAnyGroupsCondition
+			com.googlecode.jsu.workflow.condition.UserIsInAnyGroupsCondition
 		</condition-class>
 
         <resource type="velocity" name="view" location="templates/jira/workflow/condition/userIsInAnyGroups-condition-view.vm"/>
@@ -27,11 +25,11 @@
 	</workflow-condition>
     
 	<workflow-condition key="valueField-condition" name="Value Field" 
-        class="com.atlassian.jira.plugin.workflow.WorkflowValueFieldConditionPluginFactory">
+        class="com.googlecode.jsu.workflow.WorkflowValueFieldConditionPluginFactory">
         <description>It allows to only execute the transition if the given value of the field is equal to a specified value.</description>
 
 		<condition-class>
-			com.atlassian.jira.plugin.workflow.condition.ValueFieldCondition
+			com.googlecode.jsu.workflow.condition.ValueFieldCondition
 		</condition-class>
 
         <resource type="velocity" name="view" location="templates/jira/workflow/condition/fieldvalue-condition-view.vm"/>
@@ -41,11 +39,11 @@
     
 	<!-- Validators -->
 	<workflow-validator key="dateCompare-validator" name="Date Compare" 
-		class="com.atlassian.jira.plugin.workflow.WorkflowDateCompareValidatorPluginFactory">
+		class="com.googlecode.jsu.workflow.WorkflowDateCompareValidatorPluginFactory">
 		<description>Compare two date fields during a workflow transition.</description>
 		
 		<validator-class>
-			com.atlassian.jira.plugin.workflow.validator.DateCompareValidator
+			com.googlecode.jsu.workflow.validator.DateCompareValidator
 		</validator-class>
 		
 		<resource type="velocity" name="view" location="templates/jira/workflow/validator/datecompare-validator-view.vm"/>
@@ -54,11 +52,11 @@
 	</workflow-validator>  
 
 	<workflow-validator key="fieldsRequired-validator" name="Fields Required" 
-		class="com.atlassian.jira.plugin.workflow.WorkflowFieldsRequiredValidatorPluginFactory">
+		class="com.googlecode.jsu.workflow.WorkflowFieldsRequiredValidatorPluginFactory">
 		<description>Fields required during a workflow transition.</description>
 		
 		<validator-class>
-			com.atlassian.jira.plugin.workflow.validator.FieldsRequiredValidator
+			com.googlecode.jsu.workflow.validator.FieldsRequiredValidator
 		</validator-class>
 		
 		<resource type="velocity" name="view" location="templates/jira/workflow/validator/fieldsrequired-validator-view.vm"/>
@@ -67,11 +65,11 @@
 	</workflow-validator>  
 
 	<workflow-validator key="windowsDate-validator" name="Window Dates" 
-		class="com.atlassian.jira.plugin.workflow.WorkflowWindowsDateValidatorPluginFactory">
+		class="com.googlecode.jsu.workflow.WorkflowWindowsDateValidatorPluginFactory">
 		<description>It compares two fields dates, adding a window of days to one of them.</description>
 		
 		<validator-class>
-			com.atlassian.jira.plugin.workflow.validator.WindowsDateValidator
+			com.googlecode.jsu.workflow.validator.WindowsDateValidator
 		</validator-class>
 		
 		<resource type="velocity" name="view" location="templates/jira/workflow/validator/windowsdate-validator-view.vm"/>
@@ -81,11 +79,11 @@
 
 	<!-- Functions -->
 	<workflow-function key="copyValueFromOtherField-function" name="Copy Value From Other Field" 
-		class="com.atlassian.jira.plugin.workflow.WorkflowCopyValueFromOtherFieldPostFunctionPluginFactory">
+		class="com.googlecode.jsu.workflow.WorkflowCopyValueFromOtherFieldPostFunctionPluginFactory">
         <description>It copies the value of one field to another.</description>
 
         <function-class>
-        	com.atlassian.jira.plugin.workflow.function.CopyValueFromOtherFieldPostFunction
+        	com.googlecode.jsu.workflow.function.CopyValueFromOtherFieldPostFunction
         </function-class>
 
         <orderable>true</orderable>
@@ -100,11 +98,11 @@
     
     <workflow-function key="updateIssueCustomField-function" 
     				   name="Update Issue Custom Field" 
-    				   class="com.atlassian.jira.plugin.workflow.WorkflowUpdateIssueCustomFieldFunctionPluginFactory">
+    				   class="com.googlecode.jsu.workflow.WorkflowUpdateIssueCustomFieldFunctionPluginFactory">
         <description>Updates an issue custom field to a given value.</description>
 
         <function-class>
-        	com.atlassian.jira.plugin.workflow.function.UpdateIssueCustomFieldPostFunction
+        	com.googlecode.jsu.workflow.function.UpdateIssueCustomFieldPostFunction
         </function-class>
 
         <orderable>true</orderable>
@@ -118,11 +116,11 @@
 
     <workflow-function key="clearFieldValue-function" 
     				   name="Clear Field Value" 
-    				   class="com.atlassian.jira.plugin.workflow.WorkflowClearFieldValueFunctionPluginFactory">
+    				   class="com.googlecode.jsu.workflow.WorkflowClearFieldValueFunctionPluginFactory">
         <description>Clear field value.</description>
 
         <function-class>
-        	com.atlassian.jira.plugin.workflow.function.ClearFieldValuePostFunction
+        	com.googlecode.jsu.workflow.function.ClearFieldValuePostFunction
         </function-class>
 
         <orderable>true</orderable>
@@ -142,14 +140,14 @@
 	
     <issue-tabpanel key="transitions-summary-tabpanel" 
     				name="Transitions Summary Tab Panel" 
-    				class="com.atlassian.jira.plugin.transitionssummary.issuetabpanel.TransitionsSummaryTabPanel">
+    				class="com.googlecode.jsu.transitionssummary.issuetabpanel.TransitionsSummaryTabPanel">
 
 		<description key="transition.summary.description" />
 		<label key="transition.summary.transitions" />
 
     	<resource type="i18n" 
     			  name="i18n" 
-    			  location="com.atlassian.jira.plugin.transitionssummary.transitionssummary" />
+    			  location="com.googlecode.jsu.transitionssummary.transitionssummary" />
         <resource type="velocity" 
         		  name="view" 
         		  location="templates/jira/issuetabpanel/transitionssummary/transitions-summary-view.vm" />
