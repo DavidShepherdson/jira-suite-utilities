@@ -42,7 +42,7 @@ import com.atlassian.jira.issue.fields.screen.FieldScreenTab;
 import com.atlassian.jira.util.I18nHelper;
 import com.atlassian.jira.web.bean.FieldVisibilityBean;
 import com.atlassian.jira.web.bean.I18nBean;
-import com.googlecode.jsu.issue.fields.NameComparatorEx;
+import com.googlecode.jsu.helpers.NameComparatorEx;
 
 /**
  * @author Gustavo Martin.
