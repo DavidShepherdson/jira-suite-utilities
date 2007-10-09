@@ -2,6 +2,8 @@ package com.googlecode.jsu.workflow.function;
 
 import java.util.Map;
 
+import org.apache.log4j.Logger;
+
 import com.atlassian.jira.issue.MutableIssue;
 import com.atlassian.jira.issue.fields.Field;
 import com.atlassian.jira.workflow.function.issue.AbstractJiraFunctionProvider;
@@ -16,6 +18,8 @@ import com.opensymphony.workflow.WorkflowException;
  * This function copies the value from a field to another one.
  */
 public class CopyValueFromOtherFieldPostFunction extends AbstractJiraFunctionProvider {
+	private final Logger log = LogUtils.getGeneral();
+	
 	/* (non-Javadoc)
 	 * @see com.opensymphony.workflow.FunctionProvider#execute(java.util.Map, java.util.Map, com.opensymphony.module.propertyset.PropertySet)
 	 */
@@ -30,9 +34,23 @@ public class CopyValueFromOtherFieldPostFunction extends AbstractJiraFunctionPro
 			
 			// It gives the value from the source field.
 			Object sourceValue = WorkflowUtils.getFieldValueFromIssue(issue, fieldFrom);
-		
+
+			if (log.isDebugEnabled()) {
+				log.debug(
+						String.format(
+								"Copying value \"%s\" from issue %s field [%s] to field [%s] ", 
+								sourceValue.toString(), issue.getKey(), 
+								sourceFieldKey, destinationFieldKey
+						)
+				);
+			}
+			
 			// It set the value to field.
 			WorkflowUtils.setFieldValue(issue, destinationFieldKey, sourceValue);
+
+			if (log.isDebugEnabled()) {
+				log.debug("Value was successfully copied");
+			}
 		} catch (Exception e) {
 			final Field destField = (Field) WorkflowUtils.getFieldFromKey(destinationFieldKey);
 			final String message = "Unable to copy value from " + fieldFrom.getName() + " to " + destField.getName();
