@@ -1,6 +1,7 @@
 package com.googlecode.jsu.workflow.function;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import com.atlassian.jira.ManagerFactory;
@@ -42,12 +43,25 @@ public class UpdateIssueCustomFieldPostFunction extends AbstractJiraFunctionProv
 			);
 		}
 
-		processField(getIssue(transientVars), fieldName, fieldValue);
+		// Add change item history. First, get any other changeitems found
+		// then push ours back onto the stack for later processing
+		// As seen in UpdateIssueFieldFunction
+
+		IssueChangeHolder changeHolder = new DefaultIssueChangeHolder();
+		List changeItems = (List) transientVars.get("changeItems");
+
+		if (changeItems != null) {
+			changeHolder.addChangeItems(changeItems);
+		}
+
+		processField(getIssue(transientVars), fieldName, fieldValue, changeHolder);
+
+		// push back
+		transientVars.put("changeItems", changeHolder.getChangeItems());
 	}
 
-	private void processField(MutableIssue issue, String fieldName, String fieldValue) throws WorkflowException {
+	private void processField(MutableIssue issue, String fieldName, String fieldValue, IssueChangeHolder changeHolder) throws WorkflowException {
 		FieldManager fieldManager = ManagerFactory.getFieldManager();
-		IssueChangeHolder changeHolder = new DefaultIssueChangeHolder();
 
 		CustomField field = fieldManager.getCustomField(fieldName);
 		Map params = EasyMap.build(field.getId(), new String[] { fieldValue });
