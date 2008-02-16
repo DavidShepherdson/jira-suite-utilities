@@ -7,8 +7,45 @@
     </plugin-info>   
 
 	<!-- Custom Fields -->
+    <customfield-type key="locationtextfield" 
+                      name="Location Text Field"
+                      class="com.atlassian.jira.issue.customfields.impl.TextCFType"
+                      i18n-name-key="custom.field.type.text_field.name">
+
+		<resource type="i18n" name="i18n" location="com.googlecode.jsu.maps.resources" />
+        
+        <description key="custom.field.type.text_field.description">Custom field type for saving locations and showing it at maps.</description>
+        
+        <resource type="velocity" name="view" location="templates/jira/fields/view/view-location.vm"/>
+        <resource type="velocity" name="edit" location="templates/plugins/fields/edit/edit-basictext.vm"/>
+        <resource type="velocity" name="xml" location="templates/plugins/fields/xml/xml-basictext.vm"/>
+    </customfield-type>
+
+    <customfield-type key="locationselect" 
+    				  name="Location Select List"
+        			  i18n-name-key="custom.field.type.select_field.name"
+        			  class="com.atlassian.jira.issue.customfields.impl.SelectCFType">
+    
+    	<resource type="i18n" name="i18n" location="com.googlecode.jsu.maps.resources" />
+        
+        <description key="custom.field.type.select_field.description">A single select list for locations.</description>
+
+        <resource type="velocity" name="view" location="templates/jira/fields/view/view-location.vm"/>
+        <resource type="velocity" name="edit" location="templates/plugins/fields/edit/edit-select.vm"/>
+        <resource type="velocity" name="xml" location="templates/plugins/fields/xml/xml-basictext.vm"/>
+    </customfield-type>
 
 	<!-- Searches -->
+    <customfield-searcher key="textsearcher" name="Free Text Searcher"
+        i18n-name-key="admin.customfield.searcher.textsearcher.name"
+        class="com.atlassian.jira.issue.customfields.searchers.TextSearcher">
+        <description key="admin.customfield.searcher.textsearcher.desc">Search for values using a free text search.</description>
+
+        <resource type="velocity" name="search" location="templates/plugins/fields/edit-searcher/search-basictext.vm"/>
+        <resource type="velocity" name="view" location="templates/plugins/fields/view-searcher/view-searcher-basictext.vm"/>
+        
+        <valid-customfield-type package="com.atlassian.jira.plugin.maps" key="locationtextfield"/>
+    </customfield-searcher>
 
 	<!-- Conditions -->
 	<workflow-condition key="userIsInAnyGroups-condition" name="User Is In Any Groups" 

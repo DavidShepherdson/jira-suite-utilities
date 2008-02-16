@@ -1,0 +1,88 @@
+#if ($value)
+  #if (${displayParameters.excel_view})
+    $textutils.br($textutils.htmlEncode($!value.toString(), false))
+  #else
+    <div id="${customField.id}-closed">
+      <div>
+		<a href="#" onClick="showMap('${customField.id}', '$!value.toString()'); return false;">$!value.toString()</a>       
+      </div>
+    </div>
+
+    <div id="${customField.id}-opened" style="display: none">
+      <div id="${customField.id}-hide-button" style="float: right; display: none">
+        <a href="#" onClick="hideMap('${customField.id}'); return false;" class="smallgrey">&laquo;  $i18n.getText("custom.field.messages.hide_map")</a>
+      </div>
+      <div>
+		$!value.toString()<span id="${customField.id}-not-found" style="display: none"> - $i18n.getText("custom.field.messages.location_not_found")</span>
+      </div>
+    </div>
+    
+    <div id="${customField.id}-map" style="display: none; width: 100%; height: 300px"></div>
+
+    <script type="text/javascript">
+    //<!--
+    if (!showMap) {
+      	var showMap = function(field, address) {
+			var closedDiv = document.getElementById(field + "-closed"); 
+		  	var openedDiv = document.getElementById(field + "-opened"); 
+		  
+		  	closedDiv.style.display = "none";
+		  	openedDiv.style.display = "";
+
+	        if (GBrowserIsCompatible()) {
+  		    	var geocoder = new GClientGeocoder();
+
+       			geocoder.getLatLng(address, eval("addAddressToMap_" + field));
+  			}
+		}
+	}
+
+    if (!hideMap) {
+    	var hideMap = function(field) {
+			var closedDiv = document.getElementById(field + "-closed"); 
+		  	var openedDiv = document.getElementById(field + "-opened"); 
+			var mapDiv = document.getElementById(field + "-map"); 
+		  
+		  	closedDiv.style.display = "";
+		  	openedDiv.style.display = "none";
+		  	mapDiv.style.display = "none";
+		}
+	}
+
+	var loadedGMapsScripts;
+
+	if (!loadedGMapsScripts) {
+		document.write('<' + 'script src="http://maps.google.com/maps?file=api&amp;v=2&amp;key=ABQIAAAAD6U-RffJk13pGIhMB_KAvxTwM0brOpm-All5BF6PoaKBxRWWERSCltlAbvZaMC9vZIYpq3KaaYNbRw" type="text/javascript">'+'<'+'/script>');
+		loadedGMapsScripts = true;
+	}
+
+    function addAddressToMap_${customField.id}(point) {
+		field = '${customField.id}';
+
+		if (!point) {
+			var label = document.getElementById(field + "-not-found"); 
+			
+			label.style.display = "";
+      	} else {
+			var mapDiv = document.getElementById(field + "-map"); 
+			var buttonDiv = document.getElementById(field + "-hide-button"); 
+		  
+			mapDiv.style.display = "";
+			buttonDiv.style.display = "";
+
+			if (mapDiv.getAttribute("gmapLoaded") == null) {
+	            var map = new GMap2(mapDiv);
+   				var marker = new GMarker(point);
+
+   				map.setCenter(point, 13);
+   				map.addOverlay(marker);
+   				marker.openInfoWindowHtml("$!value.toString()");
+
+	            mapDiv.setAttribute("gmapLoaded", "loaded");
+			}
+		}
+	}
+    //-->
+    </script>
+  #end
+#end
