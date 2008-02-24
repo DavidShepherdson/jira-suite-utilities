@@ -138,7 +138,20 @@ public class WorkflowUtils {
 	 * @return a Field object from given key. (Field or Custom Field).
 	 */
 	public static Field getFieldFromKey(String key) {
-		return ManagerFactory.getFieldManager().getField(key);
+		FieldManager fieldManager = ManagerFactory.getFieldManager();
+		Field field;
+		
+		if (fieldManager.isCustomField(key)) {
+			field = fieldManager.getCustomField(key);
+		} else {
+			field = fieldManager.getField(key);
+		}
+		
+		if (field == null) {
+			throw new IllegalArgumentException("Unable to find field '" + key + "'");
+		}
+		
+		return field;
 	}
 
 	/**

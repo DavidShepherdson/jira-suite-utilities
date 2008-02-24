@@ -23,14 +23,18 @@ public class CopyValueFromOtherFieldPostFunction extends AbstractJiraFunctionPro
 	/* (non-Javadoc)
 	 * @see com.opensymphony.workflow.FunctionProvider#execute(java.util.Map, java.util.Map, com.opensymphony.module.propertyset.PropertySet)
 	 */
-	public void execute(Map transientVars, Map args, PropertySet ps) throws WorkflowException {
-		String sourceFieldKey = (String) args.get("sourceField");
-		String destinationFieldKey = (String) args.get("destinationField");
+	public void execute(
+			@SuppressWarnings("unchecked") Map transientVars, 
+			@SuppressWarnings("unchecked") Map args,
+			PropertySet ps
+	) throws WorkflowException {
+		String fieldFromKey = (String) args.get("sourceField");
+		String fieldToKey = (String) args.get("destinationField");
 		
-		Field fieldFrom = (Field) WorkflowUtils.getFieldFromKey(sourceFieldKey);
+		Field fieldFrom = (Field) WorkflowUtils.getFieldFromKey(fieldFromKey);
 
 		try {
-			final MutableIssue issue = getIssue(transientVars);
+			MutableIssue issue = getIssue(transientVars);
 			
 			// It gives the value from the source field.
 			Object sourceValue = WorkflowUtils.getFieldValueFromIssue(issue, fieldFrom);
@@ -40,22 +44,24 @@ public class CopyValueFromOtherFieldPostFunction extends AbstractJiraFunctionPro
 						String.format(
 								"Copying value \"%s\" from issue %s field [%s] to field [%s] ", 
 								sourceValue.toString(), issue.getKey(), 
-								sourceFieldKey, destinationFieldKey
+								fieldFromKey, fieldToKey
 						)
 				);
 			}
 			
 			// It set the value to field.
-			WorkflowUtils.setFieldValue(issue, destinationFieldKey, sourceValue);
+			WorkflowUtils.setFieldValue(issue, fieldToKey, sourceValue);
 
 			if (log.isDebugEnabled()) {
 				log.debug("Value was successfully copied");
 			}
 		} catch (Exception e) {
-			final Field destField = (Field) WorkflowUtils.getFieldFromKey(destinationFieldKey);
-			final String message = "Unable to copy value from " + fieldFrom.getName() + " to " + destField.getName();
+			Field fieldTo = (Field) WorkflowUtils.getFieldFromKey(fieldToKey);
+			String fieldFromName = (fieldFrom != null) ? fieldFrom.getName() : fieldFromKey;
+			String fieldToName = (fieldTo != null) ? fieldTo.getName() : fieldToKey;
+			String message = "Unable to copy value from " + fieldFromName + " to " + fieldToName;
 			
-			LogUtils.getGeneral().error(message, e);
+			log.error(message, e);
 			
 			throw new WorkflowException(message);
 		}
