@@ -6,6 +6,7 @@ import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
@@ -63,30 +64,44 @@ public class CommonPluginUtils {
 	 * @return a complete list of fields, including custom fields.
 	 */
 	public static List<Field> getAllFields() {
-		List<Field> allFields = new ArrayList<Field>();
-		Set<Field> allFieldsSet = new TreeSet<Field>();
+		final FieldManager fieldManager = ManagerFactory.getFieldManager();
+		Set<Field> allFieldsSet = new TreeSet<Field>(getComparator());
 		
-		allFieldsSet.addAll(getOrderableFields());
-		allFieldsSet.addAll(getAllAvailableNavigableFields());
+		allFieldsSet.addAll(fieldManager.getOrderableFields());
 		
-		for (Field f : allFieldsSet) {
-			allFields.add(f);
+		try {
+			allFieldsSet.addAll(fieldManager.getAllAvailableNavigableFields());
+		} catch (FieldException e) {
+			LogUtils.getGeneral().error("Unable to load navigable fields", e);
 		}
 		
-		return sortFields(allFields);
+		if (fieldManager.isTimeTrackingOn()) {
+			allFieldsSet.add(fieldManager.getField(IssueFieldConstants.TIME_SPENT));
+			allFieldsSet.add(fieldManager.getField(IssueFieldConstants.TIME_ESTIMATE));
+			allFieldsSet.add(fieldManager.getField(IssueFieldConstants.PROGRESS));
+		}
+		
+		return new ArrayList<Field>(allFieldsSet);
 	}
 	
 	/**
 	 * @return a list of fields, including custom fields, which could be modified. 
 	 */
 	public static List<Field> getAllEditableFields(){
-		List<Field> allFields = new ArrayList<Field>();
+		final FieldManager fieldManager = ManagerFactory.getFieldManager();
+		Set<Field> allFields = new TreeSet<Field>(getComparator());
 		
-		for (Field f : getAllAvailableNavigableFields()) {
-			allFields.add(f);
+		try {
+			final Set<Field> fields = fieldManager.getAllAvailableNavigableFields();
+			
+			for (Field f : fields) {
+				allFields.add(f);
+			}
+		} catch (FieldException e) {
+			LogUtils.getGeneral().error("Unable to load navigable fields", e);
 		}
 		
-		return sortFields(allFields);
+		return new ArrayList<Field>(allFields);
 	}
 	
 	/**
@@ -94,39 +109,9 @@ public class CommonPluginUtils {
 	 * @return a list with fields sorted by name.
 	 */
 	public static List<Field> sortFields(List<Field> allFields) {
-		ApplicationProperties ap = new ApplicationPropertiesImpl();
-		I18nBean i18n = new I18nBean(ap.getDefaultLocale().getDisplayName());
-		NameComparatorEx nameComparator = new NameComparatorEx(i18n); 
-		
-		Collections.sort(allFields, nameComparator);
+		Collections.sort(allFields, getComparator());
 		
 		return allFields;
-	}
-	
-	/**
-	 * @return all orderable fields
-	 */
-	@SuppressWarnings("unchecked")
-	private static Set<Field> getOrderableFields() {
-		Set<Field> orderableFields = ManagerFactory.getFieldManager().getOrderableFields();
-		
-		return orderableFields;
-	}
-	
-	/**
-	 * @return all navigable fields, include custom fields.
-	 */
-	@SuppressWarnings("unchecked")
-	private static Set<Field> getAllAvailableNavigableFields() {
-		Set<Field> navigableFields = Collections.emptySet();
-		
-		try {
-			navigableFields = ManagerFactory.getFieldManager().getAllAvailableNavigableFields();
-		} catch (FieldException e) {
-			LogUtils.getGeneral().error("Unable to load field list", e);
-		}
-		
-		return navigableFields;
 	}
 	
 	/**
@@ -444,20 +429,23 @@ public class CommonPluginUtils {
 	private static List<Field> getNonValueFieldConditionFields(){
 		List<Field> fields = new ArrayList<Field>();
 		
-		Field attachment = ManagerFactory.getFieldManager().getField("attachment");
-		Field versions = ManagerFactory.getFieldManager().getField("versions");
-		Field comment = ManagerFactory.getFieldManager().getField("comment");
-		Field components = ManagerFactory.getFieldManager().getField("components");
-		Field created = ManagerFactory.getFieldManager().getField("created");
-		Field fixVersions = ManagerFactory.getFieldManager().getField("fixVersions");
-		Field thumbnail = ManagerFactory.getFieldManager().getField("thumbnail");
-		Field issuelinks = ManagerFactory.getFieldManager().getField("issuelinks");
-		Field issuekey = ManagerFactory.getFieldManager().getField("issuekey");
-		Field subtasks = ManagerFactory.getFieldManager().getField("subtasks");
-		Field timetracking = ManagerFactory.getFieldManager().getField("timetracking");
-		Field updated = ManagerFactory.getFieldManager().getField("updated");
-		Field votes = ManagerFactory.getFieldManager().getField("votes");
+		final FieldManager fieldManager = ManagerFactory.getFieldManager();
 		
+		Field attachment = fieldManager.getField("attachment");
+		Field versions = fieldManager.getField("versions");
+		Field comment = fieldManager.getField("comment");
+		Field components = fieldManager.getField("components");
+		Field created = fieldManager.getField("created");
+		Field fixVersions = fieldManager.getField("fixVersions");
+		Field thumbnail = fieldManager.getField("thumbnail");
+		Field issuelinks = fieldManager.getField("issuelinks");
+		Field issuekey = fieldManager.getField("issuekey");
+		Field subtasks = fieldManager.getField("subtasks");
+		Field timetracking = fieldManager.getField("timetracking");
+		Field updated = fieldManager.getField("updated");
+		Field votes = fieldManager.getField("votes");
+		Field workratio = fieldManager.getField(IssueFieldConstants.WORKRATIO);
+
 		fields.add(attachment);
 		fields.add(versions);
 		fields.add(comment);
@@ -471,6 +459,7 @@ public class CommonPluginUtils {
 		fields.add(timetracking);
 		fields.add(updated);
 		fields.add(votes);
+		fields.add(workratio);
 		
 		return fields;
 	}
@@ -498,5 +487,16 @@ public class CommonPluginUtils {
 		Date timePerformed = new Date(tsDate.getTime());
 		I18nHelper i18n = new I18nBean();
 		return ManagerFactory.getOutlookDateManager().getOutlookDate(i18n.getLocale()).formatDMYHMS(timePerformed);
+	}
+	
+	/**
+	 * Get comparator for sorting fields.
+	 * @return
+	 */
+	private static Comparator<Field> getComparator() {
+		ApplicationProperties ap = new ApplicationPropertiesImpl();
+		I18nBean i18n = new I18nBean(ap.getDefaultLocale().getDisplayName());
+
+		return new NameComparatorEx(i18n); 
 	}
 }
