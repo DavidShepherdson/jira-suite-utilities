@@ -75,12 +75,6 @@ public class CommonPluginUtils {
 			LogUtils.getGeneral().error("Unable to load navigable fields", e);
 		}
 		
-		if (fieldManager.isTimeTrackingOn()) {
-			allFieldsSet.add(fieldManager.getField(IssueFieldConstants.TIME_SPENT));
-			allFieldsSet.add(fieldManager.getField(IssueFieldConstants.TIME_ESTIMATE));
-			allFieldsSet.add(fieldManager.getField(IssueFieldConstants.PROGRESS));
-		}
-		
 		return new ArrayList<Field>(allFieldsSet);
 	}
 	
