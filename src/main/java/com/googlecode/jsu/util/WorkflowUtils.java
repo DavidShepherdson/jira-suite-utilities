@@ -1,9 +1,13 @@
 package com.googlecode.jsu.util;
 
+import java.sql.Timestamp;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Date;
 import java.util.List;
 
 import org.ofbiz.core.entity.GenericEntityException;
@@ -13,6 +17,8 @@ import com.atlassian.core.user.GroupUtils;
 import com.atlassian.core.user.UserUtils;
 import com.atlassian.jira.ComponentManager;
 import com.atlassian.jira.ManagerFactory;
+import com.atlassian.jira.config.properties.APKeys;
+import com.atlassian.jira.config.properties.ApplicationProperties;
 import com.atlassian.jira.issue.Issue;
 import com.atlassian.jira.issue.IssueFieldConstants;
 import com.atlassian.jira.issue.IssueRelationConstants;
@@ -449,7 +455,32 @@ public class WorkflowUtils {
 							issue.setAssignee(user);
 						}
 					} catch (EntityNotFoundException e) {
-						throw new IllegalArgumentException(String.format("User \"%s\" not found", value.toString()));
+						throw new IllegalArgumentException(String.format("User \"%s\" not found", value));
+					}
+				}
+			} else if (fieldId.equals(IssueFieldConstants.DUE_DATE)) {
+				if (value == null) {
+					issue.setDueDate(null);
+				}
+				
+				if (value instanceof Timestamp) {
+					issue.setDueDate((Timestamp) value);
+				} else if (value instanceof String) {
+					ApplicationProperties properties = ManagerFactory.getApplicationProperties();
+					SimpleDateFormat formatter = new SimpleDateFormat(
+							properties.getDefaultString(APKeys.JIRA_DATE_TIME_PICKER_JAVA_FORMAT)
+					);
+
+					try {
+						Date date = formatter.parse((String) value);
+						
+						if (date != null) {
+							issue.setDueDate(new Timestamp(date.getTime()));
+						} else {
+							issue.setDueDate(null);
+						}
+					} catch (ParseException e) {
+						throw new IllegalArgumentException("Wrong date format exception for \"" + value + "\"");
 					}
 				}
 			}

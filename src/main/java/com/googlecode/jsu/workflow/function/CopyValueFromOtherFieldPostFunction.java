@@ -43,7 +43,7 @@ public class CopyValueFromOtherFieldPostFunction extends AbstractJiraFunctionPro
 				log.debug(
 						String.format(
 								"Copying value \"%s\" from issue %s field [%s] to field [%s] ", 
-								sourceValue.toString(), issue.getKey(), 
+								sourceValue, issue.getKey(), 
 								fieldFromKey, fieldToKey
 						)
 				);
