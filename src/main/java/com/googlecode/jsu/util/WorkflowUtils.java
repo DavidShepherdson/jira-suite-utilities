@@ -194,16 +194,14 @@ public class WorkflowUtils {
 					} else {
 						retVal = retCollection;
 					}
-				}
-				if (fieldId.equals(IssueFieldConstants.AFFECTED_VERSIONS)) {
+				} else if (fieldId.equals(IssueFieldConstants.AFFECTED_VERSIONS)) {
 					retCollection = issue.getAffectedVersions();
 					if (retCollection == null || retCollection.isEmpty()) {
 						isEmpty = true;
 					} else {
 						retVal = retCollection;
 					}
-				}
-				if (fieldId.equals(IssueFieldConstants.COMMENT)) {
+				} else if (fieldId.equals(IssueFieldConstants.COMMENT)) {
 					// return a list with the comments of a given issue.
 					try {
 						retCollection = ManagerFactory.getIssueManager().getEntitiesByIssue(IssueRelationConstants.COMMENTS, issue.getGenericValue());
@@ -215,83 +213,77 @@ public class WorkflowUtils {
 					} catch (GenericEntityException e) {
 						retVal = null;
 					}
-				}
-				if (fieldId.equals(IssueFieldConstants.COMPONENTS)) {
+				} else if (fieldId.equals(IssueFieldConstants.COMPONENTS)) {
 					retCollection = issue.getComponents();
 					if (retCollection == null || retCollection.isEmpty()) {
 						isEmpty = true;
 					} else {
 						retVal = retCollection;
 					}
-				}
-				if (fieldId.equals(IssueFieldConstants.FIX_FOR_VERSIONS)) {
+				} else if (fieldId.equals(IssueFieldConstants.FIX_FOR_VERSIONS)) {
 					retCollection = issue.getFixVersions();
 					if (retCollection == null || retCollection.isEmpty()) {
 						isEmpty = true;
 					} else {
 						retVal = retCollection;
 					}
-				}
-				if (fieldId.equals(IssueFieldConstants.THUMBNAIL)) {
+				} else if (fieldId.equals(IssueFieldConstants.THUMBNAIL)) {
 					// Not implemented, yet.
 					isEmpty = true;
-				}
-				if (fieldId.equals(IssueFieldConstants.ISSUE_TYPE)) {
+				} else if (fieldId.equals(IssueFieldConstants.ISSUE_TYPE)) {
 					retVal = issue.getIssueTypeObject();
-				}
-				if (fieldId.equals(IssueFieldConstants.TIMETRACKING)) {
+				} else if (fieldId.equals(IssueFieldConstants.TIMETRACKING)) {
 					// Not implemented, yet.
 					isEmpty = true;
-				}
-				if (fieldId.equals(IssueFieldConstants.ISSUE_LINKS)) {
+				} else if (fieldId.equals(IssueFieldConstants.ISSUE_LINKS)) {
 					retVal = ComponentManager.getInstance().getIssueLinkManager().getIssueLinks(issue.getId());
-				}
-				if (fieldId.equals(IssueFieldConstants.WORKRATIO)) {
+				} else if (fieldId.equals(IssueFieldConstants.WORKRATIO)) {
 					retVal = String.valueOf(WorkRatio.getWorkRatio(issue));
-				}
-				if (fieldId.equals(IssueFieldConstants.ISSUE_KEY)) {
+				} else if (fieldId.equals(IssueFieldConstants.ISSUE_KEY)) {
 					retVal = issue.getKey();
-				}
-				if (fieldId.equals(IssueFieldConstants.SUBTASKS)) {
+				} else if (fieldId.equals(IssueFieldConstants.SUBTASKS)) {
 					retCollection = issue.getSubTasks();
+					
 					if (retCollection == null || retCollection.isEmpty()) {
 						isEmpty = true;
 					} else {
 						retVal = retCollection;
 					}
-				}
-				if (fieldId.equals(IssueFieldConstants.PRIORITY)) {
+				} else if (fieldId.equals(IssueFieldConstants.PRIORITY)) {
 					retVal = issue.getPriorityObject();
-				}
-				if (fieldId.equals(IssueFieldConstants.RESOLUTION)) {
+				} else if (fieldId.equals(IssueFieldConstants.RESOLUTION)) {
 					retVal = issue.getResolutionObject();
-				}
-				if (fieldId.equals(IssueFieldConstants.STATUS)) {
+				} else if (fieldId.equals(IssueFieldConstants.STATUS)) {
 					retVal = issue.getStatusObject();
-				}
-				if (fieldId.equals(IssueFieldConstants.PROJECT)) {
+				} else if (fieldId.equals(IssueFieldConstants.PROJECT)) {
 					retVal = issue.getProject();
-				}
-				if (fieldId.equals(IssueFieldConstants.SECURITY)) {
+				} else if (fieldId.equals(IssueFieldConstants.SECURITY)) {
 					retVal = issue.getSecurityLevel();
-				}
-				if (fieldId.equals(IssueFieldConstants.TIME_ESTIMATE)) {
+				} else if (fieldId.equals(IssueFieldConstants.TIME_ESTIMATE)) {
 					retVal = issue.getEstimate();
-				}
-				if (fieldId.equals(IssueFieldConstants.ASSIGNEE)) {
+				} else if (fieldId.equals(IssueFieldConstants.ASSIGNEE)) {
 					retVal = issue.getAssignee();
-				}
-				if (fieldId.equals(IssueFieldConstants.REPORTER)) {
+				} else if (fieldId.equals(IssueFieldConstants.REPORTER)) {
 					retVal = issue.getReporter();
-				}
-				if (retVal == null && !isEmpty) {
+				} else if (fieldId.equals(IssueFieldConstants.DESCRIPTION)) {
+					retVal = issue.getDescription();
+				} else if (fieldId.equals(IssueFieldConstants.ENVIRONMENT)) {
+					retVal = issue.getEnvironment();
+				} else if (fieldId.equals(IssueFieldConstants.SUMMARY)) {
+					retVal = issue.getSummary();
+				} else {
+					LogUtils.getGeneral().error("Default field \"" + field + "\" is not supported");
+
 					GenericValue gvIssue = issue.getGenericValue();
-					retVal = gvIssue.get(fieldId);
+					
+					if (gvIssue != null) {
+						retVal = gvIssue.get(fieldId);
+					}
 				}
 			}
 		} catch (NullPointerException e) {
 			retVal = null;
-			LogUtils.getGeneral().error("Unable to get field value", e);
+			LogUtils.getGeneral().error("Unable to get field \"" + field + "\" value", e);
 		}
 
 		return retVal;

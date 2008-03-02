@@ -224,7 +224,7 @@ public class CommonPluginUtils {
 		} else {
 			FieldVisibilityBean fieldVisibilityBean = new FieldVisibilityBean();
 
-	        return fieldVisibilityBean.isFieldHidden(field.getId(), issue.getGenericValue());
+	        return fieldVisibilityBean.isFieldHidden(field.getId(), issue);
 		}
 	}
 	
