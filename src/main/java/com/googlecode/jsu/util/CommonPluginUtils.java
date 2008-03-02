@@ -39,6 +39,7 @@ import com.atlassian.jira.issue.fields.layout.field.FieldLayoutStorageException;
 import com.atlassian.jira.issue.fields.screen.FieldScreen;
 import com.atlassian.jira.issue.fields.screen.FieldScreenLayoutItem;
 import com.atlassian.jira.issue.fields.screen.FieldScreenTab;
+import com.atlassian.jira.project.Project;
 import com.atlassian.jira.util.I18nHelper;
 import com.atlassian.jira.web.bean.FieldVisibilityBean;
 import com.atlassian.jira.web.bean.I18nBean;
@@ -204,7 +205,17 @@ public class CommonPluginUtils {
 	 * @return if a field is hidden.
 	 */
 	public static boolean isFieldHidden(Issue issue, Field field) {
+		final FieldManager fieldManager = ManagerFactory.getFieldManager();
 		final String fieldId = field.getId();
+		
+		if (fieldManager.isCustomField(field)) {
+			CustomField customField = (CustomField) field;
+			List<Project> assignedProjects = customField.getAssociatedProjects();
+		        
+			if (!customField.isGlobal() && !assignedProjects.contains(issue.getProjectObject())) {
+				return true;
+			}
+		}
 		
 		if (TIME_TRACKING_FIELDS.contains(fieldId)) {
 			ApplicationProperties applicationProperties = ManagerFactory.getApplicationProperties();
