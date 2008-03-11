@@ -17,7 +17,6 @@ import com.atlassian.core.user.GroupUtils;
 import com.atlassian.core.user.UserUtils;
 import com.atlassian.jira.ComponentManager;
 import com.atlassian.jira.ManagerFactory;
-import com.atlassian.jira.config.ConstantsManager;
 import com.atlassian.jira.config.properties.APKeys;
 import com.atlassian.jira.config.properties.ApplicationProperties;
 import com.atlassian.jira.issue.Issue;
@@ -324,7 +323,7 @@ public class WorkflowUtils {
 
 			// Special treatment of fields.
 			if (fieldId.equals(IssueFieldConstants.ATTACHMENT)) {
-				throw new IllegalArgumentException("Not implemented");
+				throw new UnsupportedOperationException("Not implemented");
 				//				// return a collection with the attachments associated to given issue.
 				//				retCollection = (Collection)issue.getExternalFieldValue(fieldId);
 				//				if(retCollection==null || retCollection.isEmpty()){
@@ -350,7 +349,7 @@ public class WorkflowUtils {
 					throw new IllegalArgumentException("Wrong affected version value");
 				}
 			} else if (fieldId.equals(IssueFieldConstants.COMMENT)) {
-				throw new IllegalArgumentException("Not implemented");
+				throw new UnsupportedOperationException("Not implemented");
 
 				//				// return a list with the comments of a given issue.
 				//				try {
@@ -364,7 +363,7 @@ public class WorkflowUtils {
 				//					retVal = null;
 				//				}
 			} else if (fieldId.equals(IssueFieldConstants.COMPONENTS)) {
-				throw new IllegalArgumentException("Not implemented");
+				throw new UnsupportedOperationException("Not implemented");
 
 				//				retCollection = issue.getComponents();
 				//				if(retCollection==null || retCollection.isEmpty()){
@@ -388,33 +387,33 @@ public class WorkflowUtils {
 					throw new IllegalArgumentException("Wrong fix version value");
 				}
 			} else if (fieldId.equals(IssueFieldConstants.THUMBNAIL)) {
-				throw new IllegalArgumentException("Not implemented");
+				throw new UnsupportedOperationException("Not implemented");
 
 				//				// Not implemented, yet.
 				//				isEmpty = true;
 			} else if (fieldId.equals(IssueFieldConstants.ISSUE_TYPE)) {
-				throw new IllegalArgumentException("Not implemented");
+				throw new UnsupportedOperationException("Not implemented");
 				//
 				//				retVal = issue.getIssueTypeObject();
 			} else if (fieldId.equals(IssueFieldConstants.TIMETRACKING)) {
-				throw new IllegalArgumentException("Not implemented");
+				throw new UnsupportedOperationException("Not implemented");
 				//
 				//				// Not implemented, yet.
 				//				isEmpty = true;
 			} else if (fieldId.equals(IssueFieldConstants.ISSUE_LINKS)) {
-				throw new IllegalArgumentException("Not implemented");
+				throw new UnsupportedOperationException("Not implemented");
 				//
 				//				retVal = ComponentManager.getInstance().getIssueLinkManager().getIssueLinks(issue.getId());
 			} else if (fieldId.equals(IssueFieldConstants.WORKRATIO)) {
-				throw new IllegalArgumentException("Not implemented");
+				throw new UnsupportedOperationException("Not implemented");
 				//
 				//				retVal = String.valueOf(WorkRatio.getWorkRatio(issue));
 			} else if (fieldId.equals(IssueFieldConstants.ISSUE_KEY)) {
-				throw new IllegalArgumentException("Not implemented");
+				throw new UnsupportedOperationException("Not implemented");
 				//
 				//				retVal = issue.getKey();
 			} else if (fieldId.equals(IssueFieldConstants.SUBTASKS)) {
-				throw new IllegalArgumentException("Not implemented");
+				throw new UnsupportedOperationException("Not implemented");
 				//
 				//				retCollection = issue.getSubTasks();
 				//				if(retCollection==null || retCollection.isEmpty()){
@@ -426,13 +425,13 @@ public class WorkflowUtils {
 				if (value == null) {
 					issue.setPriority(null);
 				} else {
-					throw new IllegalArgumentException("Not implemented");
+					throw new UnsupportedOperationException("Not implemented");
 				}
 			} else if (fieldId.equals(IssueFieldConstants.RESOLUTION)) {
 				if (value == null) {
 					issue.setResolution(null);
 				} else {
-					throw new IllegalArgumentException("Not implemented");
+					throw new UnsupportedOperationException("Not implemented");
 				}
 			} else if (fieldId.equals(IssueFieldConstants.STATUS)) {
 				if (value == null) {
@@ -450,19 +449,19 @@ public class WorkflowUtils {
 						throw new IllegalArgumentException("Unable to find status with name \"" + value + "\"");
 					}
 				} else {
-					throw new IllegalArgumentException("Not implemented");
+					throw new UnsupportedOperationException("Not implemented");
 				}
 			} else if (fieldId.equals(IssueFieldConstants.PROJECT)) {
 				if (value == null) {
 					issue.setProject(null);
 				} else {
-					throw new IllegalArgumentException("Not implemented");
+					throw new UnsupportedOperationException("Not implemented");
 				}
 			} else if (fieldId.equals(IssueFieldConstants.SECURITY)) {
 				if (value == null) {
 					issue.setSecurityLevel(null);
 				} else {
-					throw new IllegalArgumentException("Not implemented");
+					throw new UnsupportedOperationException("Not implemented");
 				}
 			} else if (fieldId.equals(IssueFieldConstants.ASSIGNEE)) {
 				if (value == null) {
