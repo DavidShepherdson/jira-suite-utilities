@@ -421,24 +421,39 @@ public class WorkflowUtils {
 				//					retVal = retCollection;
 				//				}
 			} else if (fieldId.equals(IssueFieldConstants.PRIORITY)) {
-				throw new IllegalArgumentException("Not implemented");
-				//
-				//				retVal = issue.getPriorityObject();
+				if (value == null) {
+					issue.setPriority(null);
+				} else {
+					throw new IllegalArgumentException("Not implemented");
+				}
 			} else if (fieldId.equals(IssueFieldConstants.RESOLUTION)) {
-				throw new IllegalArgumentException("Not implemented");
-				//
-				//				retVal = issue.getResolutionObject();
+				if (value == null) {
+					issue.setResolution(null);
+				} else {
+					throw new IllegalArgumentException("Not implemented");
+				}
 			} else if (fieldId.equals(IssueFieldConstants.STATUS)) {
-				throw new IllegalArgumentException("Not implemented");
-				//				retVal = issue.getStatusObject();
+				if (value == null) {
+					issue.setStatus(null);
+				} else {
+					throw new IllegalArgumentException("Not implemented");
+				}
 			} else if (fieldId.equals(IssueFieldConstants.PROJECT)) {
-				throw new IllegalArgumentException("Not implemented");
-				//				retVal = issue.getProject();
+				if (value == null) {
+					issue.setProject(null);
+				} else {
+					throw new IllegalArgumentException("Not implemented");
+				}
 			} else if (fieldId.equals(IssueFieldConstants.SECURITY)) {
-				throw new IllegalArgumentException("Not implemented");
-				//				retVal = issue.getSecurityLevel();
+				if (value == null) {
+					issue.setSecurityLevel(null);
+				} else {
+					throw new IllegalArgumentException("Not implemented");
+				}
 			} else if (fieldId.equals(IssueFieldConstants.ASSIGNEE)) {
-				if (value instanceof User) {
+				if (value == null) {
+					issue.setAssignee(null);
+				} else if (value instanceof User) {
 					issue.setAssignee((User) value);
 				} else if (value instanceof String) {
 					try {
