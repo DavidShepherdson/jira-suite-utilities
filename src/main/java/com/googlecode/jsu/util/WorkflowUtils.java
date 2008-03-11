@@ -17,6 +17,7 @@ import com.atlassian.core.user.GroupUtils;
 import com.atlassian.core.user.UserUtils;
 import com.atlassian.jira.ComponentManager;
 import com.atlassian.jira.ManagerFactory;
+import com.atlassian.jira.config.ConstantsManager;
 import com.atlassian.jira.config.properties.APKeys;
 import com.atlassian.jira.config.properties.ApplicationProperties;
 import com.atlassian.jira.issue.Issue;
@@ -30,6 +31,7 @@ import com.atlassian.jira.issue.fields.FieldManager;
 import com.atlassian.jira.issue.fields.layout.field.FieldLayoutItem;
 import com.atlassian.jira.issue.fields.layout.field.FieldLayoutStorageException;
 import com.atlassian.jira.issue.fields.screen.FieldScreen;
+import com.atlassian.jira.issue.status.Status;
 import com.atlassian.jira.issue.util.DefaultIssueChangeHolder;
 import com.atlassian.jira.issue.worklog.WorkRatio;
 import com.atlassian.jira.project.version.Version;
@@ -435,6 +437,18 @@ public class WorkflowUtils {
 			} else if (fieldId.equals(IssueFieldConstants.STATUS)) {
 				if (value == null) {
 					issue.setStatus(null);
+				} else if (value instanceof GenericValue) {
+					issue.setStatus((GenericValue) value);
+				} else if (value instanceof Status) {
+					issue.setStatusId(((Status) value).getId());
+				} else if (value instanceof String) {
+					Status status = ManagerFactory.getConstantsManager().getStatusByName((String) value);
+					
+					if (status != null) {
+						issue.setStatusId(status.getId());
+					} else {
+						throw new IllegalArgumentException("Unable to find status with name \"" + value + "\"");
+					}
 				} else {
 					throw new IllegalArgumentException("Not implemented");
 				}
