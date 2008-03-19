@@ -1,10 +1,12 @@
 package com.googlecode.jsu.workflow.validator;
 
+import static com.googlecode.jsu.util.CommonPluginUtils.isFieldHidden;
+
 import java.util.Collection;
 
+import com.atlassian.jira.issue.Issue;
 import com.atlassian.jira.issue.fields.Field;
 import com.googlecode.jsu.annotation.Argument;
-import com.googlecode.jsu.util.CommonPluginUtils;
 import com.googlecode.jsu.util.WorkflowUtils;
 import com.opensymphony.workflow.InvalidInputException;
 import com.opensymphony.workflow.WorkflowException;
@@ -26,9 +28,10 @@ public class FieldsRequiredValidator extends GenericValidator {
 		Collection<Field> fieldsSelected = WorkflowUtils.getFields(fieldList, WorkflowUtils.SPLITTER);
 		
 		for (Field field : fieldsSelected) {
-			Object fieldValue = WorkflowUtils.getFieldValueFromIssue(getIssue(), field);
+			final Issue issue = getIssue();
+			Object fieldValue = WorkflowUtils.getFieldValueFromIssue(issue, field);
 			
-			if ((fieldValue == null) && !CommonPluginUtils.isFieldHidden(getIssue(), field)) {
+			if ((fieldValue == null) && !isFieldHidden(issue, field)) {
 				// Sets Exception message.
 				this.setExceptionMessage(
 						field, 

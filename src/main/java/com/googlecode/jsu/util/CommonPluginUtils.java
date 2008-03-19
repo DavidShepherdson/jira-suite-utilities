@@ -13,6 +13,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
 
+import org.ofbiz.core.entity.GenericValue;
 import org.ofbiz.core.entity.model.ModelEntity;
 import org.ofbiz.core.entity.model.ModelField;
 
@@ -186,20 +187,32 @@ public class CommonPluginUtils {
 	public static boolean isFieldHidden(Issue issue, Field field) {
 		final FieldManager fieldManager = ManagerFactory.getFieldManager();
 		final String fieldId = field.getId();
-		
+
 		if (fieldManager.isCustomField(field)) {
 			CustomField customField = (CustomField) field;
-			List<Project> assignedProjects = customField.getAssociatedProjects();
-		        
-			if (!customField.isGlobal() && !assignedProjects.contains(issue.getProjectObject())) {
-				return true;
+			
+			if (!customField.isGlobal()) {
+				List<GenericValue> assignedProjects = customField.getAssociatedProjects();
+				final Long projectId = issue.getProjectObject().getId();
+				boolean notForProject = true;
+				
+				for (GenericValue gv : assignedProjects) {
+					if (gv.getLong("id") == projectId) {
+						notForProject = false;
+						break;
+					}
+				}
+				
+				if (notForProject) {
+					return true;
+				}
 			}
 		}
-		
+
 		if (TIME_TRACKING_FIELDS.contains(fieldId)) {
 			ApplicationProperties applicationProperties = ManagerFactory.getApplicationProperties();
 			
-			return !applicationProperties.getOption(APKeys.JIRA_OPTION_TIMETRACKING);
+			return !fieldManager.isTimeTrackingOn();
 		} else {
 			FieldVisibilityBean fieldVisibilityBean = new FieldVisibilityBean();
 
