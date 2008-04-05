@@ -13,14 +13,12 @@ import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
 
-import org.ofbiz.core.entity.GenericValue;
 import org.ofbiz.core.entity.model.ModelEntity;
 import org.ofbiz.core.entity.model.ModelField;
 
 import com.atlassian.core.ofbiz.CoreFactory;
 import com.atlassian.jira.ComponentManager;
 import com.atlassian.jira.ManagerFactory;
-import com.atlassian.jira.config.properties.APKeys;
 import com.atlassian.jira.config.properties.ApplicationProperties;
 import com.atlassian.jira.config.properties.ApplicationPropertiesImpl;
 import com.atlassian.jira.issue.Issue;
@@ -34,6 +32,7 @@ import com.atlassian.jira.issue.fields.CustomField;
 import com.atlassian.jira.issue.fields.Field;
 import com.atlassian.jira.issue.fields.FieldException;
 import com.atlassian.jira.issue.fields.FieldManager;
+import com.atlassian.jira.issue.fields.config.FieldConfig;
 import com.atlassian.jira.issue.fields.layout.field.FieldLayout;
 import com.atlassian.jira.issue.fields.layout.field.FieldLayoutItem;
 import com.atlassian.jira.issue.fields.layout.field.FieldLayoutManager;
@@ -41,7 +40,6 @@ import com.atlassian.jira.issue.fields.layout.field.FieldLayoutStorageException;
 import com.atlassian.jira.issue.fields.screen.FieldScreen;
 import com.atlassian.jira.issue.fields.screen.FieldScreenLayoutItem;
 import com.atlassian.jira.issue.fields.screen.FieldScreenTab;
-import com.atlassian.jira.project.Project;
 import com.atlassian.jira.util.I18nHelper;
 import com.atlassian.jira.web.bean.FieldVisibilityBean;
 import com.atlassian.jira.web.bean.I18nBean;
@@ -190,28 +188,14 @@ public class CommonPluginUtils {
 
 		if (fieldManager.isCustomField(field)) {
 			CustomField customField = (CustomField) field;
+			FieldConfig config = customField.getRelevantConfig(issue);
 			
-			if (!customField.isGlobal()) {
-				List<GenericValue> assignedProjects = customField.getAssociatedProjects();
-				final Long projectId = issue.getProjectObject().getId();
-				boolean notForProject = true;
-				
-				for (GenericValue gv : assignedProjects) {
-					if (gv.getLong("id") == projectId) {
-						notForProject = false;
-						break;
-					}
-				}
-				
-				if (notForProject) {
-					return true;
-				}
+			if (config == null) {
+				return true;
 			}
 		}
 
 		if (TIME_TRACKING_FIELDS.contains(fieldId)) {
-			ApplicationProperties applicationProperties = ManagerFactory.getApplicationProperties();
-			
 			return !fieldManager.isTimeTrackingOn();
 		} else {
 			FieldVisibilityBean fieldVisibilityBean = new FieldVisibilityBean();
