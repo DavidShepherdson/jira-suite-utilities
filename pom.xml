@@ -73,7 +73,6 @@
                 </executions>
             </plugin>
 			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-antrun-plugin</artifactId>
 				<executions>
 					<execution>
@@ -89,7 +88,24 @@
 					</execution>
 				</executions>
 			</plugin>
-		</plugins>
+			<plugin>
+				<artifactId>maven-surefire-plugin</artifactId>
+				<configuration>
+					<skip>true</skip>
+				</configuration>
+			</plugin>
+			<plugin>
+                <artifactId>maven-jar-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>test-jar</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+      	</plugins>
 	</build>
 
 	<dependencies>
@@ -97,6 +113,18 @@
 			<groupId>com.atlassian.jira</groupId>
 			<artifactId>atlassian-jira</artifactId>
 			<version>${atlassian.jira.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.cactus</groupId>
+			<artifactId>cactus.core.framework.uberjar.javaEE.14</artifactId>
+			<version>1.8.0</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<version>3.8.1</version>
+			<scope>test</scope>
 		</dependency>
 	</dependencies>
 	
@@ -123,7 +151,23 @@
 			<layout>legacy</layout>
 		</repository>
 	</repositories>
-	
+
+	<profiles>
+		<profile>
+			<id>remote-test</id>
+			<build>
+				<plugins>
+					<plugin>
+						<artifactId>maven-surefire-plugin</artifactId>
+						<configuration>
+							<skip>false</skip>
+						</configuration>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+	</profiles>
+		
 	<properties>
 		<atlassian.jira.version>3.11</atlassian.jira.version>
 	</properties>
