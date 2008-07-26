@@ -91,7 +91,9 @@
 			<plugin>
 				<artifactId>maven-surefire-plugin</artifactId>
 				<configuration>
-					<skip>true</skip>
+					<excludes>
+						<exclude>**/*RemoteTest.java</exclude>
+					</excludes>
 				</configuration>
 			</plugin>
 			<plugin>
@@ -151,22 +153,6 @@
 			<layout>legacy</layout>
 		</repository>
 	</repositories>
-
-	<profiles>
-		<profile>
-			<id>remote-test</id>
-			<build>
-				<plugins>
-					<plugin>
-						<artifactId>maven-surefire-plugin</artifactId>
-						<configuration>
-							<skip>false</skip>
-						</configuration>
-					</plugin>
-				</plugins>
-			</build>
-		</profile>
-	</profiles>
 		
 	<properties>
 		<atlassian.jira.version>3.11</atlassian.jira.version>
