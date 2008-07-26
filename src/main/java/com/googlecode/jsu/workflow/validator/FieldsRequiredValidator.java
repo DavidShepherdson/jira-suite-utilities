@@ -1,6 +1,6 @@
 package com.googlecode.jsu.workflow.validator;
 
-import static com.googlecode.jsu.util.CommonPluginUtils.isFieldHidden;
+import static com.googlecode.jsu.util.CommonPluginUtils.isIssueHasField;
 
 import java.util.Collection;
 
@@ -31,7 +31,7 @@ public class FieldsRequiredValidator extends GenericValidator {
 			final Issue issue = getIssue();
 			Object fieldValue = WorkflowUtils.getFieldValueFromIssue(issue, field);
 			
-			if ((fieldValue == null) && !isFieldHidden(issue, field)) {
+			if ((fieldValue == null) && isIssueHasField(issue, field)) {
 				// Sets Exception message.
 				this.setExceptionMessage(
 						field, 

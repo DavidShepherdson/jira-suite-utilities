@@ -167,8 +167,7 @@ public class CommonPluginUtils {
 			while(itFields.hasNext() && !retVal){
 				FieldScreenLayoutItem fieldScreenLayoutItem = itFields.next();
 
-				if (field.getId().equals(fieldScreenLayoutItem.getFieldId()) && 
-						!isFieldHidden(issue, field)) {
+				if (field.getId().equals(fieldScreenLayoutItem.getFieldId()) && isIssueHasField(issue, field)) {
 					retVal = true;
 				}
 			}
@@ -178,30 +177,39 @@ public class CommonPluginUtils {
 	}
 	
 	/**
+	 * Check is the issue has the field.
+	 * 
 	 * @param issue: issue to which the field belongs
 	 * @param field: wished field
-	 * @return if a field is hidden.
+	 * @return if a field is available.
 	 */
-	public static boolean isFieldHidden(Issue issue, Field field) {
+	public static boolean isIssueHasField(Issue issue, Field field) {
 		final FieldManager fieldManager = ManagerFactory.getFieldManager();
 		final String fieldId = field.getId();
+		
+		boolean isHidden = false;
+		
+		if (TIME_TRACKING_FIELDS.contains(fieldId)) {
+			isHidden = !fieldManager.isTimeTrackingOn();
+		} else {
+			FieldVisibilityBean fieldVisibilityBean = new FieldVisibilityBean();
 
+			isHidden = fieldVisibilityBean.isFieldHidden(field.getId(), issue);
+		}
+		
+		if (isHidden) {
+			// Looks like we found hidden field
+			return false;
+		}
+		
 		if (fieldManager.isCustomField(field)) {
 			CustomField customField = (CustomField) field;
 			FieldConfig config = customField.getRelevantConfig(issue);
 			
-			if (config == null) {
-				return true;
-			}
+			return (config != null); 
 		}
-
-		if (TIME_TRACKING_FIELDS.contains(fieldId)) {
-			return !fieldManager.isTimeTrackingOn();
-		} else {
-			FieldVisibilityBean fieldVisibilityBean = new FieldVisibilityBean();
-
-	        return fieldVisibilityBean.isFieldHidden(field.getId(), issue);
-		}
+		
+		return true;
 	}
 	
 	public static FieldLayoutItem getFieldLayoutItem(Issue issue, Field field) throws FieldLayoutStorageException {
