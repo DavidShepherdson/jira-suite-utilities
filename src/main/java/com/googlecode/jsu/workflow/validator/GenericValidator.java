@@ -2,6 +2,8 @@ package com.googlecode.jsu.workflow.validator;
 
 import java.util.Map;
 
+import org.apache.log4j.Logger;
+
 import com.atlassian.jira.issue.Issue;
 import com.atlassian.jira.issue.fields.Field;
 import com.atlassian.jira.issue.fields.screen.FieldScreen;
@@ -21,9 +23,11 @@ import com.opensymphony.workflow.loader.WorkflowDescriptor;
 
 /**
  * @author <A href="mailto:abashev at gmail dot com">Alexey Abashev</A>
- * @version $Id: GenericValidator.java 105 2007-10-09 13:34:25Z abashev $
+ * @version $Id: GenericValidator.java 173 2008-10-14 13:04:43Z abashev $
  */
 public abstract class GenericValidator implements Validator {
+	private final Logger log = Logger.getLogger(this.getClass());
+
 	private ValidatorErrorsBuilder errorBuilder;
 	private FieldScreen fieldScreen = null;
 	private Issue issue = null;
@@ -34,8 +38,20 @@ public abstract class GenericValidator implements Validator {
 	public final void validate(
 			Map transientVars, Map args, PropertySet ps
 	) throws InvalidInputException, WorkflowException {
-		initObject(transientVars, args);
+		if (log.isDebugEnabled()) {
+			log.debug(
+					"Validation request: [transientVars=" +
+					transientVars +
+					";args=" +
+					args + 
+					";property=" +
+					ps +
+					"]"
+			);
+		}
 
+		initObject(transientVars, args);
+		
 		this.fieldScreen = initScreen(transientVars);
 		this.errorBuilder = new ValidatorErrorsBuilder(hasViewScreen());
 		this.issue = (Issue) transientVars.get("issue");

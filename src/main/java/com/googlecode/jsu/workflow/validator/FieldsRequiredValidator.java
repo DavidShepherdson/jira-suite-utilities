@@ -31,7 +31,11 @@ public class FieldsRequiredValidator extends GenericValidator {
 		// It obtains the fields that are required for the transition.
 		Collection<Field> fieldsSelected = WorkflowUtils.getFields(fieldList, WorkflowUtils.SPLITTER);
 		final Issue issue = getIssue();
-		final String issueKey = issue.getKey();
+		String issueKey = issue.getKey();
+		
+		if (issueKey == null) {
+			issueKey = "'New issue'";
+		}
 		
 		if (log.isDebugEnabled()) {
 			log.debug(issueKey + ": Found " + fieldsSelected.size() + " fields for validation");
