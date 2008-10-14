@@ -30,7 +30,7 @@ public class TransitionSummary {
 	 * @param fromStatus
 	 * @param toStatus
 	 */
-	public TransitionSummary (String id, Status fromStatus, Status toStatus){
+	public TransitionSummary(String id, Status fromStatus, Status toStatus){
 		setId(id);
 		setFromStatus(fromStatus);
 		setToStatus(toStatus);
@@ -112,6 +112,13 @@ public class TransitionSummary {
 		return CommonPluginUtils.getNiceDate(lastUpdate);
 	}
 	
+	/**
+	 * @return the lastUpdate
+	 */
+	public Timestamp getLastUpdate() {
+		return lastUpdate;
+	}
+
 	public String getLastUpdater() {
 		return lastUpdater;
 	}
