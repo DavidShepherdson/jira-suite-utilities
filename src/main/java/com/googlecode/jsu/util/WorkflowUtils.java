@@ -24,6 +24,7 @@ import com.atlassian.jira.issue.IssueFieldConstants;
 import com.atlassian.jira.issue.IssueRelationConstants;
 import com.atlassian.jira.issue.ModifiedValue;
 import com.atlassian.jira.issue.MutableIssue;
+import com.atlassian.jira.issue.customfields.view.CustomFieldParams;
 import com.atlassian.jira.issue.fields.CustomField;
 import com.atlassian.jira.issue.fields.Field;
 import com.atlassian.jira.issue.fields.FieldManager;
@@ -66,7 +67,9 @@ public class WorkflowUtils {
 	public static final String COMPARISON_TYPE_DATE = "Date";
 
 	private static final WorkflowActionsBean workflowActionsBean = new WorkflowActionsBean();
-
+	
+	public static final String CASCADING_SELECT_TYPE = "com.atlassian.jira.plugin.system.customfieldtypes:cascadingselect";
+	
 	/**
 	 * @return a list of boolean values.
 	 */
@@ -180,7 +183,22 @@ public class WorkflowUtils {
 			if (fldManager.isCustomField(field)) {
 				// Return the CustomField value. It will be any object.
 				CustomField customField = (CustomField) field;
-				retVal = issue.getCustomFieldValue(customField);
+				
+				// TODO Maybe for cascade we have to create separate manager 
+				if (CASCADING_SELECT_TYPE.equals(customField.getCustomFieldType().getKey())) {
+					CustomFieldParams value = (CustomFieldParams) issue.getCustomFieldValue(customField);
+
+					if (value != null) {
+						Object parent = value.getFirstValueForNullKey();
+						Object child = value.getFirstValueForKey("1");
+
+						if (parent != null) {
+							retVal = child;
+						}
+					}
+				} else {
+					retVal = issue.getCustomFieldValue(customField);
+				}
 			} else {
 				String fieldId = field.getId();
 				Collection retCollection = null;
