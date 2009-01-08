@@ -2,6 +2,8 @@ package com.googlecode.jsu.workflow.condition;
 
 import java.util.Map;
 
+import org.apache.log4j.Logger;
+
 import com.atlassian.jira.issue.Issue;
 import com.atlassian.jira.issue.fields.Field;
 import com.atlassian.jira.workflow.condition.AbstractJiraCondition;
@@ -19,7 +21,8 @@ import com.opensymphony.module.propertyset.PropertySet;
  * @author Gustavo Martin
  */
 public class ValueFieldCondition extends AbstractJiraCondition {
-
+	private final Logger log = Logger.getLogger(ValueFieldCondition.class);
+	
 	/* (non-Javadoc)
 	 * @see com.opensymphony.workflow.Condition#passesCondition(java.util.Map, java.util.Map, com.opensymphony.module.propertyset.PropertySet)
 	 */
@@ -31,12 +34,20 @@ public class ValueFieldCondition extends AbstractJiraCondition {
 		String comparisonType = (String) args.get("comparisonType");
 		// fieldValue could be empty.
 		String fieldValue = (String) args.get("fieldValue");
+		
+		boolean result = false;
+		
+		try { 
+			Field field = WorkflowUtils.getFieldFromKey(sField);
+			ComparisonType compType = ComparisonManager.getManager().getComparisonType(new Integer(comparisonType));
+			ConditionType cond = ConditionManager.getManager().getCondition(new Integer(fieldCondition));
 
-		Field field = WorkflowUtils.getFieldFromKey(sField);
-		ComparisonType compType = ComparisonManager.getManager().getComparisonType(new Integer(comparisonType));
-		ConditionType cond = ConditionManager.getManager().getCondition(new Integer(fieldCondition));
-
-		return checkCondition(issue, field, cond.getValue(), compType.getValue(), fieldValue);
+			result = checkCondition(issue, field, cond.getValue(), compType.getValue(), fieldValue);
+		} catch (Exception e) {
+			log.error("Unable to check value for field '" + sField + "'", e);
+		}
+		
+		return result;
 	}
 
 	/**

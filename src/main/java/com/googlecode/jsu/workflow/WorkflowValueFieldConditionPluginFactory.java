@@ -24,7 +24,7 @@ import com.opensymphony.workflow.loader.ConditionDescriptor;
  * 
  */
 public class WorkflowValueFieldConditionPluginFactory extends
-AbstractWorkflowPluginFactory implements WorkflowPluginConditionFactory {
+		AbstractWorkflowPluginFactory implements WorkflowPluginConditionFactory {
 	
 	/* (non-Javadoc)
 	 * @see com.googlecode.jsu.workflow.AbstractWorkflowPluginFactory#getVelocityParamsForInput(java.util.Map)
@@ -37,14 +37,14 @@ AbstractWorkflowPluginFactory implements WorkflowPluginConditionFactory {
 		velocityParams.put("val-fieldsList", Collections.unmodifiableList(fields));
 		velocityParams.put("val-conditionList", Collections.unmodifiableList(conditionList));
 		velocityParams.put("val-comparisonList", Collections.unmodifiableList(comparisonList));
-		
 	}
 	
 	/* (non-Javadoc)
 	 * @see com.googlecode.jsu.workflow.AbstractWorkflowPluginFactory#getVelocityParamsForEdit(java.util.Map, com.opensymphony.workflow.loader.AbstractDescriptor)
 	 */
-	protected void getVelocityParamsForEdit(Map velocityParams,
-			AbstractDescriptor descriptor) {
+	protected void getVelocityParamsForEdit(
+			Map velocityParams,	AbstractDescriptor descriptor
+	) {
 		getVelocityParamsForInput(velocityParams);
 		
 		ConditionDescriptor conditionDescriptor = (ConditionDescriptor) descriptor;
@@ -55,15 +55,22 @@ AbstractWorkflowPluginFactory implements WorkflowPluginConditionFactory {
 		String comparisonType = (String) args.get("comparisonType");
 		String fieldValue = (String) args.get("fieldValue");
 		
-		Field field = WorkflowUtils.getFieldFromKey(sField);
-		ComparisonType compType = ComparisonManager.getManager().getComparisonType(new Integer(comparisonType));
-		ConditionType cond = ConditionManager.getManager().getCondition(new Integer(fieldCondition));
+		Field field = null;
 		
-		velocityParams.put("val-fieldSelected", field);
-		velocityParams.put("val-conditionSelected", cond);
-		velocityParams.put("val-comparisonTypeSelected", compType);
-		velocityParams.put("val-fieldValue", fieldValue);
-		
+		try {
+			field = WorkflowUtils.getFieldFromKey(sField);
+		} catch (Exception e) {
+		}
+	
+		if (field != null) {
+			ComparisonType compType = ComparisonManager.getManager().getComparisonType(new Integer(comparisonType));
+			ConditionType cond = ConditionManager.getManager().getCondition(new Integer(fieldCondition));
+
+			velocityParams.put("val-fieldSelected", field);
+			velocityParams.put("val-conditionSelected", cond);
+			velocityParams.put("val-comparisonTypeSelected", compType);
+			velocityParams.put("val-fieldValue", fieldValue);
+		}
 	}
 	
 	/* (non-Javadoc)
@@ -77,16 +84,25 @@ AbstractWorkflowPluginFactory implements WorkflowPluginConditionFactory {
 		String fieldCondition = (String) args.get("conditionList");
 		String comparisonType = (String) args.get("comparisonType");
 		String fieldValue = (String) args.get("fieldValue");
+
+		Field field = null;
 		
-		Field field = WorkflowUtils.getFieldFromKey(sField);
-		ComparisonType compType = ComparisonManager.getManager().getComparisonType(new Integer(comparisonType));
-		ConditionType cond = ConditionManager.getManager().getCondition(new Integer(fieldCondition));
-		
-		velocityParams.put("val-fieldSelected", field);
-		velocityParams.put("val-conditionSelected", cond);
-		velocityParams.put("val-comparisonTypeSelected", compType);
-		velocityParams.put("val-fieldValue", fieldValue);
-		
+		try {
+			field = WorkflowUtils.getFieldFromKey(sField);
+		} catch (Exception e) {
+		}
+	
+		if (field != null) {
+			ComparisonType compType = ComparisonManager.getManager().getComparisonType(new Integer(comparisonType));
+			ConditionType cond = ConditionManager.getManager().getCondition(new Integer(fieldCondition));
+
+			velocityParams.put("val-fieldSelected", field);
+			velocityParams.put("val-conditionSelected", cond);
+			velocityParams.put("val-comparisonTypeSelected", compType);
+			velocityParams.put("val-fieldValue", fieldValue);
+		} else {
+			velocityParams.put("val-errorMessage", "Unable to find field '" + sField + "'");
+		}
 	}
 	
 	/* (non-Javadoc)
@@ -95,7 +111,7 @@ AbstractWorkflowPluginFactory implements WorkflowPluginConditionFactory {
 	public Map getDescriptorParams(Map conditionParams) {
 		Map params = new HashMap();
 		
-		try{
+		try {
 			String field = extractSingleParam(conditionParams, "fieldsList");
 			String fieldCondition = extractSingleParam(conditionParams, "conditionList");
 			String comparisonType = extractSingleParam(conditionParams, "comparisonType");
@@ -106,11 +122,10 @@ AbstractWorkflowPluginFactory implements WorkflowPluginConditionFactory {
 			params.put("comparisonType", comparisonType);
 			params.put("fieldValue", fieldValue);
 			
-		}catch(IllegalArgumentException iae){
+		} catch(IllegalArgumentException iae) {
 			// Aggregate so that Transitions can be added.
 		}
 		
 		return params;
 	}
-	
 }

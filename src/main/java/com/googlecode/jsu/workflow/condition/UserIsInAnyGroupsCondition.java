@@ -4,7 +4,8 @@ import java.util.Collection;
 import java.util.Iterator;
 import java.util.Map;
 
-import com.atlassian.jira.issue.Issue;
+import org.apache.log4j.Logger;
+
 import com.atlassian.jira.workflow.condition.AbstractJiraCondition;
 import com.googlecode.jsu.util.WorkflowUtils;
 import com.opensymphony.module.propertyset.PropertySet;
@@ -21,20 +22,12 @@ import com.opensymphony.workflow.WorkflowContext;
  *  
  */
 public class UserIsInAnyGroupsCondition extends AbstractJiraCondition {
-	
-	Issue issueObject = null;
-	
-	public UserIsInAnyGroupsCondition() {
-		
-	}
+	private final Logger log = Logger.getLogger(UserIsInAnyGroupsCondition.class);
 	
 	/* (non-Javadoc)
 	 * @see com.opensymphony.workflow.Condition#passesCondition(java.util.Map, java.util.Map, com.opensymphony.module.propertyset.PropertySet)
 	 */
 	public boolean passesCondition(Map transientVars, Map args, PropertySet ps) {
-		
-		issueObject = (Issue) transientVars.get("issue");
-		
 		boolean allowUser = false; 
 		
 		try {
@@ -53,9 +46,8 @@ public class UserIsInAnyGroupsCondition extends AbstractJiraCondition {
 					allowUser = true;
 				}
 			}
-			
 		} catch (EntityNotFoundException e) {
-			e.printStackTrace();
+			log.error("Unable to find user from context", e);
 		}
 		
 		return allowUser;		
