@@ -54,7 +54,7 @@
     </td>
         #foreach ($field in ${fields})
             <td nowrap id="${field.id}_container">
-                <input type="text" name="${field.id}" id="${field.id}" value="$!{fieldValue}"/>
+                <textarea rows="10" cols="35" type="text" name="${field.id}" id="${field.id}">$!{fieldValue}</textarea>
                 <br /><span class="subText">The value of the custom field to set.</span>
             </td>
         #end

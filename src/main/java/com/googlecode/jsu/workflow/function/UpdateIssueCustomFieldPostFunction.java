@@ -1,24 +1,15 @@
 package com.googlecode.jsu.workflow.function;
 
-import java.util.HashMap;
-import java.util.List;
+import static com.googlecode.jsu.workflow.WorkflowUpdateIssueCustomFieldFunctionPluginFactory.TARGET_FIELD_NAME;
+import static com.googlecode.jsu.workflow.WorkflowUpdateIssueCustomFieldFunctionPluginFactory.TARGET_FIELD_VALUE;
+
 import java.util.Map;
 
-import com.atlassian.jira.ManagerFactory;
-import com.atlassian.jira.issue.ModifiedValue;
 import com.atlassian.jira.issue.MutableIssue;
-import com.atlassian.jira.issue.fields.CustomField;
-import com.atlassian.jira.issue.fields.FieldManager;
-import com.atlassian.jira.issue.fields.layout.field.FieldLayoutItem;
-import com.atlassian.jira.issue.fields.layout.field.FieldLayoutStorageException;
-import com.atlassian.jira.issue.util.DefaultIssueChangeHolder;
+import com.atlassian.jira.issue.fields.Field;
 import com.atlassian.jira.issue.util.IssueChangeHolder;
-import com.atlassian.jira.util.map.EasyMap;
-import com.atlassian.jira.workflow.function.issue.AbstractJiraFunctionProvider;
-import com.googlecode.jsu.util.CommonPluginUtils;
-import com.googlecode.jsu.util.LogUtils;
+import com.googlecode.jsu.util.WorkflowUtils;
 import com.opensymphony.module.propertyset.PropertySet;
-import com.opensymphony.util.TextUtils;
 import com.opensymphony.workflow.WorkflowException;
 
 /**
@@ -28,70 +19,48 @@ import com.opensymphony.workflow.WorkflowException;
  * @version 1.0
  *
  */
-public class UpdateIssueCustomFieldPostFunction extends AbstractJiraFunctionProvider {
-	public void execute(Map transientVars, Map args, PropertySet ps) throws WorkflowException {
-		String fieldName = (String) args.get("field.name");
-		String fieldValue = (String) args.get("field.value");
+public class UpdateIssueCustomFieldPostFunction extends AbstractPreserveChangesPostFunction {
+	/* (non-Javadoc)
+	 * @see com.googlecode.jsu.workflow.function.AbstractPreserveChangesPostFunction#executeFunction(java.util.Map, java.util.Map, com.opensymphony.module.propertyset.PropertySet, com.atlassian.jira.issue.util.IssueChangeHolder)
+	 */
+	@Override
+	protected void executeFunction(
+			Map<String, Object> transientVars, Map<String, String> args, 
+			PropertySet ps, IssueChangeHolder holder
+	) throws WorkflowException {
+		String fieldKey = (String) args.get(TARGET_FIELD_NAME);
+
+		final Field field = (Field) WorkflowUtils.getFieldFromKey(fieldKey);
+		final String fieldName = (field != null) ? field.getName() : "null";
+
+		String fieldValue = (String) args.get(TARGET_FIELD_VALUE);
 		
-		if (fieldValue != null && "null".equals(fieldValue)) {
+		if ((fieldValue != null) && ("null".equals(fieldValue))) {
 			fieldValue = null;
 		}
-		
-		if (TextUtils.stringSet((String) args.get("field.type"))) {
-			LogUtils.getGeneral().debug(
-					"There is no need to specify the field type in this version of JIRA. Remove the 'field.type' argument from the functions arguments."
-			);
-		}
 
-		// Add change item history. First, get any other changeitems found
-		// then push ours back onto the stack for later processing
-		// As seen in UpdateIssueFieldFunction
-
-		IssueChangeHolder changeHolder = new DefaultIssueChangeHolder();
-		List changeItems = (List) transientVars.get("changeItems");
-
-		if (changeItems != null) {
-			changeHolder.addChangeItems(changeItems);
-		}
-
-		processField(getIssue(transientVars), fieldName, fieldValue, changeHolder);
-
-		// push back
-		transientVars.put("changeItems", changeHolder.getChangeItems());
-	}
-
-	private void processField(MutableIssue issue, String fieldName, String fieldValue, IssueChangeHolder changeHolder) throws WorkflowException {
-		FieldManager fieldManager = ManagerFactory.getFieldManager();
-
-		CustomField field = fieldManager.getCustomField(fieldName);
-		Map params = EasyMap.build(field.getId(), new String[] { fieldValue });
-		Map fieldValuesHolder = new HashMap();
-		field.populateFromParams(fieldValuesHolder, params);
-
-		FieldLayoutItem fieldLayoutItem;
+		MutableIssue issue = null;
 
 		try {
-			fieldLayoutItem	= CommonPluginUtils.getFieldLayoutItem(issue, field);
-		} catch (FieldLayoutStorageException e) {
-			String msg = "GenerateChangeHistory is unable to resolve a field layout item for " + field.getName();
+			issue = getIssue(transientVars);
 
-			LogUtils.getGeneral().error(msg, e);
-			
-			throw new WorkflowException(msg);
-		}
+			if (log.isDebugEnabled()) {
+				log.debug(String.format(
+						"Updating custom field '%s - %s' in issue [%s] with value [%s]",
+						fieldKey, fieldName, issue.getKey(), fieldValue
+				));
+			}
 
-		field.updateIssue(fieldLayoutItem, issue, fieldValuesHolder);
-
-		if (issue.getModifiedFields().containsKey(field.getId())) {
-			field.updateValue(
-					fieldLayoutItem, 
-					issue, 
-					(ModifiedValue) issue.getModifiedFields().get(field.getId()), 
-					changeHolder
+			WorkflowUtils.setFieldValue(issue, fieldKey, fieldValue, holder);
+		} catch (Exception e) {
+			final String message = String.format(
+					"Unable to update custom field '%s - %s' in issue [%s]",
+					fieldKey, fieldName, (issue != null) ? issue.getKey() : "null"
 			);
-
-			// Ensure the field is not modified by other workflow functions
-			issue.getModifiedFields().remove(field.getId());
+			
+			log.error(message, e);
+			
+			throw new WorkflowException(message);
 		}
 	}
 }
