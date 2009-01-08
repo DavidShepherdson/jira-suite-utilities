@@ -331,6 +331,9 @@ public class WorkflowUtils {
 				throw new IllegalStateException(e);
 			}
 			
+			// Updating internal custom field value
+			issue.setCustomFieldValue(customField, value);
+			
 			customField.updateValue(
 					fieldLayoutItem, issue, 
 					new ModifiedValue(oldValue, value),	changeHolder
