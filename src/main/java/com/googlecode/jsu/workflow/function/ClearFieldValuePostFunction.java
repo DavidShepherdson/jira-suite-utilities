@@ -27,6 +27,8 @@ public class ClearFieldValuePostFunction extends AbstractPreserveChangesPostFunc
 		String fieldKey = (String) args.get(WorkflowClearFieldValueFunctionPluginFactory.FIELD);
 		Field field = (Field) WorkflowUtils.getFieldFromKey(fieldKey);
 
+		final String fieldName = (field != null) ? field.getName() : "null";
+		
 		// It set the value to field.
 		try {
 			MutableIssue issue = getIssue(transientVars);
@@ -34,15 +36,17 @@ public class ClearFieldValuePostFunction extends AbstractPreserveChangesPostFunc
 			if (log.isDebugEnabled()) {
 				log.debug(String.format(
 						"Clean field '%s - %s' in the issue [%s]",
-						fieldKey, field.getName(), issue.getKey()
+						fieldKey, fieldName, issue.getKey()
 				));
 			}
 
 			WorkflowUtils.setFieldValue(issue, fieldKey, null, holder);
 		} catch (Exception e) {
-			log.error(
-					"Unable to set field - '" + fieldKey + " - " + field.getName() + "'", e
-			);
+			String message = "Unable to clean field - '" + fieldKey + " - " + fieldName + "'";
+			
+			log.error(message, e);
+			
+			throw new WorkflowException(message);
 		}
 	}
 }
