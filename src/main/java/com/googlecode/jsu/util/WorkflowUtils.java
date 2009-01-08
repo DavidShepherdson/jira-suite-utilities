@@ -31,7 +31,7 @@ import com.atlassian.jira.issue.fields.layout.field.FieldLayoutItem;
 import com.atlassian.jira.issue.fields.layout.field.FieldLayoutStorageException;
 import com.atlassian.jira.issue.fields.screen.FieldScreen;
 import com.atlassian.jira.issue.status.Status;
-import com.atlassian.jira.issue.util.DefaultIssueChangeHolder;
+import com.atlassian.jira.issue.util.IssueChangeHolder;
 import com.atlassian.jira.issue.worklog.WorkRatio;
 import com.atlassian.jira.project.version.Version;
 import com.atlassian.jira.project.version.VersionManager;
@@ -297,26 +297,30 @@ public class WorkflowUtils {
 	 * @param field
 	 * @param value
 	 */
-	public static void setFieldValue(MutableIssue issue, Field field, Object value) {
+	public static void setFieldValue(MutableIssue issue, Field field, Object value, IssueChangeHolder changeHolder) {
 		FieldManager fldManager = ManagerFactory.getFieldManager();
 
 		if (fldManager.isCustomField(field)) {
 			CustomField customField = (CustomField) field;
 			Object oldValue = issue.getCustomFieldValue(customField);
-
+			FieldLayoutItem fieldLayoutItem;
+			
 			try {
-				FieldLayoutItem fieldLayoutItem = CommonPluginUtils.getFieldLayoutItem(issue, field);
-
-				customField.updateValue(
-						fieldLayoutItem, 
-						issue, 
-						new ModifiedValue(oldValue, value),
-						new DefaultIssueChangeHolder()
-				);
+				fieldLayoutItem = CommonPluginUtils.getFieldLayoutItem(issue, field);
 			} catch (FieldLayoutStorageException e) {
 				LogUtils.getGeneral().error("Unable to get field layout item", e);
 
 				throw new IllegalStateException(e);
+			}
+			
+			customField.updateValue(
+					fieldLayoutItem, issue, 
+					new ModifiedValue(oldValue, value),	changeHolder
+			);
+			
+			// Remove duplicated issue update
+			if (issue.getModifiedFields().containsKey(field.getId())) {
+				issue.getModifiedFields().remove(field.getId());
 			}
 		} else {
 			final String fieldId = field.getId();
@@ -521,10 +525,13 @@ public class WorkflowUtils {
 	 * @param value
 	 *            Value for setting
 	 */
-	public static void setFieldValue(MutableIssue issue, String fieldKey, Object value) {
+	public static void setFieldValue(
+			MutableIssue issue, String fieldKey, Object value, 
+			IssueChangeHolder changeHolder
+	) {
 		final Field field = (Field) WorkflowUtils.getFieldFromKey(fieldKey);
 
-		setFieldValue(issue, field, value);
+		setFieldValue(issue, field, value, changeHolder);
 	}
 
 	/**

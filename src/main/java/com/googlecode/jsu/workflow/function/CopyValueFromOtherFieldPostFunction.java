@@ -2,12 +2,9 @@ package com.googlecode.jsu.workflow.function;
 
 import java.util.Map;
 
-import org.apache.log4j.Logger;
-
 import com.atlassian.jira.issue.MutableIssue;
 import com.atlassian.jira.issue.fields.Field;
-import com.atlassian.jira.workflow.function.issue.AbstractJiraFunctionProvider;
-import com.googlecode.jsu.util.LogUtils;
+import com.atlassian.jira.issue.util.IssueChangeHolder;
 import com.googlecode.jsu.util.WorkflowUtils;
 import com.opensymphony.module.propertyset.PropertySet;
 import com.opensymphony.workflow.WorkflowException;
@@ -17,16 +14,14 @@ import com.opensymphony.workflow.WorkflowException;
  *
  * This function copies the value from a field to another one.
  */
-public class CopyValueFromOtherFieldPostFunction extends AbstractJiraFunctionProvider {
-	private final Logger log = LogUtils.getGeneral();
-	
+public class CopyValueFromOtherFieldPostFunction extends AbstractPreserveChangesPostFunction {
 	/* (non-Javadoc)
-	 * @see com.opensymphony.workflow.FunctionProvider#execute(java.util.Map, java.util.Map, com.opensymphony.module.propertyset.PropertySet)
+	 * @see com.googlecode.jsu.workflow.function.AbstractPreserveChangesPostFunction#executeFunction(java.util.Map, java.util.Map, com.opensymphony.module.propertyset.PropertySet, com.atlassian.jira.issue.util.IssueChangeHolder)
 	 */
-	public void execute(
-			@SuppressWarnings("unchecked") Map transientVars, 
-			@SuppressWarnings("unchecked") Map args,
-			PropertySet ps
+	@Override
+	protected void executeFunction(
+			Map<String, Object> transientVars, Map<String, String> args, 
+			PropertySet ps, IssueChangeHolder holder
 	) throws WorkflowException {
 		String fieldFromKey = (String) args.get("sourceField");
 		String fieldToKey = (String) args.get("destinationField");
@@ -50,7 +45,7 @@ public class CopyValueFromOtherFieldPostFunction extends AbstractJiraFunctionPro
 			}
 			
 			// It set the value to field.
-			WorkflowUtils.setFieldValue(issue, fieldToKey, sourceValue);
+			WorkflowUtils.setFieldValue(issue, fieldToKey, sourceValue, holder);
 
 			if (log.isDebugEnabled()) {
 				log.debug("Value was successfully copied");

@@ -2,8 +2,9 @@ package com.googlecode.jsu.workflow.function;
 
 import java.util.Map;
 
-import com.atlassian.jira.workflow.function.issue.AbstractJiraFunctionProvider;
-import com.googlecode.jsu.util.LogUtils;
+import com.atlassian.jira.issue.MutableIssue;
+import com.atlassian.jira.issue.fields.Field;
+import com.atlassian.jira.issue.util.IssueChangeHolder;
 import com.googlecode.jsu.util.WorkflowUtils;
 import com.googlecode.jsu.workflow.WorkflowClearFieldValueFunctionPluginFactory;
 import com.opensymphony.module.propertyset.PropertySet;
@@ -14,16 +15,34 @@ import com.opensymphony.workflow.WorkflowException;
  * 
  * @author Alexey Abashev
  */
-public class ClearFieldValuePostFunction extends AbstractJiraFunctionProvider {
-	@SuppressWarnings("unchecked")
-	public void execute(Map transientVars, Map args, PropertySet ps) throws WorkflowException {
+public class ClearFieldValuePostFunction extends AbstractPreserveChangesPostFunction {
+	/* (non-Javadoc)
+	 * @see com.googlecode.jsu.workflow.function.AbstractPreserveChangesPostFunction#executeFunction(java.util.Map, java.util.Map, com.opensymphony.module.propertyset.PropertySet, com.atlassian.jira.issue.util.IssueChangeHolder)
+	 */
+	@Override
+	protected void executeFunction(
+			Map<String, Object> transientVars, Map<String, String> args, 
+			PropertySet ps, IssueChangeHolder holder
+	) throws WorkflowException {
 		String fieldKey = (String) args.get(WorkflowClearFieldValueFunctionPluginFactory.FIELD);
-		
+		Field field = (Field) WorkflowUtils.getFieldFromKey(fieldKey);
+
 		// It set the value to field.
 		try {
-			WorkflowUtils.setFieldValue(getIssue(transientVars), fieldKey, null);
+			MutableIssue issue = getIssue(transientVars);
+
+			if (log.isDebugEnabled()) {
+				log.debug(String.format(
+						"Clean field '%s - %s' in the issue [%s]",
+						fieldKey, field.getName(), issue.getKey()
+				));
+			}
+
+			WorkflowUtils.setFieldValue(issue, fieldKey, null, holder);
 		} catch (Exception e) {
-			LogUtils.getGeneral().error("Unable to set field - " + fieldKey, e);
+			log.error(
+					"Unable to set field - '" + fieldKey + " - " + field.getName() + "'", e
+			);
 		}
 	}
 }
