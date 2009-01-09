@@ -256,31 +256,18 @@ public class CommonPluginUtils {
 	 * @return a list of fields that will be eliminated from getCopyFromFields().
 	 */
 	private static List<Field> getNonCopyFromFields(){
-		List<Field> fields = new ArrayList<Field>();
-		
-		Field attachment = ManagerFactory.getFieldManager().getField("attachment");
-		Field comment = ManagerFactory.getFieldManager().getField("comment");
-		Field components = ManagerFactory.getFieldManager().getField("components");
-		Field fixVersions = ManagerFactory.getFieldManager().getField("fixVersions");
-		Field issuelinks = ManagerFactory.getFieldManager().getField("issuelinks");
-		Field security = ManagerFactory.getFieldManager().getField("security");
-		Field subtasks = ManagerFactory.getFieldManager().getField("subtasks");
-		Field thumbnail = ManagerFactory.getFieldManager().getField("thumbnail");
-		Field timetracking = ManagerFactory.getFieldManager().getField("timetracking");
-		Field versions = ManagerFactory.getFieldManager().getField("versions");
-		
-		fields.add(attachment);
-		fields.add(comment);
-		fields.add(components);
-		fields.add(fixVersions);
-		fields.add(issuelinks);
-		fields.add(security);
-		fields.add(subtasks);
-		fields.add(thumbnail);
-		fields.add(timetracking);
-		fields.add(versions);
-		
-		return fields;
+		return asFields(
+				IssueFieldConstants.ATTACHMENT,
+				IssueFieldConstants.COMMENT,
+				IssueFieldConstants.COMPONENTS,
+				IssueFieldConstants.FIX_FOR_VERSIONS,
+				IssueFieldConstants.AFFECTED_VERSIONS,
+				IssueFieldConstants.ISSUE_LINKS,
+				IssueFieldConstants.SECURITY,
+				IssueFieldConstants.SUBTASKS,
+				IssueFieldConstants.THUMBNAIL,
+				IssueFieldConstants.TIMETRACKING
+		);
 	}
 	
 	/**
@@ -297,57 +284,34 @@ public class CommonPluginUtils {
 	 * @return a list of fields that will be eliminated from getCopyFromFields().
 	 */
 	private static List<Field> getNonCopyToFields(){
-		List<Field> fields = new ArrayList<Field>();
-		
-		Field attachment = ManagerFactory.getFieldManager().getField("attachment");
-		Field comment = ManagerFactory.getFieldManager().getField("comment");
-		Field components = ManagerFactory.getFieldManager().getField("components");
-		Field created = ManagerFactory.getFieldManager().getField("created");
-		Field estimate = ManagerFactory.getFieldManager().getField("timeoriginalestimate");
-		Field fixVersions = ManagerFactory.getFieldManager().getField("fixVersions");
-		Field issueKey = ManagerFactory.getFieldManager().getField("issuekey");
-		Field issuelinks = ManagerFactory.getFieldManager().getField("issuelinks");
-		Field issueType = ManagerFactory.getFieldManager().getField("issuetype");
-		Field priority = ManagerFactory.getFieldManager().getField("priority");
-		Field project = ManagerFactory.getFieldManager().getField("project");
-		Field remaining = ManagerFactory.getFieldManager().getField("timeestimate");
-		Field resolution = ManagerFactory.getFieldManager().getField("resolution");
-		Field security = ManagerFactory.getFieldManager().getField("security");
-		Field status = ManagerFactory.getFieldManager().getField("status");
-		Field subtasks = ManagerFactory.getFieldManager().getField("subtasks");
-		Field thumbnail = ManagerFactory.getFieldManager().getField("thumbnail");
-		Field timeSpent = ManagerFactory.getFieldManager().getField("timespent");
-		Field timetracking = ManagerFactory.getFieldManager().getField("timetracking");
-		Field updated = ManagerFactory.getFieldManager().getField("updated");
-		Field versions = ManagerFactory.getFieldManager().getField("versions");
-		Field votes = ManagerFactory.getFieldManager().getField("votes");
-		Field workratio = ManagerFactory.getFieldManager().getField("workratio");
-		
-		fields.add(attachment);
-		fields.add(comment);
-		fields.add(components);
-		fields.add(created);
-		fields.add(estimate);
-		fields.add(fixVersions);
-		fields.add(issueKey);
-		fields.add(issuelinks);
-		fields.add(issueType);
-		fields.add(priority);
-		fields.add(project);
-		fields.add(remaining);
-		fields.add(resolution);
-		fields.add(security);
-		fields.add(status);
-		fields.add(subtasks);
-		fields.add(thumbnail);
-		fields.add(timeSpent);
-		fields.add(timetracking);
-		fields.add(updated);
-		fields.add(versions);
-		fields.add(votes);
-		fields.add(workratio);
-		
-		return fields;
+		return asFields(
+				IssueFieldConstants.ATTACHMENT,
+				IssueFieldConstants.COMMENT,
+				IssueFieldConstants.COMPONENTS,
+				IssueFieldConstants.CREATED,
+				IssueFieldConstants.TIMETRACKING,
+				IssueFieldConstants.TIME_ORIGINAL_ESTIMATE,
+				IssueFieldConstants.TIME_ESTIMATE,
+				IssueFieldConstants.TIME_SPENT,
+				IssueFieldConstants.AGGREGATE_TIME_ORIGINAL_ESTIMATE,
+				IssueFieldConstants.AGGREGATE_TIME_ESTIMATE,
+				IssueFieldConstants.AGGREGATE_PROGRESS,
+				IssueFieldConstants.ISSUE_KEY,
+				IssueFieldConstants.ISSUE_LINKS,
+				IssueFieldConstants.ISSUE_TYPE,
+				IssueFieldConstants.AFFECTED_VERSIONS,
+				IssueFieldConstants.FIX_FOR_VERSIONS,
+				IssueFieldConstants.PRIORITY,
+				IssueFieldConstants.PROJECT,
+				IssueFieldConstants.RESOLUTION,
+				IssueFieldConstants.SECURITY,
+				IssueFieldConstants.STATUS,
+				IssueFieldConstants.SUBTASKS,
+				IssueFieldConstants.THUMBNAIL,
+				IssueFieldConstants.UPDATED,
+				IssueFieldConstants.VOTES,
+				IssueFieldConstants.WORKRATIO
+		);
 	}
 	
 	/**
@@ -365,48 +329,27 @@ public class CommonPluginUtils {
 	 * @return a list of fields that will be eliminated from getRequirableFields().
 	 */
 	private static List<Field> getNonRequirableFields(){
-		List<Field> fields = new ArrayList<Field>();
-		final FieldManager fieldManager = ManagerFactory.getFieldManager();
-		
-		Field attachment = fieldManager.getField(IssueFieldConstants.ATTACHMENT);
-		Field comment = fieldManager.getField(IssueFieldConstants.COMMENT);
-		Field created = fieldManager.getField(IssueFieldConstants.CREATED);
-		Field estimate = fieldManager.getField(IssueFieldConstants.TIME_ORIGINAL_ESTIMATE);
-		Field issuekey = fieldManager.getField(IssueFieldConstants.ISSUE_KEY);
-		Field issuelinks = fieldManager.getField(IssueFieldConstants.ISSUE_LINKS);
-		Field issuetype = fieldManager.getField(IssueFieldConstants.ISSUE_TYPE);
-		Field project = fieldManager.getField(IssueFieldConstants.PROJECT);
-//		Field remaining = ManagerFactory.getFieldManager().getField("timeestimate");
-		Field status = fieldManager.getField(IssueFieldConstants.STATUS);
-		Field subtasks = fieldManager.getField(IssueFieldConstants.SUBTASKS);
-		Field thumbnail = fieldManager.getField(IssueFieldConstants.THUMBNAIL);
-		Field timeSpent = fieldManager.getField(IssueFieldConstants.TIME_SPENT);
-		Field timetracking = fieldManager.getField(IssueFieldConstants.TIMETRACKING);
-		Field updated = fieldManager.getField(IssueFieldConstants.UPDATED);
-		Field votes = fieldManager.getField(IssueFieldConstants.VOTES);
-		Field workratio = fieldManager.getField(IssueFieldConstants.WORKRATIO);
-		Field security = fieldManager.getField(IssueFieldConstants.SECURITY);
-		
-		fields.add(attachment);
-		fields.add(comment);
-		fields.add(created);
-		fields.add(estimate);
-		fields.add(issuekey);
-		fields.add(issuelinks);
-		fields.add(issuetype);
-		fields.add(project);
-//		fields.add(remaining);
-		fields.add(status);
-		fields.add(subtasks);
-		fields.add(thumbnail);
-		fields.add(timeSpent);
-		fields.add(timetracking);
-		fields.add(updated);
-		fields.add(votes);
-		fields.add(workratio);
-		fields.add(security);
-		
-		return fields;
+		return asFields(
+				IssueFieldConstants.ATTACHMENT,
+				IssueFieldConstants.COMMENT,
+				IssueFieldConstants.CREATED,
+				IssueFieldConstants.TIMETRACKING,
+				IssueFieldConstants.TIME_ORIGINAL_ESTIMATE,
+				IssueFieldConstants.PROGRESS,
+				IssueFieldConstants.AGGREGATE_TIME_ORIGINAL_ESTIMATE,
+				IssueFieldConstants.AGGREGATE_PROGRESS,
+				IssueFieldConstants.ISSUE_KEY,
+				IssueFieldConstants.ISSUE_LINKS,
+				IssueFieldConstants.ISSUE_TYPE,
+				IssueFieldConstants.PROJECT,
+				IssueFieldConstants.STATUS,
+				IssueFieldConstants.SUBTASKS,
+				IssueFieldConstants.THUMBNAIL,
+				IssueFieldConstants.UPDATED,
+				IssueFieldConstants.VOTES,
+				IssueFieldConstants.WORKRATIO,
+				IssueFieldConstants.SECURITY
+		);
 	}
 	
 	/**
@@ -426,41 +369,22 @@ public class CommonPluginUtils {
 	 * @return a list of fields that will be eliminated from getValueFieldConditionFields().
 	 */
 	private static List<Field> getNonValueFieldConditionFields(){
-		List<Field> fields = new ArrayList<Field>();
-		
-		final FieldManager fieldManager = ManagerFactory.getFieldManager();
-		
-		Field attachment = fieldManager.getField("attachment");
-		Field versions = fieldManager.getField("versions");
-		Field comment = fieldManager.getField("comment");
-		Field components = fieldManager.getField("components");
-		Field created = fieldManager.getField("created");
-		Field fixVersions = fieldManager.getField("fixVersions");
-		Field thumbnail = fieldManager.getField("thumbnail");
-		Field issuelinks = fieldManager.getField("issuelinks");
-		Field issuekey = fieldManager.getField("issuekey");
-		Field subtasks = fieldManager.getField("subtasks");
-		Field timetracking = fieldManager.getField("timetracking");
-		Field updated = fieldManager.getField("updated");
-		Field votes = fieldManager.getField("votes");
-		Field workratio = fieldManager.getField(IssueFieldConstants.WORKRATIO);
-
-		fields.add(attachment);
-		fields.add(versions);
-		fields.add(comment);
-		fields.add(components);
-		fields.add(created);
-		fields.add(fixVersions);
-		fields.add(issuekey);
-		fields.add(issuelinks);
-		fields.add(subtasks);
-		fields.add(thumbnail);
-		fields.add(timetracking);
-		fields.add(updated);
-		fields.add(votes);
-		fields.add(workratio);
-		
-		return fields;
+		return asFields(
+				IssueFieldConstants.ATTACHMENT,
+				IssueFieldConstants.COMMENT,
+				IssueFieldConstants.COMPONENTS,
+				IssueFieldConstants.CREATED,
+				IssueFieldConstants.AFFECTED_VERSIONS,
+				IssueFieldConstants.FIX_FOR_VERSIONS,
+				IssueFieldConstants.ISSUE_KEY,
+				IssueFieldConstants.ISSUE_LINKS,
+				IssueFieldConstants.SUBTASKS,
+				IssueFieldConstants.THUMBNAIL,
+				IssueFieldConstants.TIMETRACKING,
+				IssueFieldConstants.UPDATED,
+				IssueFieldConstants.VOTES,
+				IssueFieldConstants.WORKRATIO
+		);
 	}
 	
 	/**
@@ -497,5 +421,21 @@ public class CommonPluginUtils {
 		I18nBean i18n = new I18nBean(ap.getDefaultLocale().getDisplayName());
 
 		return new NameComparatorEx(i18n); 
+	}
+	
+	/**
+	 * Convert array of names into list of fields
+	 * @param names
+	 * @return
+	 */
+	private static List<Field> asFields(String ... names) {
+		final FieldManager fieldManager = ManagerFactory.getFieldManager();
+		List<Field> result = new ArrayList<Field>(names.length);
+		
+		for (String name : names) {
+			result.add(fieldManager.getField(name));
+		}
+		
+		return result;
 	}
 }

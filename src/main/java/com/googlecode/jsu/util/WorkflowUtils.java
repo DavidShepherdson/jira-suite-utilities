@@ -280,6 +280,8 @@ public class WorkflowUtils {
 					retVal = issue.getSecurityLevel();
 				} else if (fieldId.equals(IssueFieldConstants.TIME_ESTIMATE)) {
 					retVal = issue.getEstimate();
+				} else if (fieldId.equals(IssueFieldConstants.TIME_SPENT)) {
+					retVal = issue.getTimeSpent();
 				} else if (fieldId.equals(IssueFieldConstants.ASSIGNEE)) {
 					retVal = issue.getAssignee();
 				} else if (fieldId.equals(IssueFieldConstants.REPORTER)) {
@@ -291,7 +293,7 @@ public class WorkflowUtils {
 				} else if (fieldId.equals(IssueFieldConstants.SUMMARY)) {
 					retVal = issue.getSummary();
 				} else {
-					LogUtils.getGeneral().error("Default field \"" + field + "\" is not supported");
+					LogUtils.getGeneral().error("Issue field \"" + fieldId + "\" is not supported.");
 
 					GenericValue gvIssue = issue.getGenericValue();
 					
@@ -302,7 +304,8 @@ public class WorkflowUtils {
 			}
 		} catch (NullPointerException e) {
 			retVal = null;
-			LogUtils.getGeneral().error("Unable to get field \"" + field + "\" value", e);
+			
+			LogUtils.getGeneral().error("Unable to get field \"" + field.getId() + "\" value", e);
 		}
 
 		return retVal;
