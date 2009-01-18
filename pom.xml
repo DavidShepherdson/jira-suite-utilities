@@ -107,6 +107,38 @@
                     </execution>
                 </executions>
             </plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-release-plugin</artifactId>
+				<configuration>
+					<tagBase>https://jira-suite-utilities.googlecode.com/svn/tags</tagBase>
+					<releaseProfiles>release</releaseProfiles>
+					<goals>deploy assembly:assembly gcupload:gcupload</goals>
+				</configuration>
+			</plugin>
+			<plugin>
+    			<groupId>org.riedelcastro</groupId>
+    			<artifactId>gcupload-maven-plugin</artifactId>
+    			<version>0.9</version>
+    			<configuration>
+        			<projectName>jira-suite-utilities</projectName>
+        			<!-- dryRun>true</dryRun>
+        			<allowSnapshots>true</allowSnapshots -->
+        			<uploads>
+            			<upload>
+                			<summary>${project.name} version ${project.version} (binaries)</summary>
+                			<extensions>jar</extensions>
+							<labels>Type-Package,OpSys-All,Featured</labels>
+            			</upload>
+						<upload>
+							<summary>${project.name} version ${project.version} (sources)</summary>
+							<postfix>sources</postfix>
+							<extensions>jar</extensions>
+							<labels>Type-Source,OpSys-All</labels>
+						</upload>
+        			</uploads>
+    			</configuration>
+			</plugin>
       	</plugins>
 	</build>
 
@@ -151,9 +183,15 @@
 			<id>atlassian-m1</id>
 			<url>https://maven.atlassian.com/maven1</url>
 			<layout>legacy</layout>
-		</repository>
+    	</repository>
 	</repositories>
-		
+	
+	<pluginRepositories>
+		<pluginRepository>
+        	<id>repository.riedelcastro.org</id>
+        	<url>http://repository.riedelcastro.org</url>
+		</pluginRepository>
+	</pluginRepositories>
 	<properties>
 		<atlassian.jira.version>3.11</atlassian.jira.version>
 	</properties>
