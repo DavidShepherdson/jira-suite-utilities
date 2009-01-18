@@ -260,8 +260,9 @@ public class CommonPluginUtils {
 				IssueFieldConstants.ATTACHMENT,
 				IssueFieldConstants.COMMENT,
 				IssueFieldConstants.COMPONENTS,
-				IssueFieldConstants.FIX_FOR_VERSIONS,
-				IssueFieldConstants.AFFECTED_VERSIONS,
+// For issue #65
+//				IssueFieldConstants.FIX_FOR_VERSIONS,
+//				IssueFieldConstants.AFFECTED_VERSIONS,
 				IssueFieldConstants.ISSUE_LINKS,
 				IssueFieldConstants.SECURITY,
 				IssueFieldConstants.SUBTASKS,
@@ -299,8 +300,9 @@ public class CommonPluginUtils {
 				IssueFieldConstants.ISSUE_KEY,
 				IssueFieldConstants.ISSUE_LINKS,
 				IssueFieldConstants.ISSUE_TYPE,
-				IssueFieldConstants.AFFECTED_VERSIONS,
-				IssueFieldConstants.FIX_FOR_VERSIONS,
+// For issue #65
+//				IssueFieldConstants.AFFECTED_VERSIONS,
+//				IssueFieldConstants.FIX_FOR_VERSIONS,
 				IssueFieldConstants.PRIORITY,
 				IssueFieldConstants.PROJECT,
 				IssueFieldConstants.RESOLUTION,
