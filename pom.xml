@@ -122,8 +122,6 @@
     			<version>0.9</version>
     			<configuration>
         			<projectName>jira-suite-utilities</projectName>
-        			<!-- dryRun>true</dryRun>
-        			<allowSnapshots>true</allowSnapshots -->
         			<uploads>
             			<upload>
                 			<summary>${project.name} version ${project.version} (binaries)</summary>
@@ -139,13 +137,6 @@
         			</uploads>
     			</configuration>
 			</plugin>
-			<!-- plugin>
-				<artifactId>maven-deploy-plugin</artifactId>
-    			<version>2.4</version>
-				<configuration>
-					<skip>true</skip>
-				</configuration>
-			</plugin-->
       	</plugins>
 	</build>
 
@@ -199,6 +190,7 @@
         	<url>http://repository.riedelcastro.org</url>
 		</pluginRepository>
 	</pluginRepositories>
+	
 	<properties>
 		<atlassian.jira.version>3.11</atlassian.jira.version>
 	</properties>
