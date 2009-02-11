@@ -10,6 +10,7 @@ import com.atlassian.jira.issue.fields.Field;
 import com.atlassian.jira.issue.util.IssueChangeHolder;
 import com.googlecode.jsu.util.WorkflowUtils;
 import com.opensymphony.module.propertyset.PropertySet;
+import com.opensymphony.user.User;
 import com.opensymphony.workflow.WorkflowException;
 
 /**
@@ -39,6 +40,16 @@ public class UpdateIssueCustomFieldPostFunction extends AbstractPreserveChangesP
 			fieldValue = null;
 		}
 
+		if (fieldValue.equals("%%CURRENT_USER%%")) {
+            try {
+                User currentUser = getCaller(transientVars, args);
+
+    			fieldValue = currentUser.toString();
+			} catch (Exception e) {
+				log.error("Unable to find caller for function", e);
+			}
+		}
+		
 		MutableIssue issue = null;
 
 		try {

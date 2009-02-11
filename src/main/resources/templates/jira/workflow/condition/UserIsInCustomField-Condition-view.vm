@@ -1,0 +1,9 @@
+#if (${val-errorMessage})
+	<div style="background: red; color: white">${val-errorMessage}</div>
+#else  
+	The field 
+	#if (${val-fieldSelected})
+		<b>${val-fieldSelected.name}</b>
+	#end 
+	.
+#end

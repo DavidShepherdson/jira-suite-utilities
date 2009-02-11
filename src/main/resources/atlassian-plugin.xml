@@ -74,6 +74,19 @@
         <resource type="velocity" name="edit-parameters" location="templates/jira/workflow/condition/fieldvalue-condition-edit.vm"/>
 	</workflow-condition>
     
+	<workflow-condition key="UserIsInCustomField-Condition" name="User Is In Custom field" 
+        class="com.googlecode.jsu.workflow.WorkflowUserIsInCustomFieldConditionPluginFactory">
+        <description>It allows only users in custom field to execute the transition.</description>
+
+		<condition-class>
+			com.googlecode.jsu.workflow.condition.UserIsInCustomFieldCondition
+		</condition-class>
+
+        <resource type="velocity" name="view" location="templates/jira/workflow/condition/UserIsInCustomField-Condition-view.vm"/>
+        <resource type="velocity" name="input-parameters" location="templates/jira/workflow/condition/UserIsInCustomField-Condition-edit.vm"/>
+        <resource type="velocity" name="edit-parameters" location="templates/jira/workflow/condition/UserIsInCustomField-Condition-edit.vm"/>
+	</workflow-condition>
+    
 	<!-- Validators -->
 	<workflow-validator key="dateCompare-validator" name="Date Compare" 
 		class="com.googlecode.jsu.workflow.WorkflowDateCompareValidatorPluginFactory">

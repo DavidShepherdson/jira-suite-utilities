@@ -32,6 +32,7 @@ import com.atlassian.jira.issue.fields.layout.field.FieldLayoutItem;
 import com.atlassian.jira.issue.fields.layout.field.FieldLayoutStorageException;
 import com.atlassian.jira.issue.fields.screen.FieldScreen;
 import com.atlassian.jira.issue.status.Status;
+import com.atlassian.jira.issue.status.StatusImpl;
 import com.atlassian.jira.issue.util.IssueChangeHolder;
 import com.atlassian.jira.issue.worklog.WorkRatio;
 import com.atlassian.jira.project.version.Version;
@@ -334,12 +335,18 @@ public class WorkflowUtils {
 				throw new IllegalStateException(e);
 			}
 			
+			Object newValue = value;
+			
+            if (value instanceof StatusImpl) {
+				newValue = ((StatusImpl) value).getName();
+            }
+			
 			// Updating internal custom field value
-			issue.setCustomFieldValue(customField, value);
+			issue.setCustomFieldValue(customField, newValue);
 			
 			customField.updateValue(
 					fieldLayoutItem, issue, 
-					new ModifiedValue(oldValue, value),	changeHolder
+					new ModifiedValue(oldValue, newValue),	changeHolder
 			);
 			
 			// Remove duplicated issue update
