@@ -10,6 +10,7 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
+import org.apache.log4j.Logger;
 import org.ofbiz.core.entity.GenericEntityException;
 import org.ofbiz.core.entity.GenericValue;
 
@@ -52,7 +53,6 @@ import com.opensymphony.workflow.loader.ActionDescriptor;
  * 
  */
 public class WorkflowUtils {
-
 	public static final String SPLITTER = "@@";
 
 	public static final String CONDITION_MAJOR = ">";
@@ -72,6 +72,8 @@ public class WorkflowUtils {
 	private static final WorkflowActionsBean workflowActionsBean = new WorkflowActionsBean();
 	
 	public static final String CASCADING_SELECT_TYPE = "com.atlassian.jira.plugin.system.customfieldtypes:cascadingselect";
+	
+	private static final Logger log = Logger.getLogger(WorkflowUtils.class);
 	
 	/**
 	 * @return a list of boolean values.
@@ -184,24 +186,33 @@ public class WorkflowUtils {
 
 		try {
 			if (fldManager.isCustomField(field)) {
-				// Return the CustomField value. It will be any object.
+				// Return the CustomField value. It could be any object.
 				CustomField customField = (CustomField) field;
+				Object value = issue.getCustomFieldValue(customField);
 				
 				// TODO Maybe for cascade we have to create separate manager 
 				if (CASCADING_SELECT_TYPE.equals(customField.getCustomFieldType().getKey())) {
-					CustomFieldParams value = (CustomFieldParams) issue.getCustomFieldValue(customField);
+					CustomFieldParams params = (CustomFieldParams) value;
 
-					if (value != null) {
-						Object parent = value.getFirstValueForNullKey();
-						Object child = value.getFirstValueForKey("1");
+					if (params != null) {
+						Object parent = params.getFirstValueForNullKey();
+						Object child = params.getFirstValueForKey("1");
 
 						if (parent != null) {
-							retVal = child;
+							retVal = child.toString();
 						}
 					}
 				} else {
-					retVal = issue.getCustomFieldValue(customField);
+					retVal = value;
 				}
+				
+				log.debug(
+						"Get field value [object=" +
+						retVal +
+						";class=" +
+						((retVal != null) ? retVal.getClass() : "") + 
+						"]"
+				);
 			} else {
 				String fieldId = field.getId();
 				Collection retCollection = null;
@@ -328,6 +339,7 @@ public class WorkflowUtils {
 			CustomField customField = (CustomField) field;
 			Object oldValue = issue.getCustomFieldValue(customField);
 			FieldLayoutItem fieldLayoutItem;
+            CustomFieldType cfType = customField.getCustomFieldType();
 			
 			try {
 				fieldLayoutItem = CommonPluginUtils.getFieldLayoutItem(issue, field);
@@ -339,14 +351,17 @@ public class WorkflowUtils {
 			
 			Object newValue = value;
 			
-            if (value instanceof StatusImpl) {
-				newValue = ((StatusImpl) value).getName();
-            } else if (value instanceof String) {
-                  //convert from string to Object
-                  CustomFieldParams fieldParams = new CustomFieldParamsImpl(customField, value);
-                  CustomFieldType cfType = customField.getCustomFieldType();
+            if (value instanceof Status) {
+				newValue = ((Status) value).getName();
+            } else if (value instanceof User) {
+				newValue = ((User) value).getName();
+            }
+            	
+            if ((newValue instanceof String) || (newValue instanceof Collection)) {
+            	//convert from string to Object
+            	CustomFieldParams fieldParams = new CustomFieldParamsImpl(customField, newValue);
 
-                  newValue = cfType.getValueFromCustomFieldParams(fieldParams);
+            	newValue = cfType.getValueFromCustomFieldParams(fieldParams);
             }
 			
 			// Updating internal custom field value
