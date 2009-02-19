@@ -39,7 +39,7 @@ public class WorkflowUpdateIssueCustomFieldFunctionPluginFactory extends
 		params.put(TARGET_FIELD_NAME, fieldId);
 		
 		String fieldValue = extractSingleParam(conditionParams, PARAM_FIELD_VALUE);
-		params.put(TARGET_FIELD_VALUE, fieldValue);
+		params.put(TARGET_FIELD_VALUE, fieldValue.trim());
 		
 		return params;
 	}
@@ -60,7 +60,7 @@ public class WorkflowUpdateIssueCustomFieldFunctionPluginFactory extends
 		if (value == null || value.equals("null")) {
 			velocityParams.put(PARAM_FIELD_VALUE, null);
 		} else {
-			velocityParams.put(PARAM_FIELD_VALUE, value);
+			velocityParams.put(PARAM_FIELD_VALUE, value.trim());
 		}
 	}
 
