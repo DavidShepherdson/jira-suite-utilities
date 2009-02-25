@@ -40,14 +40,16 @@ public class UserIsInCustomFieldCondition extends AbstractJiraCondition {
 			Issue issue = getIssue(transientVars);
 			
 			Object fieldValue = WorkflowUtils.getFieldValueFromIssue(issue, field);
-
-			if (fieldValue instanceof String) {
-				if (fieldValue.equals(userLogged.toString())) {
-					allowUser = true;
-				}
-			} else {
-				if (fieldValue.equals(userLogged)) {
-					allowUser = true;
+			
+			if (fieldValue != null) {
+				if (fieldValue instanceof String) {
+					if (fieldValue.equals(userLogged.toString())) {
+						allowUser = true;
+					}
+				} else {
+					if (fieldValue.equals(userLogged)) {
+						allowUser = true;
+					}
 				}
 			}
 		} catch (EntityNotFoundException e) {
