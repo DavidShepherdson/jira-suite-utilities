@@ -1,4 +1,7 @@
-<atlassian-plugin key="com.googlecode.jira-suite-utilities" name="JIRA Suite Utilities">
+<atlassian-plugin key="com.googlecode.jira-suite-utilities" 
+                  name="JIRA Suite Utilities"
+                  plugin-version="2">
+                      
     <plugin-info>
         <description>Many objects to extend JIRA</description>
         <version>@VERSION-REPLACED-BY-MAVEN@</version>

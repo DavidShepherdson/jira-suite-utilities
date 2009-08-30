@@ -1,5 +1,6 @@
 package com.googlecode.jsu.util;
 
+import com.atlassian.jira.issue.fields.NavigableField;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -85,7 +86,7 @@ public class CommonPluginUtils {
 		Set<Field> allFields = new TreeSet<Field>(getComparator());
 		
 		try {
-			final Set<Field> fields = fieldManager.getAllAvailableNavigableFields();
+			final Set<NavigableField> fields = fieldManager.getAllAvailableNavigableFields();
 			
 			for (Field f : fields) {
 				allFields.add(f);

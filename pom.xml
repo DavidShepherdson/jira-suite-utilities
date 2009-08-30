@@ -192,6 +192,6 @@
 	</pluginRepositories>
 	
 	<properties>
-		<atlassian.jira.version>3.11</atlassian.jira.version>
+		<atlassian.jira.version>4.0.0-Beta3-b439a</atlassian.jira.version>
 	</properties>
 </project>
