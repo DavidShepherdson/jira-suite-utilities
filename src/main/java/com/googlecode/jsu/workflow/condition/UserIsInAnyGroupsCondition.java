@@ -33,16 +33,25 @@ public class UserIsInAnyGroupsCondition extends AbstractJiraCondition {
 		try {
 			// Obtains the current user.
 			WorkflowContext context = (WorkflowContext) transientVars.get("context");
-			User userLogged = UserManager.getInstance().getUser(context.getCaller());
+            String caller = context.getCaller();
+
+            if (caller == null) {
+                // User not logged in
+
+                return false;
+            }
+
+			User userLogged = UserManager.getInstance().getUser(caller);
 			
 			// If there aren't groups selected, hidGroupsList is equal to "".
 			// And groupsSelected will be an empty collection.
-			String strGroupsSelected = (String)args.get("hidGroupsList");
+			String strGroupsSelected = (String) args.get("hidGroupsList");
 			Collection groupsSelected = WorkflowUtils.getGroups(strGroupsSelected, WorkflowUtils.SPLITTER);
 			
-			Iterator it = groupsSelected.iterator();
-			while(it.hasNext() && !allowUser){
-				if(userLogged.inGroup((Group) it.next())){
+			Iterator<Group> it = groupsSelected.iterator();
+
+			while (it.hasNext() && !allowUser){
+				if (userLogged.inGroup(it.next())){
 					allowUser = true;
 				}
 			}
@@ -51,7 +60,5 @@ public class UserIsInAnyGroupsCondition extends AbstractJiraCondition {
 		}
 		
 		return allowUser;		
-		
 	}
-	
 }
