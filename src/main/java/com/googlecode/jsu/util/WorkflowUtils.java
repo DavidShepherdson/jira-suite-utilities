@@ -21,6 +21,7 @@ import com.atlassian.jira.ManagerFactory;
 import com.atlassian.jira.config.properties.APKeys;
 import com.atlassian.jira.config.properties.ApplicationProperties;
 import com.atlassian.jira.issue.Issue;
+import com.atlassian.jira.issue.IssueConstant;
 import com.atlassian.jira.issue.IssueFieldConstants;
 import com.atlassian.jira.issue.IssueRelationConstants;
 import com.atlassian.jira.issue.ModifiedValue;
@@ -34,6 +35,7 @@ import com.atlassian.jira.issue.fields.FieldManager;
 import com.atlassian.jira.issue.fields.layout.field.FieldLayoutItem;
 import com.atlassian.jira.issue.fields.layout.field.FieldLayoutStorageException;
 import com.atlassian.jira.issue.fields.screen.FieldScreen;
+import com.atlassian.jira.issue.resolution.Resolution;
 import com.atlassian.jira.issue.status.Status;
 import com.atlassian.jira.issue.status.StatusImpl;
 import com.atlassian.jira.issue.util.IssueChangeHolder;
@@ -351,8 +353,8 @@ public class WorkflowUtils {
 			
 			Object newValue = value;
 			
-            if (value instanceof Status) {
-				newValue = ((Status) value).getName();
+            if (value instanceof IssueConstant) {
+				newValue = ((IssueConstant) value).getName();
             } else if (value instanceof User) {
 				newValue = ((User) value).getName();
             }
@@ -492,6 +494,28 @@ public class WorkflowUtils {
 			} else if (fieldId.equals(IssueFieldConstants.RESOLUTION)) {
 				if (value == null) {
 					issue.setResolution(null);
+                } else if (value instanceof GenericValue) {
+					issue.setResolution((GenericValue) value);
+				} else if (value instanceof Resolution) {
+					issue.setResolutionId(((Resolution) value).getId());
+				} else if (value instanceof String) {
+					Collection<Resolution> resolutions = ManagerFactory.getConstantsManager().getResolutionObjects();
+					Resolution resolution = null;
+                    String s = ((String) value).trim();
+
+                    for (Resolution r : resolutions) {
+                        if (r.getName().equalsIgnoreCase(s)) {
+                            resolution = r;
+                            
+                            break;
+                        }
+                    }
+
+					if (resolution != null) {
+						issue.setResolutionId(resolution.getId());
+					} else {
+						throw new IllegalArgumentException("Unable to find resolution with name \"" + value + "\"");
+					}
 				} else {
 					throw new UnsupportedOperationException("Not implemented");
 				}

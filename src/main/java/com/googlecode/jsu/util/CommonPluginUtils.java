@@ -301,12 +301,8 @@ public class CommonPluginUtils {
 				IssueFieldConstants.ISSUE_KEY,
 				IssueFieldConstants.ISSUE_LINKS,
 				IssueFieldConstants.ISSUE_TYPE,
-// For issue #65
-//				IssueFieldConstants.AFFECTED_VERSIONS,
-//				IssueFieldConstants.FIX_FOR_VERSIONS,
 				IssueFieldConstants.PRIORITY,
 				IssueFieldConstants.PROJECT,
-				IssueFieldConstants.RESOLUTION,
 				IssueFieldConstants.SECURITY,
 				IssueFieldConstants.STATUS,
 				IssueFieldConstants.SUBTASKS,

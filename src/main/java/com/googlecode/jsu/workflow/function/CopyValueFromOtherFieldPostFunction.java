@@ -27,6 +27,10 @@ public class CopyValueFromOtherFieldPostFunction extends AbstractPreserveChanges
 		String fieldToKey = (String) args.get("destinationField");
 		
 		Field fieldFrom = (Field) WorkflowUtils.getFieldFromKey(fieldFromKey);
+		Field fieldTo = (Field) WorkflowUtils.getFieldFromKey(fieldToKey);
+
+        String fieldFromName = (fieldFrom != null) ? fieldFrom.getName() : fieldFromKey;
+        String fieldToName = (fieldTo != null) ? fieldTo.getName() : fieldToKey;
 
 		try {
 			MutableIssue issue = getIssue(transientVars);
@@ -37,9 +41,10 @@ public class CopyValueFromOtherFieldPostFunction extends AbstractPreserveChanges
 			if (log.isDebugEnabled()) {
 				log.debug(
 						String.format(
-								"Copying value \"%s\" from issue %s field [%s] to field [%s] ", 
+								"Copying value [%s] from issue %s field '%s' to '%s'",
 								sourceValue, issue.getKey(), 
-								fieldFromKey, fieldToKey
+								fieldFromName,
+                                fieldToName
 						)
 				);
 			}
@@ -51,10 +56,7 @@ public class CopyValueFromOtherFieldPostFunction extends AbstractPreserveChanges
 				log.debug("Value was successfully copied");
 			}
 		} catch (Exception e) {
-			Field fieldTo = (Field) WorkflowUtils.getFieldFromKey(fieldToKey);
-			String fieldFromName = (fieldFrom != null) ? fieldFrom.getName() : fieldFromKey;
-			String fieldToName = (fieldTo != null) ? fieldTo.getName() : fieldToKey;
-			String message = "Unable to copy value from " + fieldFromName + " to " + fieldToName;
+			String message = String.format("Unable to copy value from '%s' to '%s'", fieldFromName, fieldToName);
 			
 			log.error(message, e);
 			
