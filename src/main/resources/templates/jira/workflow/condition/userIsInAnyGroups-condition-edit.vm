@@ -31,15 +31,15 @@
 		                </td>
 		    	        </tr>
 		    	        
-	   	        <tr align="center" valign="center">
-		                <td align="center" width=50% valign="top">
-		                    <button type=button onclick="transferItemAdd('groupsList', 'groupsListSelected', 'hidGroupsList')">Add &gt;&gt;</button>
-	                </td>
+   	        <tr align="center" valign="center">
                 <td align="center" width=50% valign="top">
-				                    <button type=button onclick="transferItemRemove('groupsListSelected', 'groupsList', 'hidGroupsList')">&lt;&lt; Remove</button>
-		                </td>
-			    	        </tr>
-    	    </table>
+                    <button type=button onclick="transfer('groupsList', 'groupsListSelected'); storeSelectedItems('groupsListSelected', 'hidGroupsList')">Add &gt;&gt;</button>
+                </td>
+                <td align="center" width=50% valign="top">
+				    <button type=button onclick="transfer('groupsListSelected', 'groupsList'); storeSelectedItems('groupsListSelected', 'hidGroupsList')">&lt;&lt; Remove</button>
+                </td>
+   	        </tr>
+   	    </table>
     </td>
 </tr>
 <tr>
@@ -51,47 +51,35 @@
 </tr>
 
 <script type="text/javascript">
-    function transferItemAdd(inListaSrc, inListaDes, inSeleccion){
-        var listaSrc = document.getElementById(inListaSrc);
-        var listaDes = document.getElementById(inListaDes);
-        var seleccion = document.getElementById(inSeleccion);
+	function transfer(srcList, destList) {
+        var src = document.getElementById(srcList);
+        var dest = document.getElementById(destList);
 
-        for (i=0 ; i < listaSrc.length ; i++){
-            if(listaSrc[i].selected){
-                try {
-                    listaDes.add(listaSrc[i], null); // standards compliant; doesn't work in IE
-                } catch(ex) {
-                    listaDes.add(listaSrc[i]); // IE only
-                }
-                i--;
-            }
+		while (src.selectedIndex >= 0) {
+			var selectedOption = src.options[src.selectedIndex];
+			var newOption = document.createElement('option');
+
+			newOption.text = selectedOption.text;
+			newOption.value = selectedOption.value;
+
+			try {
+				dest.add(newOption, null); // standards compliant; doesn't work in IE
+			} catch(ex) {
+				dest.add(newOption, 0); // IE only
+			}
+
+			src.remove(src.selectedIndex);
+		}
+	}
+
+	function storeSelectedItems(srcList, storage) {
+        var src = document.getElementById(srcList);
+        var selected = document.getElementById(storage);
+
+        selected.value = "";
+
+        for (i = 0; i < src.length ; i++) {
+            selected.value += src[i].value + "${val-splitter}";
         }
-
-        seleccion.value = "";
-        for (i=0 ; i < listaDes.length ; i++){
-            seleccion.value = seleccion.value + listaDes[i].value + "${val-splitter}"
-        }
-    }
-
-    function transferItemRemove(inListaSrc, inListaDes, inSeleccion){
-        var listaSrc = document.getElementById(inListaSrc);
-        var listaDes = document.getElementById(inListaDes);
-        var seleccion = document.getElementById(inSeleccion);
-
-        for (i=0 ; i < listaSrc.length ; i++){
-            if(listaSrc[i].selected){
-                try {
-                    listaDes.add(listaSrc[i], null); // standards compliant; doesn't work in IE
-                } catch(ex) {
-                    listaDes.add(listaSrc[i]); // IE only
-                }
-                i--;
-            }
-        }
-
-        seleccion.value = "";
-        for (i=0 ; i < listaSrc.length ; i++){
-            seleccion.value = seleccion.value + listaSrc[i].value + "${val-splitter}"
-        }
-    }
+	}
 </script>
