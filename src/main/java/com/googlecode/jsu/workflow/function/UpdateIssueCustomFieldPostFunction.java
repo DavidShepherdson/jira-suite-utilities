@@ -58,7 +58,9 @@ public class UpdateIssueCustomFieldPostFunction extends AbstractPreserveChangesP
 			if (log.isDebugEnabled()) {
 				log.debug(String.format(
 						"Updating custom field '%s - %s' in issue [%s] with value [%s]",
-						fieldKey, fieldName, issue.getKey(), fieldValue
+						fieldKey, fieldName, 
+                        issueToString(issue),
+                        fieldValue
 				));
 			}
 
@@ -66,7 +68,8 @@ public class UpdateIssueCustomFieldPostFunction extends AbstractPreserveChangesP
 		} catch (Exception e) {
 			final String message = String.format(
 					"Unable to update custom field '%s - %s' in issue [%s]",
-					fieldKey, fieldName, (issue != null) ? issue.getKey() : "null"
+					fieldKey, fieldName, 
+                    issueToString(issue)
 			);
 			
 			log.error(message, e);
@@ -74,4 +77,8 @@ public class UpdateIssueCustomFieldPostFunction extends AbstractPreserveChangesP
 			throw new WorkflowException(message);
 		}
 	}
+
+    private String issueToString(MutableIssue issue) {
+        return ((issue != null) ? ((issue.getKey() == null) ? "new issue" : issue.getKey()) : "null");
+    }
 }

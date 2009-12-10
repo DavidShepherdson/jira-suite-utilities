@@ -41,7 +41,19 @@ abstract class AbstractPreserveChangesPostFunction extends AbstractJiraFunctionP
 	@SuppressWarnings("unchecked")
 	public final void execute(Map transientVars, Map args, PropertySet ps) throws WorkflowException {
 		IssueChangeHolder holder = createChangeHolder(transientVars);
-		
+
+        if (log.isDebugEnabled()) {
+            log.debug(
+                    "Executing function with [transientVars=" +
+                    transientVars +
+                    ";args=" +
+                    args +
+                    ";ps=" +
+                    ps +
+                    "]"
+            );
+        }
+        
 		try {
 			executeFunction(transientVars, args, ps, holder);
 		} finally {

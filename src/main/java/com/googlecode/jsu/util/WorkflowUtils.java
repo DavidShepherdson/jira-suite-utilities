@@ -373,11 +373,24 @@ public class WorkflowUtils {
 					fieldLayoutItem, issue, 
 					new ModifiedValue(oldValue, newValue),	changeHolder
 			);
-			
-			// Remove duplicated issue update
-			if (issue.getModifiedFields().containsKey(field.getId())) {
-				issue.getModifiedFields().remove(field.getId());
-			}
+
+            if (log.isDebugEnabled()) {
+                log.debug(
+                        "Issue [" +
+                        issue +
+                        "] got modfied fields - [" +
+                        issue.getModifiedFields() +
+                        "]"
+                );
+            }
+
+            // Not new
+            if (issue.getKey() != null) {
+                // Remove duplicated issue update
+                if (issue.getModifiedFields().containsKey(field.getId())) {
+                    issue.getModifiedFields().remove(field.getId());
+                }
+            }
 		} else {
 			final String fieldId = field.getId();
 
