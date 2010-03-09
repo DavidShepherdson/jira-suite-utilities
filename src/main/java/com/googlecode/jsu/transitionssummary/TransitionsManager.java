@@ -45,7 +45,7 @@ public class TransitionsManager {
 
 		for (Transition trans : statusChanges) {
 			// Sets an ID for the Transition.
-			String transitionId = trans.getFromStatus().getId().toString() + "to" + trans.getToStatus().getId().toString();
+			String transitionId = trans.getFromStatus().getId().toString() + "to" + trans.getToStatus().getId().toString() + trans.getChangedAt();
 			
 			LogUtils.getGeneral().debug("transition found: " + transitionId); // Debug output
 			
