@@ -37,7 +37,6 @@ import com.atlassian.jira.issue.fields.layout.field.FieldLayoutStorageException;
 import com.atlassian.jira.issue.fields.screen.FieldScreen;
 import com.atlassian.jira.issue.resolution.Resolution;
 import com.atlassian.jira.issue.status.Status;
-import com.atlassian.jira.issue.status.StatusImpl;
 import com.atlassian.jira.issue.util.IssueChangeHolder;
 import com.atlassian.jira.issue.worklog.WorkRatio;
 import com.atlassian.jira.project.version.Version;
@@ -308,6 +307,8 @@ public class WorkflowUtils {
 					retVal = issue.getEnvironment();
 				} else if (fieldId.equals(IssueFieldConstants.SUMMARY)) {
 					retVal = issue.getSummary();
+				} else if (fieldId.equals(IssueFieldConstants.DUE_DATE)) {
+					retVal = issue.getDueDate();
 				} else {
 					LogUtils.getGeneral().error("Issue field \"" + fieldId + "\" is not supported.");
 
