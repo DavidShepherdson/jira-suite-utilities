@@ -156,8 +156,8 @@
 	</dependencies>
 	
 	<scm>
-		<connection>scm:svn:http://jira-suite-utilities.googlecode.com/svn/trunk/</connection>
-		<developerConnection>scm:svn:https://jira-suite-utilities.googlecode.com/svn/trunk/</developerConnection>
+		<connection>scm:hg:file://${basedir}</connection>
+		<developerConnection>scm:hg:file://${basedir}</developerConnection>
 	</scm>
 	
 	<repositories>
