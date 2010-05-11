@@ -571,6 +571,7 @@ public class WorkflowUtils {
 				} else if (value instanceof String) {
 					try {
 						User user = UserUtils.getUser((String) value);
+						
 						if (null != user) {
 							issue.setAssignee(user);
 						}
@@ -603,6 +604,24 @@ public class WorkflowUtils {
 						throw new IllegalArgumentException("Wrong date format exception for \"" + value + "\"");
 					}
 				}
+			} else if (fieldId.equals(IssueFieldConstants.REPORTER)) {
+				if (value == null) {
+					issue.setReporter(null);
+				} else if (value instanceof User) {
+					issue.setReporter((User) value);
+				} else if (value instanceof String) {
+					try {
+						User user = UserUtils.getUser((String) value);
+						
+						if (user != null) {
+							issue.setReporter(user);
+						}
+					} catch (EntityNotFoundException e) {
+						throw new IllegalArgumentException(String.format("User \"%s\" not found", value));
+					}
+				}
+			} else {
+				LogUtils.getGeneral().error("Issue field \"" + fieldId + "\" is not supported for setting.");
 			}
 		}
 	}
