@@ -10,6 +10,7 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.ofbiz.core.entity.GenericEntityException;
 import org.ofbiz.core.entity.GenericValue;
@@ -344,6 +345,20 @@ public class WorkflowUtils {
 			FieldLayoutItem fieldLayoutItem;
             CustomFieldType cfType = customField.getCustomFieldType();
 			
+            if (log.isDebugEnabled()) {
+            	log.debug(
+            			String.format(
+            					"Set custom field value " +
+            					"[field=%s,type=%s,oldValue=%s,newValueClass=%s,newValue=%s]",
+            					customField,
+            					cfType,
+            					oldValue,
+            					(value != null) ? value.getClass().getName() : "null",
+            					value		
+            			)
+            	);
+            }
+            
 			try {
 				fieldLayoutItem = CommonPluginUtils.getFieldLayoutItem(issue, field);
 			} catch (FieldLayoutStorageException e) {
@@ -360,13 +375,30 @@ public class WorkflowUtils {
 				newValue = ((User) value).getName();
             }
             	
-            if ((newValue instanceof String) || (newValue instanceof Collection)) {
+            if (newValue instanceof String) {
             	//convert from string to Object
             	CustomFieldParams fieldParams = new CustomFieldParamsImpl(customField, newValue);
 
             	newValue = cfType.getValueFromCustomFieldParams(fieldParams);
+            } else if (newValue instanceof Collection<?>) {
+            	//convert from string to Object
+            	CustomFieldParams fieldParams = new CustomFieldParamsImpl(
+            			customField, 
+            			StringUtils.join((Collection<?>) newValue, ",")
+            	);
+
+            	newValue = cfType.getValueFromCustomFieldParams(fieldParams);
             }
 			
+            if (log.isDebugEnabled()) {
+            	log.debug("Got new value [class=" +
+            			((newValue != null) ? newValue.getClass().getName() : "null") +
+            			",value=" +
+            			newValue +
+            			"]"
+            	);
+            }
+            
 			// Updating internal custom field value
 			issue.setCustomFieldValue(customField, newValue);
 			

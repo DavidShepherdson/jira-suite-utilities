@@ -156,8 +156,8 @@
 	</dependencies>
 	
 	<scm>
-		<connection>scm:hg:file://${basedir}</connection>
-		<developerConnection>scm:hg:file://${basedir}</developerConnection>
+		<connection>${scm.connection}</connection>
+		<developerConnection>${scm.connection}</developerConnection>
 	</scm>
 	
 	<repositories>
@@ -172,11 +172,6 @@
 				<enabled>true</enabled>
 			</releases>
 		</repository>
-		<repository>
-			<id>atlassian-m1</id>
-			<url>https://maven.atlassian.com/maven1</url>
-			<layout>legacy</layout>
-    	</repository>
 	</repositories>
 	
 	<pluginRepositories>
@@ -187,6 +182,18 @@
 	</pluginRepositories>
 
 	<properties>
-		<atlassian.jira.version>4.0.0-Beta3-b439a</atlassian.jira.version>
+		<atlassian.jira.version>4.1</atlassian.jira.version>
+		
+		<scm.connection>scm:hg:file://${basedir}</scm.connection>
 	</properties>
+	
+	<profiles>
+		<profile>
+			<id>release</id>
+			
+			<properties>
+				<scm.connection>scm:hg:https://abashev@bitbucket.org/abashev/jira-suite-utilities</scm.connection>
+			</properties>
+		</profile>
+	</profiles>
 </project>
