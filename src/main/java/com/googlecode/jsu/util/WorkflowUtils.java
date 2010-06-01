@@ -310,8 +310,12 @@ public class WorkflowUtils {
 					retVal = issue.getSummary();
 				} else if (fieldId.equals(IssueFieldConstants.DUE_DATE)) {
 					retVal = issue.getDueDate();
+				} else if (fieldId.equals(IssueFieldConstants.UPDATED)) {
+					retVal = issue.getUpdated();
+				} else if (fieldId.equals(IssueFieldConstants.CREATED)) {
+					retVal = issue.getCreated();
 				} else {
-					LogUtils.getGeneral().error("Issue field \"" + fieldId + "\" is not supported.");
+					LogUtils.getGeneral().warn("Issue field \"" + fieldId + "\" is not supported.");
 
 					GenericValue gvIssue = issue.getGenericValue();
 					
