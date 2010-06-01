@@ -5,7 +5,7 @@
 	<groupId>jira-suite-utilities</groupId>
 	<artifactId>jira-suite-utilities</artifactId>
 	<name>JIRA Suite Utilities</name>
-	<version>0.7.5-SNAPSHOT</version>
+	<version>0.7.5</version>
 	<packaging>jar</packaging>
 
 	<organization>
