@@ -5,7 +5,7 @@
     <plugin-info>
         <description>Many objects to extend JIRA</description>
         <version>@VERSION-REPLACED-BY-MAVEN@</version>
-        <application-version min="3.5" max="3.11"/>
+        <application-version min="3.5" max="4.1"/>
         <vendor name="Quadratica SRL" url="http://www.quadratica.com.ar"/>
     </plugin-info>   
 
@@ -205,4 +205,10 @@
         		  name="view" 
         		  location="templates/jira/issuetabpanel/transitionssummary/transitions-summary-view.vm" />
     </issue-tabpanel>
+    
+    <!-- Components -->
+    <component key="conditionCheckerFactory" class="com.googlecode.jsu.helpers.ConditionCheckerFactory">
+		<description>Provide service for checking conditions</description>
+		<interface>com.googlecode.jsu.helpers.ConditionCheckerFactory</interface>
+	</component>
 </atlassian-plugin>
