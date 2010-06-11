@@ -1,6 +1,5 @@
 package com.googlecode.jsu.workflow;
 
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -8,9 +7,8 @@ import java.util.Map;
 import com.atlassian.jira.issue.fields.Field;
 import com.atlassian.jira.plugin.workflow.AbstractWorkflowPluginFactory;
 import com.atlassian.jira.plugin.workflow.WorkflowPluginConditionFactory;
-import com.googlecode.jsu.helpers.ComparisonManager;
 import com.googlecode.jsu.helpers.ComparisonType;
-import com.googlecode.jsu.helpers.ConditionManager;
+import com.googlecode.jsu.helpers.ConditionCheckerFactory;
 import com.googlecode.jsu.helpers.ConditionType;
 import com.googlecode.jsu.util.CommonPluginUtils;
 import com.googlecode.jsu.util.WorkflowUtils;
@@ -26,17 +24,27 @@ import com.opensymphony.workflow.loader.ConditionDescriptor;
 public class WorkflowValueFieldConditionPluginFactory extends
 		AbstractWorkflowPluginFactory implements WorkflowPluginConditionFactory {
 	
+	private final ConditionCheckerFactory conditionCheckerFactory;
+	
+	/**
+	 * @param conditionCheckerFactory
+	 */
+	public WorkflowValueFieldConditionPluginFactory(ConditionCheckerFactory conditionCheckerFactory) {
+		this.conditionCheckerFactory = conditionCheckerFactory;
+	}
+
 	/* (non-Javadoc)
 	 * @see com.googlecode.jsu.workflow.AbstractWorkflowPluginFactory#getVelocityParamsForInput(java.util.Map)
 	 */
 	protected void getVelocityParamsForInput(Map velocityParams) {
 		List fields = CommonPluginUtils.getValueFieldConditionFields();
-		List conditionList = ConditionManager.getManager().getAllConditions();
-		List comparisonList = ComparisonManager.getManager().getAllComparisonType();
 		
-		velocityParams.put("val-fieldsList", Collections.unmodifiableList(fields));
-		velocityParams.put("val-conditionList", Collections.unmodifiableList(conditionList));
-		velocityParams.put("val-comparisonList", Collections.unmodifiableList(comparisonList));
+		List<ConditionType> conditionList = conditionCheckerFactory.getConditionTypes();
+		List<ComparisonType> comparisonList = conditionCheckerFactory.getComparisonTypes();
+		
+		velocityParams.put("val-fieldsList", fields);
+		velocityParams.put("val-conditionList", conditionList);
+		velocityParams.put("val-comparisonList", comparisonList);
 	}
 	
 	/* (non-Javadoc)
@@ -51,8 +59,8 @@ public class WorkflowValueFieldConditionPluginFactory extends
 		Map args = conditionDescriptor.getArgs();
 		
 		String sField = (String) args.get("fieldsList");
-		String fieldCondition = (String) args.get("conditionList");
-		String comparisonType = (String) args.get("comparisonType");
+		String conditionTypeId = (String) args.get("conditionList");
+		String comparisonTypeId = (String) args.get("comparisonType");
 		String fieldValue = (String) args.get("fieldValue");
 		
 		Field field = null;
@@ -63,12 +71,12 @@ public class WorkflowValueFieldConditionPluginFactory extends
 		}
 	
 		if (field != null) {
-			ComparisonType compType = ComparisonManager.getManager().getComparisonType(new Integer(comparisonType));
-			ConditionType cond = ConditionManager.getManager().getCondition(new Integer(fieldCondition));
+			ComparisonType comparisonType = conditionCheckerFactory.findComparisonById(comparisonTypeId);
+			ConditionType conditionType = conditionCheckerFactory.findConditionById(conditionTypeId);
 
 			velocityParams.put("val-fieldSelected", field);
-			velocityParams.put("val-conditionSelected", cond);
-			velocityParams.put("val-comparisonTypeSelected", compType);
+			velocityParams.put("val-conditionSelected", conditionType);
+			velocityParams.put("val-comparisonTypeSelected", comparisonType);
 			velocityParams.put("val-fieldValue", fieldValue);
 		}
 	}
@@ -81,8 +89,8 @@ public class WorkflowValueFieldConditionPluginFactory extends
 		Map args = conditionDescriptor.getArgs();
 		
 		String sField = (String) args.get("fieldsList");
-		String fieldCondition = (String) args.get("conditionList");
-		String comparisonType = (String) args.get("comparisonType");
+		String conditionTypeId = (String) args.get("conditionList");
+		String comparisonTypeId = (String) args.get("comparisonType");
 		String fieldValue = (String) args.get("fieldValue");
 
 		Field field = null;
@@ -93,12 +101,12 @@ public class WorkflowValueFieldConditionPluginFactory extends
 		}
 	
 		if (field != null) {
-			ComparisonType compType = ComparisonManager.getManager().getComparisonType(new Integer(comparisonType));
-			ConditionType cond = ConditionManager.getManager().getCondition(new Integer(fieldCondition));
+			ComparisonType comparisonType = conditionCheckerFactory.findComparisonById(comparisonTypeId);
+			ConditionType conditionType = conditionCheckerFactory.findConditionById(conditionTypeId);
 
 			velocityParams.put("val-fieldSelected", field);
-			velocityParams.put("val-conditionSelected", cond);
-			velocityParams.put("val-comparisonTypeSelected", compType);
+			velocityParams.put("val-conditionSelected", conditionType);
+			velocityParams.put("val-comparisonTypeSelected", comparisonType);
 			velocityParams.put("val-fieldValue", fieldValue);
 		} else {
 			velocityParams.put("val-errorMessage", "Unable to find field '" + sField + "'");
