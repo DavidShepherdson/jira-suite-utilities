@@ -84,6 +84,26 @@ public class ConditionCheckerFactory {
 		return new ArrayList<ComparisonType>(COMPARISONS_CACHE.values());
 	}
 	
+	/**
+	 * Find condition by id.
+	 * 
+	 * @param id
+	 * @return
+	 */
+	public ConditionType findConditionById(String id) {
+		return CONDITIONS_CACHE.get(Integer.valueOf(id));
+	}
+
+	/**
+	 * Find comparison by id.
+	 * 
+	 * @param id
+	 * @return
+	 */
+	public ComparisonType findComparisonById(String id) {
+		return COMPARISONS_CACHE.get(Integer.valueOf(id));
+	}
+
 	private String getCheckerClassName(ComparisonType type, ConditionType condition) {
 		return String.format(CHECKER_CLASS_TEMPLATE, type.getValue(), condition.getMnemonic());
 	}

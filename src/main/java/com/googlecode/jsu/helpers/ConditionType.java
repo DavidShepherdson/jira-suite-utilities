@@ -7,59 +7,72 @@ package com.googlecode.jsu.helpers;
  *  
  */
 public class ConditionType {
+	private final int id;
+	private final String shortText;
+	private final String displayText;
+	private final String mnemonic;
 	
-	private Integer id;
-	private String value;
-	
+	/**
+	 * @param id
+	 * @param value
+	 * @param displayValue
+	 */
+	public ConditionType(
+			int id, String shortText, String displayText, String mnemonic
+	) {
+		this.id = id;
+		this.shortText = shortText;
+		this.displayText = displayText;
+		this.mnemonic = mnemonic;
+	}
+
 	public Integer getId() {
 		return id;
 	}
-	public void setId(Integer id) {
-		this.id = id;
-	}
+
 	public String getValue() {
-		return value;
-	}
-	public void setValue(String value) {
-		this.value = value;
-	}
-	public boolean equals(Object obj) {
-		boolean retVal = false;
-		
-		if(obj!=null){
-			try{
-				ConditionType cond = (ConditionType) obj;
-				if(getId().equals(cond.getId())){
-					retVal = true;
-				}
-			}catch (ClassCastException cce){
-				retVal = false;
-			}
-		}
-		return retVal;
-	}
-	public String toString() {
-		String retVal = "";
-		
-		if(id.equals(new Integer(1)))
-			retVal = "greater than";
-		
-		if(id.equals(new Integer(2)))
-			retVal = "greater than or equal to";
-		
-		if(id.equals(new Integer(3)))
-			retVal = "equal to";
-		
-		if(id.equals(new Integer(4)))
-			retVal = "less than or equal to";
-		
-		if(id.equals(new Integer(5)))
-			retVal = "less than";
-		
-		if(id.equals(new Integer(6)))
-			retVal = "not equal to";
-		
-		return retVal;
+		return shortText;
 	}
 	
+	/**
+	 * @return the mnemonic
+	 */
+	public String getMnemonic() {
+		return mnemonic;
+	}
+
+	/**
+	 * Get display name for condition.
+	 */
+	public String toString() {
+		return displayText;
+	}
+
+	/* (non-Javadoc)
+	 * @see java.lang.Object#hashCode()
+	 */
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + id;
+		return result;
+	}
+
+	/* (non-Javadoc)
+	 * @see java.lang.Object#equals(java.lang.Object)
+	 */
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (!(obj instanceof ConditionType))
+			return false;
+		ConditionType other = (ConditionType) obj;
+		if (id != other.id)
+			return false;
+		return true;
+	}
 }
