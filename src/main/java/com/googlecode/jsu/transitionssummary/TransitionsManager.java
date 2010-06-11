@@ -8,14 +8,14 @@ import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
+import org.apache.log4j.Logger;
 import org.ofbiz.core.entity.GenericValue;
 
 import com.atlassian.core.ofbiz.CoreFactory;
+import com.atlassian.core.util.map.EasyMap;
 import com.atlassian.jira.issue.Issue;
 import com.atlassian.jira.ofbiz.DefaultOfBizDelegator;
 import com.atlassian.jira.ofbiz.OfBizDelegator;
-import com.atlassian.jira.util.map.EasyMap;
-import com.googlecode.jsu.util.LogUtils;
 
 /**
  * @author Gustavo Martin
@@ -24,6 +24,7 @@ import com.googlecode.jsu.util.LogUtils;
  *  
  */
 public class TransitionsManager {
+	private static final Logger log = Logger.getLogger(TransitionsManager.class);
 	
 	/**
 	 * @param gvIssue the current issue.
@@ -47,7 +48,7 @@ public class TransitionsManager {
 			// Sets an ID for the Transition.
 			String transitionId = trans.getFromStatus().getId().toString() + "to" + trans.getToStatus().getId().toString() + trans.getChangedAt();
 			
-			LogUtils.getGeneral().debug("transition found: " + transitionId); // Debug output
+			log.debug("transition found: " + transitionId); 
 			
 			TransitionSummary tranSummary = null;
 			

@@ -6,13 +6,15 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.Map;
 
-import com.googlecode.jsu.util.LogUtils;
+import org.apache.log4j.Logger;
 
 /**
  * @author <A href="mailto:abashev at gmail dot com">Alexey Abashev</A>
  * @version $Id: MapFieldProcessor.java 105 2007-10-09 13:34:25Z abashev $
  */
 public class MapFieldProcessor extends AbstractVisitor {
+	private final Logger log = Logger.getLogger(MapFieldProcessor.class);
+	
 	private final Class<? extends Annotation> annotation;
 	private final Map<String, Object> values;
 	
@@ -48,9 +50,9 @@ public class MapFieldProcessor extends AbstractVisitor {
 			field.set(source, values.get(fieldName));
 			field.setAccessible(access);
 		} catch (IllegalArgumentException e) {
-			LogUtils.getGeneral().error("Unable to set class field - " + fieldName, e);
+			log.error("Unable to set class field - " + fieldName, e);
 		} catch (IllegalAccessException e) {
-			LogUtils.getGeneral().error("Unable to set class field - " + fieldName, e);
+			log.error("Unable to set class field - " + fieldName, e);
 		}
 	}
 	
