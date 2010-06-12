@@ -7,6 +7,8 @@ import java.util.Map;
 
 import org.apache.log4j.Logger;
 
+import com.googlecode.jsu.helpers.checkers.CheckerCompositeFactory;
+
 /**
  * Return object for checking conditions.
  * 
@@ -21,14 +23,15 @@ public class ConditionCheckerFactory {
 	public static final ConditionType LESS = new ConditionType(5, "<", "less than", "L");
 	public static final ConditionType NOT_EQUAL = new ConditionType(6, "!=", "not equal to", "NE");
 	
-	public static final ComparisonType STRING = new ComparisonType(1, "String");
-	public static final ComparisonType NUMBER = new ComparisonType(2, "Number");
-	public static final ComparisonType DATE = new ComparisonType(3, "Date with time");
-	public static final ComparisonType DATE_WITHOUT_TIME = new ComparisonType(4, "Date without time");
+	public static final ComparisonType STRING = new ComparisonType(1, "String", "String");
+	public static final ComparisonType NUMBER = new ComparisonType(2, "Number", "Number");
+	public static final ComparisonType DATE = new ComparisonType(3, "Date with time", "Date");
+	public static final ComparisonType DATE_WITHOUT_TIME = new ComparisonType(4, "Date without time", "DateWithoutTime");
 	
 	/** Template for checker class. */
-	private static final String CHECKER_CLASS_TEMPLATE = 
-			ConditionCheckerFactory.class.getPackage().getName() + ".checkers.Checker%s%s";
+	private static final String PACKAGE = ConditionCheckerFactory.class.getPackage().getName(); 
+	private static final String CONDITION_CLASS_TEMPLATE = PACKAGE + ".checkers.Snipet";
+	private static final String COMPARISON_CLASS_TEMPLATE = PACKAGE + ".checkers.Converter";
 	
 	/** Cache for searching through conditions */
 	private static final Map<Integer, ConditionType> CONDITIONS_CACHE = 
@@ -51,20 +54,23 @@ public class ConditionCheckerFactory {
 	}};
 	
 	private final Logger log = Logger.getLogger(ConditionCheckerFactory.class);
+	private final CheckerCompositeFactory checkerCompositeFactory = new CheckerCompositeFactory();
 	
 	public ConditionChecker getChecker(ComparisonType type, ConditionType condition) {
-		String clazz = getCheckerClassName(type, condition);
-
+		String conditionClassName = CONDITION_CLASS_TEMPLATE + condition.getMnemonic();
+		String comparisonClassName = COMPARISON_CLASS_TEMPLATE + type.getMnemonic();
+		
 		if (log.isDebugEnabled()) {
 			log.debug(
-					"Using class [" + clazz + 
+					"Using class [" + conditionClassName + 
+					"] for condition [" + condition.getValue() + 
+					"]; class [" + comparisonClassName +
 					"] for type [" + type.getValue() + 
-					"] and condition [" + condition.getValue() + 
 					"]"
 			);
 		}
 
-		return initChecker(clazz);
+		return checkerCompositeFactory.getComposite(comparisonClassName, conditionClassName);
 	}
 	
 	/**
@@ -102,25 +108,5 @@ public class ConditionCheckerFactory {
 	 */
 	public ComparisonType findComparisonById(String id) {
 		return COMPARISONS_CACHE.get(Integer.valueOf(id));
-	}
-
-	private String getCheckerClassName(ComparisonType type, ConditionType condition) {
-		return String.format(CHECKER_CLASS_TEMPLATE, type.getValue(), condition.getMnemonic());
-	}
-	
-	private ConditionChecker initChecker(String clazz) {
-		ConditionChecker checker = null;
-		
-		try {
-			checker = (ConditionChecker) Class.forName(clazz).newInstance();
-		} catch (InstantiationException e) {
-			log.error("Unable to initialize class [" + clazz + "]", e);
-		} catch (IllegalAccessException e) {
-			log.error("Unable to initialize class [" + clazz + "]", e);
-		} catch (ClassNotFoundException e) {
-			log.error("Unable to initialize class [" + clazz + "]", e);
-		}
-		
-		return checker;
 	}
 }

@@ -9,14 +9,16 @@ package com.googlecode.jsu.helpers;
 public class ComparisonType {
 	private final int id;
 	private final String value;
+	private final String mnemonic;
 	
 	/**
 	 * @param id
 	 * @param value
 	 */
-	public ComparisonType(int id, String value) {
+	public ComparisonType(int id, String value, String mnemonic) {
 		this.id = id;
 		this.value = value;
+		this.mnemonic = mnemonic;
 	}
 	
 	/**
@@ -34,6 +36,13 @@ public class ComparisonType {
 	 */
 	public String getValue() {
 		return value;
+	}
+
+	/**
+	 * @return the mnemonic
+	 */
+	public String getMnemonic() {
+		return mnemonic;
 	}
 
 	/* (non-Javadoc)
