@@ -1,30 +1,30 @@
 package com.googlecode.jsu.workflow.validator;
 
+import static com.googlecode.jsu.helpers.ConditionCheckerFactory.DATE;
+import static com.googlecode.jsu.helpers.ConditionCheckerFactory.DATE_WITHOUT_TIME;
+
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.Locale;
 
-import com.atlassian.jira.ManagerFactory;
+import org.apache.log4j.Logger;
+
 import com.atlassian.jira.config.properties.APKeys;
 import com.atlassian.jira.config.properties.ApplicationProperties;
 import com.atlassian.jira.issue.fields.Field;
 import com.googlecode.jsu.annotation.Argument;
-import com.googlecode.jsu.helpers.ConditionManager;
+import com.googlecode.jsu.helpers.ComparisonType;
+import com.googlecode.jsu.helpers.ConditionChecker;
+import com.googlecode.jsu.helpers.ConditionCheckerFactory;
 import com.googlecode.jsu.helpers.ConditionType;
-import com.googlecode.jsu.helpers.YesNoManager;
-import com.googlecode.jsu.helpers.YesNoType;
 import com.googlecode.jsu.util.CommonPluginUtils;
 import com.googlecode.jsu.util.WorkflowUtils;
 import com.opensymphony.workflow.InvalidInputException;
 import com.opensymphony.workflow.WorkflowException;
 
 /**
- * @author Gustavo Martin
- * 
  * This validator compare two datetime fields, using the given comparison type. 
  * And returning an exception if it doesn't fulfill the condition.
- *  
  */
 public class DateCompareValidator extends GenericValidator {
 	@Argument("date1Selected")
@@ -34,123 +34,95 @@ public class DateCompareValidator extends GenericValidator {
 	private String date2;
 
 	@Argument("conditionSelected")
-	private String condition;
+	private String conditionId;
 
 	@Argument("includeTimeSelected")
-	private String includeTime;
+	private String includeTimeValue;
+
+	private final Logger log = Logger.getLogger(DateCompareValidator.class);
+	private final ConditionCheckerFactory conditionCheckerFactory;
+	private final ApplicationProperties applicationProperties;
+	
+	/**
+	 * @param conditionCheckerFactory
+	 */
+	public DateCompareValidator(
+			ConditionCheckerFactory conditionCheckerFactory,
+			ApplicationProperties applicationProperties
+	) {
+		this.conditionCheckerFactory = conditionCheckerFactory;
+		this.applicationProperties = applicationProperties;
+	}
 
 	/* (non-Javadoc)
 	 * @see com.googlecode.jsu.workflow.validator.GenericValidator#validate()
 	 */
 	protected void validate() throws InvalidInputException, WorkflowException {
-		Field fldDate1 = WorkflowUtils.getFieldFromKey(date1);
-		Field fldDate2 = WorkflowUtils.getFieldFromKey(date2);
-		ConditionType cond = ConditionManager.getManager().getCondition(new Integer(condition));
-		YesNoType ynTime = YesNoManager.getManager().getOption(new Integer(includeTime));
+		Field field1 = WorkflowUtils.getFieldFromKey(date1);
+		Field field2 = WorkflowUtils.getFieldFromKey(date2);
+		
+		ConditionType condition = conditionCheckerFactory.findConditionById(conditionId);
+		boolean includeTime = (Integer.parseInt(includeTimeValue) == 1) ? true : false;
 		
 		// Compare Dates.
-		if ((fldDate1 != null) && (fldDate2 != null)) {
-			checkDatesCondition(fldDate1, fldDate2, cond.getValue(), ynTime.getValue());
-		}
-	}
-	
-	/**
-	 * @param fldDate1
-	 * @param fldDate2
-	 * @param cond
-	 * @param includeTime with or wothout the time part.
-	 * 
-	 * It makes the comparison properly this.
-	 */
-	private void checkDatesCondition(Field fldDate1, Field fldDate2, String cond, String includeTime) {
-		boolean condOK = false;
-		
-		Object objDate1 = WorkflowUtils.getFieldValueFromIssue(getIssue(), fldDate1);
-		Object objDate2 = WorkflowUtils.getFieldValueFromIssue(getIssue(), fldDate2);
-		
-		if ((objDate1!=null) && (objDate2!=null)) {
-			// It Takes the Locale for inicialize dates.
-			ApplicationProperties ap = ManagerFactory.getApplicationProperties();
-			Locale locale = ap.getDefaultLocale();
-			
-			Calendar calDate1 = Calendar.getInstance(locale);
-			Calendar calDate2 = Calendar.getInstance(locale);
-			
-			calDate1.setTime((Date) objDate1);
-			calDate2.setTime((Date) objDate2);
-			
-			// If the comparison is only date part, cleans the time part.
-			if (includeTime.equals(WorkflowUtils.BOOLEAN_NO)) {
-				CommonPluginUtils.clearCalendarTimePart(calDate1);
-				CommonPluginUtils.clearCalendarTimePart(calDate2);
-			} else {
-				calDate1.clear(Calendar.SECOND);
-				calDate1.clear(Calendar.MILLISECOND);
+		if ((field1 != null) && (field2 != null)) {
+			Object objValue1 = WorkflowUtils.getFieldValueFromIssue(getIssue(), field1); 
+			Object objValue2 = WorkflowUtils.getFieldValueFromIssue(getIssue(), field2); 
+			Date objDate1, objDate2;
+
+			try {
+				objDate1 = (Date) objValue1;
+			} catch (ClassCastException e) {
+				wrongDataErrorMessage(field1, objValue1);
 				
-				calDate2.clear(Calendar.SECOND);
-				calDate2.clear(Calendar.MILLISECOND);
+				return;
 			}
-			
-			Date date1 = calDate1.getTime();
-			Date date2 = calDate2.getTime();
-			
-			int comparacion = date1.compareTo(date2);
-			
-			if ((comparacion == 0) && ((cond.equals("<=")) || (cond.equals("=")) || (cond.equals(">="))))
-				condOK = true;
-			
-			if ((comparacion < 0) && ((cond.equals("<")) || (cond.equals("<="))))
-				condOK = true;
-			
-			if ((comparacion > 0) && ((cond.equals(">")) || (cond.equals(">="))))
-				condOK = true;
-			
-			if ((comparacion != 0) && (cond.equals(WorkflowUtils.CONDITION_DIFFERENT)))
-				condOK = true;
-			
-			// Dates are different. Throws an exception.
-			if (!condOK) {
-				String condString = WorkflowUtils.getConditionString(cond);
+
+			try {
+				objDate2 = (Date) objValue2;
+			} catch (ClassCastException e) {
+				wrongDataErrorMessage(field2, objValue2);
 				
-				// Formats date to current locale, for display the Exception.
-				SimpleDateFormat formatter = null;
-				SimpleDateFormat defaultFormatter = null;
+				return;
+			}
+
+			if ((objDate1 != null) && (objDate2 != null)) {
+				ComparisonType comparison = (includeTime) ? DATE : DATE_WITHOUT_TIME;
+				ConditionChecker checker = conditionCheckerFactory.getChecker(comparison, condition);
+
+				Calendar calDate1 = Calendar.getInstance(applicationProperties.getDefaultLocale());
+				Calendar calDate2 = Calendar.getInstance(applicationProperties.getDefaultLocale());
 				
-				if (includeTime.equals(WorkflowUtils.BOOLEAN_NO)) {
-					defaultFormatter = new SimpleDateFormat(ap.getDefaultString(APKeys.JIRA_DATE_PICKER_JAVA_FORMAT));
-					formatter = new SimpleDateFormat(ap.getDefaultString(APKeys.JIRA_DATE_PICKER_JAVA_FORMAT), locale);
-				}else{
-					defaultFormatter = new SimpleDateFormat(ap.getDefaultString(APKeys.JIRA_DATE_TIME_PICKER_JAVA_FORMAT));
-					formatter = new SimpleDateFormat(ap.getDefaultString(APKeys.JIRA_DATE_TIME_PICKER_JAVA_FORMAT), locale);
+				calDate1.setTime((Date) objDate1);
+				calDate2.setTime((Date) objDate2);
+
+				boolean result = checker.checkValues(calDate1, calDate2);
+				
+				if (log.isDebugEnabled()) {
+					log.debug(
+							"Compare field \"" + field1.getName() +
+							"\" and field \"" + field2.getName() + 
+							"\" with values [" + calDate1 +
+							"] and [" + calDate2 + 
+							"] with result " + result
+					);
 				}
 				
-				String errorMsg = "";
-				
-				try{
-					errorMsg = " ( " + formatter.format(objDate2) + " )";
-				} catch (IllegalArgumentException e) {
-					try {
-						errorMsg = " ( " + defaultFormatter.format(objDate2) + " )";
-					} catch(Exception e1) {
-						errorMsg = " ( " + objDate2 + " )";
-					}
+				if (!result) {
+					generateErrorMessage(field1, objDate1, field2, objDate2, condition, includeTime);
+				}
+			} else {
+				// If any of fields are null, validates if the field is required. Otherwise, doesn't throws an Exception.
+				if (objDate1 == null) {
+					validateRequired(field1);
 				}
 				
-				this.setExceptionMessage(
-						fldDate1,
-						fldDate1.getName() + " isn't " + condString + " " + fldDate2.getName() + errorMsg, 
-						fldDate1.getName() + " isn't " + condString + " " + fldDate2.getName() + errorMsg
-				);
+				if (objDate2 == null) {
+					validateRequired(field2);
+				}
 			}
 		} else {
-			// If any of fields are null, validates if the field is required. Otherwise, doesn't throws an Exception.
-			if (objDate1 == null) {
-				validateRequired(fldDate1);
-			}
-			
-			if (objDate2 == null) {
-				validateRequired(fldDate2);
-			}
+			log.error("Unable to find field with ids [" + date1 + "] and [" + date2 + "]");
 		}
 	}
 	
@@ -160,12 +132,68 @@ public class DateCompareValidator extends GenericValidator {
 	 * Throws an Exception if the field is null, but it is required.
 	 */
 	private void validateRequired(Field fldDate){
-		if(CommonPluginUtils.isFieldRequired(getIssue(), fldDate)){
+		if (CommonPluginUtils.isFieldRequired(getIssue(), fldDate)) {
 			this.setExceptionMessage(
 					fldDate, 
 					fldDate.getName() + " is required.", 
 					fldDate.getName() + " is required."
 			);
 		}
+	}
+	
+	private void generateErrorMessage(
+			Field field1, Object fieldValue1,
+			Field field2, Object fieldValue2, 
+			ConditionType condition, boolean includeTime
+	) {
+		// Formats date to current locale to display the Exception.
+		SimpleDateFormat formatter = null;
+		SimpleDateFormat defaultFormatter = null;
+		
+		if (includeTime) {
+			defaultFormatter = new SimpleDateFormat(
+					applicationProperties.getDefaultString(APKeys.JIRA_DATE_PICKER_JAVA_FORMAT)
+			);
+			formatter = new SimpleDateFormat(
+					applicationProperties.getDefaultString(APKeys.JIRA_DATE_PICKER_JAVA_FORMAT), 
+					applicationProperties.getDefaultLocale()
+			);
+		}else{
+			defaultFormatter = new SimpleDateFormat(
+					applicationProperties.getDefaultString(APKeys.JIRA_DATE_TIME_PICKER_JAVA_FORMAT)
+			);
+			formatter = new SimpleDateFormat(
+					applicationProperties.getDefaultString(APKeys.JIRA_DATE_TIME_PICKER_JAVA_FORMAT), 
+					applicationProperties.getDefaultLocale()
+			);
+		}
+		
+		String errorMsg = "";
+		
+		try{
+			errorMsg = " ( " + formatter.format(fieldValue2) + " )";
+		} catch (IllegalArgumentException e) {
+			try {
+				errorMsg = " ( " + defaultFormatter.format(fieldValue2) + " )";
+			} catch(Exception e1) {
+				errorMsg = " ( " + fieldValue2 + " )";
+			}
+		}
+		
+		this.setExceptionMessage(
+				field1,
+				field1.getName() + " isn't " + condition.toString() + " " + field2.getName() + errorMsg, 
+				field1.getName() + " isn't " + condition.toString() + " " + field2.getName() + errorMsg
+		);
+	}
+	
+	private void wrongDataErrorMessage(
+			Field field, Object fieldValue
+	) {
+		this.setExceptionMessage(
+				field,
+				field.getName() + " not a date value (" + fieldValue + ")", 
+				field.getName() + " not a date value (" + fieldValue + ")" 
+		);
 	}
 }

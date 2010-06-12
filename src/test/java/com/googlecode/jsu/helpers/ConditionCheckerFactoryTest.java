@@ -1,5 +1,7 @@
 package com.googlecode.jsu.helpers;
 
+import java.util.Calendar;
+
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 import org.junit.Before;
@@ -40,25 +42,25 @@ public class ConditionCheckerFactoryTest {
 		assertFalse(checker.checkValues(val1, val1));
 		assertTrue(checker.checkValues(val1, val2));
 		assertFalse(checker.checkValues(val1, val3));
-		assertFalse(checker.checkValues(val4, val2));
+		assertTrue(checker.checkValues(val4, val2));
 
 		checker = factory.getChecker(NUMBER, LESS);
 		
-		assertTrue(checker.checkValues(val1, val1));
-		assertFalse(checker.checkValues(val1, val2));
+		assertFalse(checker.checkValues(val1, val1));
+		assertTrue(checker.checkValues(val1, val2));
 		assertFalse(checker.checkValues(val1, val3));
 		assertFalse(checker.checkValues(val4, val2));
 
 		checker = factory.getChecker(NUMBER, LESS_EQUAL);
 		
 		assertTrue(checker.checkValues(val1, val1));
-		assertFalse(checker.checkValues(val1, val2));
+		assertTrue(checker.checkValues(val1, val2));
 		assertFalse(checker.checkValues(val1, val3));
 		assertFalse(checker.checkValues(val4, val2));
 
 		checker = factory.getChecker(NUMBER, GREATER);
 		
-		assertTrue(checker.checkValues(val1, val1));
+		assertFalse(checker.checkValues(val1, val1));
 		assertFalse(checker.checkValues(val1, val2));
 		assertFalse(checker.checkValues(val1, val3));
 		assertFalse(checker.checkValues(val4, val2));
@@ -76,27 +78,144 @@ public class ConditionCheckerFactoryTest {
 		final String val1 = "string_1";
 		final String val2 = "string_2";
 		final String val3 = "3333";
+		final String val4 = null;
 		
 		ConditionChecker checker = factory.getChecker(STRING, EQUAL);
 		
 		assertTrue(checker.checkValues(val1, val1));
 		assertFalse(checker.checkValues(val1, val2));
 		assertFalse(checker.checkValues(val1, val3));
+		assertFalse(checker.checkValues(val1, val4));
+		assertFalse(checker.checkValues(val4, val1));
 
 		checker = factory.getChecker(STRING, NOT_EQUAL);
 		
-		assertTrue(checker.checkValues(val1, val1));
-		assertFalse(checker.checkValues(val1, val2));
-		assertFalse(checker.checkValues(val1, val3));
+		assertFalse(checker.checkValues(val1, val1));
+		assertTrue(checker.checkValues(val1, val2));
+		assertTrue(checker.checkValues(val1, val3));
+		assertTrue(checker.checkValues(val1, val4));
+		assertTrue(checker.checkValues(val4, val1));
 	}
 	
 	@Test
 	public void dateComparisons() {
-		// TODO
+		final Calendar cal1 = Calendar.getInstance();
+		final Calendar cal2 = Calendar.getInstance();
+		final Calendar cal3 = Calendar.getInstance();
+		final Calendar cal4 = null;
+		
+		cal2.add(Calendar.MINUTE, 5);
+		cal3.add(Calendar.DAY_OF_MONTH, 1);
+		
+		ConditionChecker checker = factory.getChecker(DATE, EQUAL);
+		
+		assertTrue(checker.checkValues(cal1, cal1));
+		assertFalse(checker.checkValues(cal1, cal2));
+		assertFalse(checker.checkValues(cal1, cal3));
+		assertFalse(checker.checkValues(cal4, cal2));
+		assertFalse(checker.checkValues(cal2, cal4));
+		
+		checker = factory.getChecker(DATE, NOT_EQUAL);
+		
+		assertFalse(checker.checkValues(cal1, cal1));
+		assertTrue(checker.checkValues(cal1, cal2));
+		assertTrue(checker.checkValues(cal1, cal3));
+		assertTrue(checker.checkValues(cal4, cal2));
+		assertTrue(checker.checkValues(cal2, cal4));
+
+		checker = factory.getChecker(DATE, LESS);
+		
+		assertFalse(checker.checkValues(cal1, cal1));
+		assertTrue(checker.checkValues(cal1, cal2));
+		assertTrue(checker.checkValues(cal1, cal3));
+		assertFalse(checker.checkValues(cal4, cal2));
+		assertFalse(checker.checkValues(cal2, cal4));
+
+		checker = factory.getChecker(DATE, LESS_EQUAL);
+		
+		assertTrue(checker.checkValues(cal1, cal1));
+		assertTrue(checker.checkValues(cal1, cal2));
+		assertTrue(checker.checkValues(cal1, cal3));
+		assertFalse(checker.checkValues(cal4, cal2));
+		assertFalse(checker.checkValues(cal2, cal4));
+
+		checker = factory.getChecker(DATE, GREATER);
+		
+		assertFalse(checker.checkValues(cal1, cal1));
+		assertFalse(checker.checkValues(cal1, cal2));
+		assertFalse(checker.checkValues(cal1, cal3));
+		assertFalse(checker.checkValues(cal4, cal2));
+		assertFalse(checker.checkValues(cal2, cal4));
+
+		checker = factory.getChecker(DATE, GREATER_EQUAL);
+		
+		assertTrue(checker.checkValues(cal1, cal1));
+		assertFalse(checker.checkValues(cal1, cal2));
+		assertFalse(checker.checkValues(cal1, cal3));
+		assertFalse(checker.checkValues(cal4, cal2));
+		assertFalse(checker.checkValues(cal2, cal4));
 	}
 	
 	@Test
 	public void dateWithoutTimeComparisons() {
-		// TODO
+		final Calendar cal1 = Calendar.getInstance();
+		final Calendar cal2 = Calendar.getInstance();
+		final Calendar cal3 = Calendar.getInstance();
+		final Calendar cal4 = null;
+		
+		cal1.set(2010, 3, 3, 10, 0, 45);
+		cal2.set(2010, 3, 3, 10, 0, 45);
+		cal3.set(2010, 3, 3, 10, 0, 45);
+		
+		cal2.add(Calendar.MINUTE, 5);
+		cal3.add(Calendar.DAY_OF_MONTH, 1);
+		
+		ConditionChecker checker = factory.getChecker(DATE_WITHOUT_TIME, EQUAL);
+		
+		assertTrue(checker.checkValues(cal1, cal1));
+		assertTrue(checker.checkValues(cal1, cal2));
+		assertFalse(checker.checkValues(cal1, cal3));
+		assertFalse(checker.checkValues(cal4, cal2));
+		assertFalse(checker.checkValues(cal2, cal4));
+		
+		checker = factory.getChecker(DATE_WITHOUT_TIME, NOT_EQUAL);
+		
+		assertFalse(checker.checkValues(cal1, cal1));
+		assertFalse(checker.checkValues(cal1, cal2));
+		assertTrue(checker.checkValues(cal1, cal3));
+		assertTrue(checker.checkValues(cal4, cal2));
+		assertTrue(checker.checkValues(cal2, cal4));
+
+		checker = factory.getChecker(DATE_WITHOUT_TIME, LESS);
+		
+		assertFalse(checker.checkValues(cal1, cal1));
+		assertFalse(checker.checkValues(cal1, cal2));
+		assertTrue(checker.checkValues(cal1, cal3));
+		assertFalse(checker.checkValues(cal4, cal2));
+		assertFalse(checker.checkValues(cal2, cal4));
+
+		checker = factory.getChecker(DATE_WITHOUT_TIME, LESS_EQUAL);
+		
+		assertTrue(checker.checkValues(cal1, cal1));
+		assertTrue(checker.checkValues(cal1, cal2));
+		assertTrue(checker.checkValues(cal1, cal3));
+		assertFalse(checker.checkValues(cal4, cal2));
+		assertFalse(checker.checkValues(cal2, cal4));
+
+		checker = factory.getChecker(DATE_WITHOUT_TIME, GREATER);
+		
+		assertFalse(checker.checkValues(cal1, cal1));
+		assertFalse(checker.checkValues(cal1, cal2));
+		assertFalse(checker.checkValues(cal1, cal3));
+		assertFalse(checker.checkValues(cal4, cal2));
+		assertFalse(checker.checkValues(cal2, cal4));
+
+		checker = factory.getChecker(DATE_WITHOUT_TIME, GREATER_EQUAL);
+		
+		assertTrue(checker.checkValues(cal1, cal1));
+		assertTrue(checker.checkValues(cal1, cal2));
+		assertFalse(checker.checkValues(cal1, cal3));
+		assertFalse(checker.checkValues(cal4, cal2));
+		assertFalse(checker.checkValues(cal2, cal4));
 	}
 }
