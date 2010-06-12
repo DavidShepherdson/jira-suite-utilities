@@ -1,6 +1,5 @@
 package com.googlecode.jsu.util;
 
-import com.atlassian.jira.issue.fields.NavigableField;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -14,6 +13,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
 
+import org.apache.log4j.Logger;
 import org.ofbiz.core.entity.model.ModelEntity;
 import org.ofbiz.core.entity.model.ModelField;
 
@@ -33,6 +33,7 @@ import com.atlassian.jira.issue.fields.CustomField;
 import com.atlassian.jira.issue.fields.Field;
 import com.atlassian.jira.issue.fields.FieldException;
 import com.atlassian.jira.issue.fields.FieldManager;
+import com.atlassian.jira.issue.fields.NavigableField;
 import com.atlassian.jira.issue.fields.config.FieldConfig;
 import com.atlassian.jira.issue.fields.layout.field.FieldLayout;
 import com.atlassian.jira.issue.fields.layout.field.FieldLayoutItem;
@@ -53,6 +54,8 @@ import com.googlecode.jsu.helpers.NameComparatorEx;
  * 
  */
 public class CommonPluginUtils {
+	private static final Logger log = Logger.getLogger(CommonPluginUtils.class);
+	
 	private static final Collection<String> TIME_TRACKING_FIELDS = Arrays.asList(
 			IssueFieldConstants.TIME_ESTIMATE,
 			IssueFieldConstants.TIME_ORIGINAL_ESTIMATE,
@@ -72,7 +75,7 @@ public class CommonPluginUtils {
 		try {
 			allFieldsSet.addAll(fieldManager.getAllAvailableNavigableFields());
 		} catch (FieldException e) {
-			LogUtils.getGeneral().error("Unable to load navigable fields", e);
+			log.error("Unable to load navigable fields", e);
 		}
 		
 		return new ArrayList<Field>(allFieldsSet);
@@ -92,7 +95,7 @@ public class CommonPluginUtils {
 				allFields.add(f);
 			}
 		} catch (FieldException e) {
-			LogUtils.getGeneral().error("Unable to load navigable fields", e);
+			log.error("Unable to load navigable fields", e);
 		}
 		
 		return new ArrayList<Field>(allFields);
@@ -216,7 +219,10 @@ public class CommonPluginUtils {
 	public static FieldLayoutItem getFieldLayoutItem(Issue issue, Field field) throws FieldLayoutStorageException {
 		final FieldLayoutManager fieldLayoutManager = ComponentManager.getInstance().getFieldLayoutManager();
 
-		FieldLayout layout = fieldLayoutManager.getFieldLayout(issue.getProject(), issue.getIssueTypeObject().getId());
+		FieldLayout layout = fieldLayoutManager.getFieldLayout(
+				issue.getProjectObject().getGenericValue(), 
+				issue.getIssueTypeObject().getId()
+		);
 		
 		if (layout.getId() == null) {
 			layout = fieldLayoutManager.getEditableDefaultFieldLayout();
@@ -236,7 +242,7 @@ public class CommonPluginUtils {
 		try {
 			retVal = getFieldLayoutItem(issue, field).isRequired();
 		} catch (FieldLayoutStorageException e) {
-			LogUtils.getGeneral().error("Unable to check is field required", e);
+			log.error("Unable to check is field required", e);
 		}
 		
 		return retVal;

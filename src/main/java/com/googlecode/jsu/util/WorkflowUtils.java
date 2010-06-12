@@ -57,91 +57,12 @@ import com.opensymphony.workflow.loader.ActionDescriptor;
 public class WorkflowUtils {
 	public static final String SPLITTER = "@@";
 
-	public static final String CONDITION_MAJOR = ">";
-	public static final String CONDITION_MAJOR_EQUAL = ">=";
-	public static final String CONDITION_EQUAL = "=";
-	public static final String CONDITION_MINOR_EQUAL = "<=";
-	public static final String CONDITION_MINOR = "<";
-	public static final String CONDITION_DIFFERENT = "!=";
-
-	public static final String BOOLEAN_YES = "Yes";
-	public static final String BOOLEAN_NO = "No";
-
-	public static final String COMPARISON_TYPE_STRING = "String";
-	public static final String COMPARISON_TYPE_NUMBER = "Number";
-	public static final String COMPARISON_TYPE_DATE = "Date";
-
 	private static final WorkflowActionsBean workflowActionsBean = new WorkflowActionsBean();
 	
 	public static final String CASCADING_SELECT_TYPE = "com.atlassian.jira.plugin.system.customfieldtypes:cascadingselect";
 	
 	private static final Logger log = Logger.getLogger(WorkflowUtils.class);
 	
-	/**
-	 * @return a list of boolean values.
-	 */
-	public static List<String> getBooleanList() {
-		List<String> booleanList = new ArrayList<String>();
-
-		booleanList.add(BOOLEAN_YES);
-		booleanList.add(BOOLEAN_NO);
-
-		return booleanList;
-	}
-
-	/**
-	 * @return a list of comparison types.
-	 */
-	public static List<String> getComparisonList() {
-		List<String> comparisonList = new ArrayList<String>();
-
-		comparisonList.add(COMPARISON_TYPE_STRING);
-		comparisonList.add(COMPARISON_TYPE_NUMBER);
-		// Not implemented yet.
-		//comparisonList.add(COMPARISON_TYPE_DATE);
-
-		return comparisonList;
-	}
-
-	/**
-	 * @return a list of conditions types.
-	 */
-	public static List<String> getConditionList() {
-		List<String> conditionList = new ArrayList<String>();
-
-		conditionList.add(CONDITION_MAJOR);
-		conditionList.add(CONDITION_MAJOR_EQUAL);
-		conditionList.add(CONDITION_EQUAL);
-		conditionList.add(CONDITION_MINOR_EQUAL);
-		conditionList.add(CONDITION_MINOR);
-		conditionList.add(CONDITION_DIFFERENT);
-
-		return conditionList;
-	}
-
-	/**
-	 * @param condition
-	 * @return a String with the description from given condition.
-	 */
-	public static String getConditionString(String condition) {
-		String retVal = null;
-
-		if (condition.equals(CONDITION_MINOR))
-			retVal = "minor to";
-		if (condition.equals(CONDITION_MINOR_EQUAL))
-			retVal = "minor or equal to";
-		if (condition.equals(CONDITION_EQUAL))
-			retVal = "equal to";
-		if (condition.equals(CONDITION_MAJOR_EQUAL))
-			retVal = "greater or equal than";
-		if (condition.equals(CONDITION_MAJOR))
-			retVal = "greater than";
-		if (condition.equals(CONDITION_DIFFERENT))
-			retVal = "different to";
-
-		return retVal;
-	}
-
 	/**
 	 * @param key
 	 * @return a String with the field name from given key.
@@ -218,31 +139,29 @@ public class WorkflowUtils {
 			} else {
 				String fieldId = field.getId();
 				Collection retCollection = null;
-				boolean isEmpty = false;
 
 				// Special treatment of fields.
 				if (fieldId.equals(IssueFieldConstants.ATTACHMENT)) {
 					// return a collection with the attachments associated to given issue.
 					retCollection = (Collection) issue.getExternalFieldValue(fieldId);
-					if (retCollection == null || retCollection.isEmpty()) {
-						isEmpty = true;
-					} else {
+
+					if (retCollection != null && !retCollection.isEmpty()) {
 						retVal = retCollection;
 					}
 				} else if (fieldId.equals(IssueFieldConstants.AFFECTED_VERSIONS)) {
 					retCollection = issue.getAffectedVersions();
-					if (retCollection == null || retCollection.isEmpty()) {
-						isEmpty = true;
-					} else {
+					
+					if (retCollection != null && !retCollection.isEmpty()) {
 						retVal = retCollection;
 					}
 				} else if (fieldId.equals(IssueFieldConstants.COMMENT)) {
 					// return a list with the comments of a given issue.
 					try {
-						retCollection = ManagerFactory.getIssueManager().getEntitiesByIssue(IssueRelationConstants.COMMENTS, issue.getGenericValue());
-						if (retCollection == null || retCollection.isEmpty()) {
-							isEmpty = true;
-						} else {
+						retCollection = ManagerFactory.getIssueManager().getEntitiesByIssueObject(
+								IssueRelationConstants.COMMENTS, issue
+						);
+						
+						if (retCollection != null && !retCollection.isEmpty()) {
 							retVal = retCollection;
 						}
 					} catch (GenericEntityException e) {
@@ -250,26 +169,22 @@ public class WorkflowUtils {
 					}
 				} else if (fieldId.equals(IssueFieldConstants.COMPONENTS)) {
 					retCollection = issue.getComponents();
-					if (retCollection == null || retCollection.isEmpty()) {
-						isEmpty = true;
-					} else {
+					
+					if (retCollection != null && !retCollection.isEmpty()) {
 						retVal = retCollection;
 					}
 				} else if (fieldId.equals(IssueFieldConstants.FIX_FOR_VERSIONS)) {
 					retCollection = issue.getFixVersions();
-					if (retCollection == null || retCollection.isEmpty()) {
-						isEmpty = true;
-					} else {
+					
+					if (retCollection != null && !retCollection.isEmpty()) {
 						retVal = retCollection;
 					}
 				} else if (fieldId.equals(IssueFieldConstants.THUMBNAIL)) {
 					// Not implemented, yet.
-					isEmpty = true;
 				} else if (fieldId.equals(IssueFieldConstants.ISSUE_TYPE)) {
 					retVal = issue.getIssueTypeObject();
 				} else if (fieldId.equals(IssueFieldConstants.TIMETRACKING)) {
 					// Not implemented, yet.
-					isEmpty = true;
 				} else if (fieldId.equals(IssueFieldConstants.ISSUE_LINKS)) {
 					retVal = ComponentManager.getInstance().getIssueLinkManager().getIssueLinks(issue.getId());
 				} else if (fieldId.equals(IssueFieldConstants.WORKRATIO)) {
@@ -277,11 +192,9 @@ public class WorkflowUtils {
 				} else if (fieldId.equals(IssueFieldConstants.ISSUE_KEY)) {
 					retVal = issue.getKey();
 				} else if (fieldId.equals(IssueFieldConstants.SUBTASKS)) {
-					retCollection = issue.getSubTasks();
+					retCollection = issue.getSubTaskObjects();
 					
-					if (retCollection == null || retCollection.isEmpty()) {
-						isEmpty = true;
-					} else {
+					if (retCollection != null && !retCollection.isEmpty()) {
 						retVal = retCollection;
 					}
 				} else if (fieldId.equals(IssueFieldConstants.PRIORITY)) {
@@ -291,7 +204,7 @@ public class WorkflowUtils {
 				} else if (fieldId.equals(IssueFieldConstants.STATUS)) {
 					retVal = issue.getStatusObject();
 				} else if (fieldId.equals(IssueFieldConstants.PROJECT)) {
-					retVal = issue.getProject();
+					retVal = issue.getProjectObject();
 				} else if (fieldId.equals(IssueFieldConstants.SECURITY)) {
 					retVal = issue.getSecurityLevel();
 				} else if (fieldId.equals(IssueFieldConstants.TIME_ESTIMATE)) {
@@ -315,7 +228,7 @@ public class WorkflowUtils {
 				} else if (fieldId.equals(IssueFieldConstants.CREATED)) {
 					retVal = issue.getCreated();
 				} else {
-					LogUtils.getGeneral().warn("Issue field \"" + fieldId + "\" is not supported.");
+					log.warn("Issue field \"" + fieldId + "\" is not supported.");
 
 					GenericValue gvIssue = issue.getGenericValue();
 					
@@ -327,7 +240,7 @@ public class WorkflowUtils {
 		} catch (NullPointerException e) {
 			retVal = null;
 			
-			LogUtils.getGeneral().error("Unable to get field \"" + field.getId() + "\" value", e);
+			log.error("Unable to get field \"" + field.getId() + "\" value", e);
 		}
 
 		return retVal;
@@ -366,7 +279,7 @@ public class WorkflowUtils {
 			try {
 				fieldLayoutItem = CommonPluginUtils.getFieldLayoutItem(issue, field);
 			} catch (FieldLayoutStorageException e) {
-				LogUtils.getGeneral().error("Unable to get field layout item", e);
+				log.error("Unable to get field layout item", e);
 
 				throw new IllegalStateException(e);
 			}
@@ -657,7 +570,7 @@ public class WorkflowUtils {
 					}
 				}
 			} else {
-				LogUtils.getGeneral().error("Issue field \"" + fieldId + "\" is not supported for setting.");
+				log.error("Issue field \"" + fieldId + "\" is not supported for setting.");
 			}
 		}
 	}
@@ -679,144 +592,6 @@ public class WorkflowUtils {
 		final Field field = (Field) WorkflowUtils.getFieldFromKey(fieldKey);
 
 		setFieldValue(issue, field, value, changeHolder);
-	}
-
-	/**
-	 * @param issue
-	 *            an issue object.
-	 * @param field
-	 *            a field object. (May be a Custom Field)
-	 * @return an String.
-	 * 
-	 * It returns the value of a field within issue object as String. Instead
-	 * null, it will return an empty String ( "" ).
-	 * 
-	 */
-	public static String getFieldValueFromIssueAsString(Issue issue, Field field) throws UnsupportedOperationException {
-
-		FieldManager fldManager = ManagerFactory.getFieldManager();
-		String retVal = null;
-
-		try {
-			if (fldManager.isCustomField(field)) {
-				CustomField customField = (CustomField) field;
-				if (issue.getCustomFieldValue(customField) != null) {
-					retVal = issue.getCustomFieldValue(customField).toString();
-				} else {
-					retVal = "";
-				}
-			} else {
-				String fieldId = field.getId();
-
-				// Unsupported fields as single String value.
-				if (fieldId.equals("versions")) {
-					throw new UnsupportedOperationException();
-				}
-				if (fieldId.equals("attachment")) {
-					throw new UnsupportedOperationException();
-				}
-				if (fieldId.equals("comment")) {
-					throw new UnsupportedOperationException();
-				}
-				if (fieldId.equals("components")) {
-					throw new UnsupportedOperationException();
-				}
-				if (fieldId.equals("fixVersions")) {
-					throw new UnsupportedOperationException();
-				}
-				if (fieldId.equals("thumbnail")) {
-					throw new UnsupportedOperationException();
-				}
-				if (fieldId.equals("issuelinks")) {
-					throw new UnsupportedOperationException();
-				}
-				if (fieldId.equals("subtasks")) {
-					throw new UnsupportedOperationException();
-				}
-				if (fieldId.equals("timetracking")) {
-					throw new UnsupportedOperationException();
-				}
-
-				// Special treatment of fields.
-				if (fieldId.equals("issuetype")) {
-					if (issue.getIssueTypeObject() != null) {
-						retVal = issue.getIssueTypeObject().getNameTranslation();
-					} else {
-						retVal = "";
-					}
-				}
-				if (fieldId.equals("workratio")) {
-					retVal = String.valueOf(WorkRatio.getWorkRatio(issue));
-				}
-				if (fieldId.equals("priority")) {
-					if (issue.getPriorityObject() != null) {
-						retVal = issue.getPriorityObject().getNameTranslation();
-					} else {
-						retVal = "";
-					}
-				}
-				if (fieldId.equals("project")) {
-					if (issue.getProjectObject() != null) {
-						retVal = issue.getProjectObject().getName();
-					} else {
-						retVal = "";
-					}
-				}
-				if (fieldId.equals("resolution")) {
-					if (issue.getResolutionObject() != null) {
-						retVal = issue.getResolutionObject().getNameTranslation();
-					} else {
-						retVal = "";
-					}
-				}
-				if (fieldId.equals("status")) {
-					if (issue.getStatusObject() != null) {
-						retVal = issue.getStatusObject().getNameTranslation();
-					} else {
-						retVal = "";
-					}
-				}
-				if (fieldId.equals("security")) {
-					if (issue.getSecurityLevel() != null) {
-						retVal = issue.getSecurityLevel().getString("name");
-					} else {
-						retVal = "";
-					}
-				}
-				if (fieldId.equals("issuekey")) {
-					retVal = issue.getKey();
-				}
-				if (fieldId.equals(IssueFieldConstants.ASSIGNEE)) {
-					retVal = issue.getAssigneeId();
-				}
-				if (fieldId.equals(IssueFieldConstants.REPORTER)) {
-					retVal = issue.getReporterId();
-				}
-
-				// Get the value from the Generic Value of Issue.
-				if (retVal == null) {
-					GenericValue gvIssue = issue.getGenericValue();
-					if (gvIssue.get(fieldId) != null) {
-						retVal = gvIssue.get(fieldId).toString();
-
-						if((fieldId.equals("timeoriginalestimate")) || 
-								(fieldId.equals("timeestimate")) || 
-								(fieldId.equals("timespent"))){
-
-							retVal = String.valueOf(new Long(retVal).longValue() / 60);
-						}
-
-					} else {
-						retVal = "";
-					}
-
-				}
-			}
-		} catch (NullPointerException e) {
-			retVal = null;
-		}
-
-		return retVal;
 	}
 
 	/**
