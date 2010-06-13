@@ -190,16 +190,6 @@
 	<properties>
 		<atlassian.jira.version>4.1</atlassian.jira.version>
 		
-		<scm.connection>scm:hg:file://${basedir}</scm.connection>
+		<scm.connection>scm:hg:ssh://hg@bitbucket.org/abashev/jira-suite-utilities</scm.connection>
 	</properties>
-	
-	<profiles>
-		<profile>
-			<id>release</id>
-			
-			<properties>
-				<scm.connection>scm:hg:ssh://hg@bitbucket.org/abashev/jira-suite-utilities</scm.connection>
-			</properties>
-		</profile>
-	</profiles>
 </project>
