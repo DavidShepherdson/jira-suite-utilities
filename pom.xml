@@ -198,7 +198,7 @@
 			<id>release</id>
 			
 			<properties>
-				<scm.connection>scm:hg:https://abashev@bitbucket.org/abashev/jira-suite-utilities</scm.connection>
+				<scm.connection>scm:hg:ssh://hg@bitbucket.org/abashev/jira-suite-utilities</scm.connection>
 			</properties>
 		</profile>
 	</profiles>
