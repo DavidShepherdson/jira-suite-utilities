@@ -1,6 +1,7 @@
 package com.googlecode.jsu.helpers.checkers;
 
 import com.atlassian.jira.issue.IssueConstant;
+import com.opensymphony.user.Group;
 import com.opensymphony.user.User;
 
 /**
@@ -23,6 +24,8 @@ class ConverterString implements ValueConverter {
         	result = ((IssueConstant) object).getName();
         } else if (object instanceof User) {
         	result = ((User) object).getName();
+        } else if (object instanceof Group) {
+        	result = ((Group) object).getName();
 		} else {
 			result = object.toString();
 		}

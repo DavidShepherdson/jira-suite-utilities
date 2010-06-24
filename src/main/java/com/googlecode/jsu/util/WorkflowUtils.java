@@ -290,6 +290,8 @@ public class WorkflowUtils {
 				newValue = ((IssueConstant) value).getName();
             } else if (value instanceof User) {
 				newValue = ((User) value).getName();
+            } else if (value instanceof Group) {
+            	newValue = ((Group) value).getName();
             }
             	
             if (newValue instanceof String) {
