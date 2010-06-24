@@ -43,6 +43,7 @@ import com.atlassian.jira.issue.worklog.WorkRatio;
 import com.atlassian.jira.project.version.Version;
 import com.atlassian.jira.project.version.VersionManager;
 import com.atlassian.jira.workflow.WorkflowActionsBean;
+import com.opensymphony.user.Entity;
 import com.opensymphony.user.EntityNotFoundException;
 import com.opensymphony.user.Group;
 import com.opensymphony.user.User;
@@ -288,10 +289,8 @@ public class WorkflowUtils {
 			
             if (value instanceof IssueConstant) {
 				newValue = ((IssueConstant) value).getName();
-            } else if (value instanceof User) {
-				newValue = ((User) value).getName();
-            } else if (value instanceof Group) {
-            	newValue = ((Group) value).getName();
+            } else if (value instanceof Entity) {
+				newValue = ((Entity) value).getName();
             }
             	
             if (newValue instanceof String) {
