@@ -43,7 +43,7 @@ import com.atlassian.jira.issue.fields.screen.FieldScreen;
 import com.atlassian.jira.issue.fields.screen.FieldScreenLayoutItem;
 import com.atlassian.jira.issue.fields.screen.FieldScreenTab;
 import com.atlassian.jira.util.I18nHelper;
-import com.atlassian.jira.web.bean.FieldVisibilityBean;
+import com.atlassian.jira.web.FieldVisibilityManager;
 import com.atlassian.jira.web.bean.I18nBean;
 import com.googlecode.jsu.helpers.NameComparatorEx;
 
@@ -196,9 +196,11 @@ public class CommonPluginUtils {
 		if (TIME_TRACKING_FIELDS.contains(fieldId)) {
 			isHidden = !fieldManager.isTimeTrackingOn();
 		} else {
-			FieldVisibilityBean fieldVisibilityBean = new FieldVisibilityBean();
+			FieldVisibilityManager fvManager = ComponentManager.getComponentInstanceOfType(
+					FieldVisibilityManager.class
+			);
 
-			isHidden = fieldVisibilityBean.isFieldHidden(field.getId(), issue);
+			isHidden = fvManager.isFieldHidden(field.getId(), issue);
 		}
 		
 		if (isHidden) {
