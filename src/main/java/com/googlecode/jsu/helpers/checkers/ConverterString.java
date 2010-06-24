@@ -1,5 +1,8 @@
 package com.googlecode.jsu.helpers.checkers;
 
+import com.atlassian.jira.issue.IssueConstant;
+import com.opensymphony.user.User;
+
 /**
  * @author <A href="mailto:abashev at gmail dot com">Alexey Abashev</A>
  * @version $Id$
@@ -14,6 +17,16 @@ class ConverterString implements ValueConverter {
 			return null;
 		}
 		
-		return object.toString();
+		String result;
+		
+        if (object instanceof IssueConstant) {
+        	result = ((IssueConstant) object).getName();
+        } else if (object instanceof User) {
+        	result = ((User) object).getName();
+		} else {
+			result = object.toString();
+		}
+		
+		return result;
 	}
 }
