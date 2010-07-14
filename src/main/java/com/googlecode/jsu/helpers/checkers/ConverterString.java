@@ -1,5 +1,7 @@
 package com.googlecode.jsu.helpers.checkers;
 
+import org.apache.commons.lang.StringUtils;
+
 import com.atlassian.jira.issue.IssueConstant;
 import com.opensymphony.user.Entity;
 
@@ -27,6 +29,10 @@ class ConverterString implements ValueConverter {
 			result = object.toString();
 		}
 		
+        if (StringUtils.isBlank(result)) {
+        	return null;
+        }
+        
 		return result;
 	}
 }
