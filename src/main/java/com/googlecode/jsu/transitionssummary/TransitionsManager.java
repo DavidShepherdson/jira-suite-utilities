@@ -46,13 +46,13 @@ public class TransitionsManager {
 
 		for (Transition trans : statusChanges) {
 			// Sets an ID for the Transition.
-			String transitionId = trans.getFromStatus().getId().toString() + "to" + trans.getToStatus().getId().toString() + trans.getChangedAt();
+			String transitionId = trans.getFromStatus().getId().toString() + "to" + trans.getToStatus().getId().toString();
 			
-			log.debug("transition found: " + transitionId); 
+			log.debug("Transition found [" + transitionId + "] for issue " + issue.getKey()); 
 			
 			TransitionSummary tranSummary = null;
 			
-			if (summary.containsKey(transitionId)){
+			if (summary.containsKey(transitionId)) {
 				tranSummary = (TransitionSummary) summary.get(transitionId);
 			} else {
 				tranSummary = new TransitionSummary(transitionId, trans.getFromStatus(), trans.getToStatus());
@@ -77,7 +77,8 @@ public class TransitionsManager {
 	 */
 	private static List<Transition> getStatusChanges(Issue issue, Timestamp tsCreated){
 		OfBizDelegator delegator = new DefaultOfBizDelegator(CoreFactory.getGenericDelegator());
-		Map params = EasyMap.build("issue", issue.getLong("id"));
+		@SuppressWarnings("unchecked")
+		Map<String, Object> params = EasyMap.build("issue", issue.getLong("id"));
 		List<GenericValue> changeGroups = delegator.findByAnd("ChangeGroup", params);
 		
 		// Added by caisd_1998 at hotmail dot com
@@ -94,7 +95,8 @@ public class TransitionsManager {
 
 		for (GenericValue changeGroup : changeGroups) {
 			// Obtains all ChangeItems that contains an status change.
-			Map paramsItem = EasyMap.build(
+			@SuppressWarnings("unchecked")
+			Map<String, Object> paramsItem = EasyMap.build(
 					"group", changeGroup.getLong("id"),
 					"field", "status",
 					"fieldtype", "jira"
