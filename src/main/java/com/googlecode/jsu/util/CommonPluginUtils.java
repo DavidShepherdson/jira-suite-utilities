@@ -1,5 +1,7 @@
 package com.googlecode.jsu.util;
 
+import static com.atlassian.jira.issue.IssueFieldConstants.*;
+
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -266,17 +268,17 @@ public class CommonPluginUtils {
 	 */
 	private static List<Field> getNonCopyFromFields(){
 		return asFields(
-				IssueFieldConstants.ATTACHMENT,
-				IssueFieldConstants.COMMENT,
-				IssueFieldConstants.COMPONENTS,
+				ATTACHMENT,
+				COMMENT,
+				COMPONENTS,
 // For issue #65
 //				IssueFieldConstants.FIX_FOR_VERSIONS,
 //				IssueFieldConstants.AFFECTED_VERSIONS,
-				IssueFieldConstants.ISSUE_LINKS,
-				IssueFieldConstants.SECURITY,
-				IssueFieldConstants.SUBTASKS,
-				IssueFieldConstants.THUMBNAIL,
-				IssueFieldConstants.TIMETRACKING
+				ISSUE_LINKS,
+				SECURITY,
+				SUBTASKS,
+				THUMBNAIL,
+				TIMETRACKING
 		);
 	}
 	
@@ -295,29 +297,29 @@ public class CommonPluginUtils {
 	 */
 	private static List<Field> getNonCopyToFields(){
 		return asFields(
-				IssueFieldConstants.ATTACHMENT,
-				IssueFieldConstants.COMMENT,
-				IssueFieldConstants.COMPONENTS,
-				IssueFieldConstants.CREATED,
-				IssueFieldConstants.TIMETRACKING,
-				IssueFieldConstants.TIME_ORIGINAL_ESTIMATE,
-				IssueFieldConstants.TIME_ESTIMATE,
-				IssueFieldConstants.TIME_SPENT,
-				IssueFieldConstants.AGGREGATE_TIME_ORIGINAL_ESTIMATE,
-				IssueFieldConstants.AGGREGATE_TIME_ESTIMATE,
-				IssueFieldConstants.AGGREGATE_PROGRESS,
-				IssueFieldConstants.ISSUE_KEY,
-				IssueFieldConstants.ISSUE_LINKS,
-				IssueFieldConstants.ISSUE_TYPE,
-				IssueFieldConstants.PRIORITY,
-				IssueFieldConstants.PROJECT,
-				IssueFieldConstants.SECURITY,
-				IssueFieldConstants.STATUS,
-				IssueFieldConstants.SUBTASKS,
-				IssueFieldConstants.THUMBNAIL,
-				IssueFieldConstants.UPDATED,
-				IssueFieldConstants.VOTES,
-				IssueFieldConstants.WORKRATIO
+				ATTACHMENT,
+				COMMENT,
+				COMPONENTS,
+				CREATED,
+				TIMETRACKING,
+				TIME_ORIGINAL_ESTIMATE,
+				TIME_ESTIMATE,
+				TIME_SPENT,
+				AGGREGATE_TIME_ORIGINAL_ESTIMATE,
+				AGGREGATE_TIME_ESTIMATE,
+				AGGREGATE_PROGRESS,
+				ISSUE_KEY,
+				ISSUE_LINKS,
+				ISSUE_TYPE,
+				PRIORITY,
+				PROJECT,
+				SECURITY,
+				STATUS,
+				SUBTASKS,
+				THUMBNAIL,
+				UPDATED,
+				VOTES,
+				WORKRATIO
 		);
 	}
 	
@@ -337,25 +339,25 @@ public class CommonPluginUtils {
 	 */
 	private static List<Field> getNonRequirableFields(){
 		return asFields(
-				IssueFieldConstants.ATTACHMENT,
-				IssueFieldConstants.COMMENT,
-				IssueFieldConstants.CREATED,
-				IssueFieldConstants.TIMETRACKING,
-				IssueFieldConstants.TIME_ORIGINAL_ESTIMATE,
-				IssueFieldConstants.PROGRESS,
-				IssueFieldConstants.AGGREGATE_TIME_ORIGINAL_ESTIMATE,
-				IssueFieldConstants.AGGREGATE_PROGRESS,
-				IssueFieldConstants.ISSUE_KEY,
-				IssueFieldConstants.ISSUE_LINKS,
-				IssueFieldConstants.ISSUE_TYPE,
-				IssueFieldConstants.PROJECT,
-				IssueFieldConstants.STATUS,
-				IssueFieldConstants.SUBTASKS,
-				IssueFieldConstants.THUMBNAIL,
-				IssueFieldConstants.UPDATED,
-				IssueFieldConstants.VOTES,
-				IssueFieldConstants.WORKRATIO,
-				IssueFieldConstants.SECURITY
+				ATTACHMENT,
+				COMMENT,
+				CREATED,
+				TIMETRACKING,
+				TIME_ORIGINAL_ESTIMATE,
+				PROGRESS,
+				AGGREGATE_TIME_ORIGINAL_ESTIMATE,
+				AGGREGATE_PROGRESS,
+				ISSUE_KEY,
+				ISSUE_LINKS,
+				ISSUE_TYPE,
+				PROJECT,
+				STATUS,
+				SUBTASKS,
+				THUMBNAIL,
+				UPDATED,
+				VOTES,
+				WORKRATIO,
+				SECURITY
 		);
 	}
 	
@@ -377,20 +379,16 @@ public class CommonPluginUtils {
 	 */
 	private static List<Field> getNonValueFieldConditionFields(){
 		return asFields(
-				IssueFieldConstants.ATTACHMENT,
-				IssueFieldConstants.COMMENT,
-				IssueFieldConstants.COMPONENTS,
-				IssueFieldConstants.CREATED,
-				IssueFieldConstants.AFFECTED_VERSIONS,
-				IssueFieldConstants.FIX_FOR_VERSIONS,
-				IssueFieldConstants.ISSUE_KEY,
-				IssueFieldConstants.ISSUE_LINKS,
-				IssueFieldConstants.SUBTASKS,
-				IssueFieldConstants.THUMBNAIL,
-				IssueFieldConstants.TIMETRACKING,
-				IssueFieldConstants.UPDATED,
-				IssueFieldConstants.VOTES,
-				IssueFieldConstants.WORKRATIO
+				ATTACHMENT,
+				COMMENT,
+				CREATED,
+				ISSUE_KEY,
+				ISSUE_LINKS,
+				SUBTASKS,
+				THUMBNAIL,
+				TIMETRACKING,
+				UPDATED,
+				WORKRATIO
 		);
 	}
 	
