@@ -339,7 +339,6 @@ public class CommonPluginUtils {
 	 */
 	private static List<Field> getNonRequirableFields(){
 		return asFields(
-				ATTACHMENT,
 				COMMENT,
 				CREATED,
 				TIMETRACKING,

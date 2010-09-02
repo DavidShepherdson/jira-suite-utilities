@@ -139,12 +139,12 @@ public class WorkflowUtils {
 				);
 			} else {
 				String fieldId = field.getId();
-				Collection retCollection = null;
+				Collection<?> retCollection = null;
 
 				// Special treatment of fields.
 				if (fieldId.equals(IssueFieldConstants.ATTACHMENT)) {
 					// return a collection with the attachments associated to given issue.
-					retCollection = (Collection) issue.getExternalFieldValue(fieldId);
+					retCollection = issue.getAttachments();
 
 					if (retCollection != null && !retCollection.isEmpty()) {
 						retVal = retCollection;
