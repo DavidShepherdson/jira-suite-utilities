@@ -1,91 +1,61 @@
-#include()
-<table width="100%">
+#macro(statusWithIcon $status)
+#set ($iconurl = $status.getIconUrl())
+
+<td width=7% valign=center>
+	#if ($iconurl.startsWith('http://') || $iconurl.startsWith('https://'))
+		<img src="$iconurl" height="16" width="16" alt="$status.getNameTranslation()" title="$status.getNameTranslation() - $!status.getDescTranslation()" />
+	#else
+		<img src="${req.getContextPath()}${iconurl}" height="16" width="16" alt="$status.getNameTranslation()" title="$status.getNameTranslation() - $!status.getDescTranslation()" />
+	#end
+</td>
+<td width=40% valign=top>
+	${status.nameTranslation}
+</td>
+#end
+
+#macro(headerCell $caption $width)
+##<td bgcolor="#f0f0f0" width="$width"><b>$i18n.getText($caption)</b></td>
+<th bgcolor="#f0f0f0" width="$width">$i18n.getText($caption)</th>
+#end
+
+<table width="100%" cellpadding="2">
     <tr>
-        <td bgcolor="#f0f0f0" width=34%><b>$i18n.getText("transition.summary.transition")</b></td>
-        <td bgcolor="#f0f0f0" width=15%><b>$i18n.getText("transition.summary.timespent")</b></td>
-        <td bgcolor="#f0f0f0" width=15% align=center><b>$i18n.getText("transition.summary.occurence.nb")</b></td>
-        <td bgcolor="#f0f0f0" width=18%><b>$i18n.getText("transition.summary.last.executer")</b></td>
-        <td bgcolor="#f0f0f0" width=18%><b>$i18n.getText("transition.summary.last.occurence.date")</b></td>
+    	#headerCell("transition.summary.transition" "34%")
+    	#headerCell("transition.summary.timespent" "15%")
+    	#headerCell("transition.summary.occurence.nb" "15%")
+    	#headerCell("transition.summary.last.executer" "18%")
+    	#headerCell("transition.summary.last.occurence.date" "18%")
     </tr>
+
     #foreach ($tran in ${action.getTransitions()})
-		    		    <tr>
-		            <td bgcolor="#ffffff" width=34% valign=top>
-		                <table width="100%">
-		                    <tr>
-		                        <td width=7% valign=center>
-		                            #set ($status = ${tran.getFromStatus()})
-				                            #set ($iconurl = $status.getIconUrl())
-				                
-				                            #if ($iconurl.startsWith('http://') || $iconurl.startsWith('https://'))
-				                                <img src="$iconurl" height="16" width="16" alt="$status.getNameTranslation()" title="$status.getNameTranslation() - $!status.getDescTranslation()" />
-				                            #else
-				                                <img src="${req.getContextPath()}${iconurl}" height="16" width="16" alt="$status.getNameTranslation()" title="$status.getNameTranslation() - $!status.getDescTranslation()" />
-				                            #end
-                       </td>
-		                       <td width=40% valign=top>
-		                            ${tran.getFromStatus().nameTranslation}
-				                       </td>
-		                       <td align="center" nowrap="nowrap" width=6% valign=top>
-		                           <img src="${req.getContextPath()}/images/icons/arrow_right_small.gif" align="absmiddle" border="0" height="16" width="16">
-		                       </td>
-                       <td width=7% valign=center>
-                            #set ($status = ${tran.getToStatus()})
-				                            #set ($iconurl = $status.getIconUrl())
-				                
-				                            #if ($iconurl.startsWith('http://') || $iconurl.startsWith('https://'))
-				                                <img src="$iconurl" height="16" width="16" alt="$status.getNameTranslation()" title="$status.getNameTranslation() - $!status.getDescTranslation()" />
-				                            #else
-				                                <img src="${req.getContextPath()}${iconurl}" height="16" width="16" alt="$status.getNameTranslation()" title="$status.getNameTranslation() - $!status.getDescTranslation()" />
-				                            #end
-                       </td>
-						                       <td width=40% valign=top>
-		                            ${tran.getToStatus().nameTranslation}
-				                       </td>
-		                    </tr>
-				                </table>
-            </td>
-				            <td bgcolor="#ffffff" width=15% valign=top align=right>
-                <table width="100%">
-		                    <tr>
-		                        <td valign=top>
-		                				            ${tran.getDurationAsString()}
-				                        </td>
-				                    </tr>
-				                </table>
-		            </td>
-				            <td bgcolor="#ffffff" width=15% valign=top align=center>
-				                <table width="100%">
-		                    <tr>
-		                        <td valign=top align="center">
-		                				            ${tran.getTimesToTransition()}
-				                        </td>
-				                    </tr>
-				                </table>
-		            </td>
-						            <td bgcolor="#ffffff" width=18% valign=top>
-  <table width="100%">
-	<tr>
-	  <td valign=top>
-		#if (${action.isUserExists(${tran.getLastUpdater()})})
-	      #authorlink (${tran.getLastUpdater()})
-		#else
-		  ${tran.getLastUpdater()}
-		#end
-      </td>
-	</tr>
-  </table>
-				                
-		            </td>
-						            </td>
-						            <td bgcolor="#ffffff" width=18% valign=top align=right>
-                <table width="100%">
-		                    <tr>
-		                        <td valign=top align=right>
-		                				            ${tran.getLastupdate()}
-				                        </td>
-				                    </tr>
-				                </table>
-            </td>
-		        </tr>
-		    #end
+	    <tr>
+			<td bgcolor="#ffffff" width=34% valign=top>
+		    	<table width="100%">
+		        	<tr>
+	            		#statusWithIcon ($tran.fromStatus)
+		                <td align="center" nowrap="nowrap" width=6% valign=top>
+		                	<img src="${req.getContextPath()}/images/icons/arrow_right_small.gif" align="absmiddle" border="0" height="16" width="16" />
+		                </td>
+	            		#statusWithIcon ($tran.toStatus)
+		            </tr>
 				</table>
+            </td>
+			<td width=15% valign=top align=left>
+              	${tran.durationAsString}
+		    </td>
+			<td width=15% valign=top align=center>
+            	${tran.timesToTransition}
+		    </td>
+			<td width=18% valign=top>
+				#if (${action.isUserExists(${tran.lastUpdater})})
+					#authorlink (${tran.lastUpdater})
+				#else
+					${tran.lastUpdater}
+				#end
+	        </td>
+			<td width=18% valign=top align=right>
+    	    	${tran.lastUpdateAsString}
+        	</td>
+		</tr>
+	#end
+</table>

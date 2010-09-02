@@ -108,7 +108,7 @@ public class TransitionSummary {
 	/**
 	 * @return a nice formatted date as String.
 	 */
-	public String getLastupdate(){
+	public String getLastUpdateAsString(){
 		return CommonPluginUtils.getNiceDate(lastUpdate);
 	}
 	
