@@ -1,6 +1,7 @@
 package com.googlecode.jsu.workflow.validator;
 
 import static com.googlecode.jsu.util.CommonPluginUtils.isIssueHasField;
+import static com.googlecode.jsu.workflow.WorkflowFieldsRequiredValidatorPluginFactory.SELECTED_FIELDS;
 
 import java.util.Collection;
 
@@ -21,7 +22,7 @@ import com.opensymphony.workflow.WorkflowException;
 public class FieldsRequiredValidator extends GenericValidator {
 	private static final Logger log = Logger.getLogger(FieldsRequiredValidator.class);
 	
-	@Argument("hidFieldsList")
+	@Argument(SELECTED_FIELDS)
 	private String fieldList;
 	
 	/* (non-Javadoc)

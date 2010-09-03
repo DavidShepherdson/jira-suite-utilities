@@ -647,9 +647,11 @@ public class WorkflowUtils {
 		List<Field> fieldList = new ArrayList<Field>(fields.length);
 
 		for (String s : fields) {
-			Field field = ManagerFactory.getFieldManager().getField(s);
-
-			fieldList.add(field);
+			final Field field = ManagerFactory.getFieldManager().getField(s);
+			
+			if (field != null) {
+				fieldList.add(field);
+			}
 		}
 
 		return CommonPluginUtils.sortFields(fieldList);

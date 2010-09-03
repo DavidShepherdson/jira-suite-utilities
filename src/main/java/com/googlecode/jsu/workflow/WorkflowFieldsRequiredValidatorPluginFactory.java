@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.atlassian.jira.issue.fields.Field;
 import com.atlassian.jira.plugin.workflow.AbstractWorkflowPluginFactory;
 import com.atlassian.jira.plugin.workflow.WorkflowPluginValidatorFactory;
 import com.googlecode.jsu.util.CommonPluginUtils;
@@ -21,13 +22,13 @@ public class WorkflowFieldsRequiredValidatorPluginFactory
 		extends AbstractWorkflowPluginFactory 
 		implements WorkflowPluginValidatorFactory {
 	
-	private static final String SELECTED_FIELDS = "hidFieldsList";
+	public static final String SELECTED_FIELDS = "hidFieldsList";
 
 	/* (non-Javadoc)
 	 * @see com.googlecode.jsu.workflow.AbstractWorkflowPluginFactory#getVelocityParamsForInput(java.util.Map)
 	 */
 	protected void getVelocityParamsForInput(Map velocityParams) {
-		List allFields = CommonPluginUtils.getRequirableFields();
+		List<Field> allFields = CommonPluginUtils.getRequirableFields();
 		
 		velocityParams.put("val-fieldsList", allFields);
 		velocityParams.put("val-splitter", WorkflowUtils.SPLITTER);
@@ -42,14 +43,13 @@ public class WorkflowFieldsRequiredValidatorPluginFactory
 		getVelocityParamsForInput(velocityParams);
 		
 		ValidatorDescriptor validatorDescriptor = (ValidatorDescriptor) descriptor;
-		Map args = validatorDescriptor.getArgs();
+		Map<String, Object> args = validatorDescriptor.getArgs();
 		
 		velocityParams.remove("val-fieldsList");
 		
-		String strFieldsSelected = (String) args.get(SELECTED_FIELDS);
-		Collection fieldsSelected = WorkflowUtils.getFields(strFieldsSelected, WorkflowUtils.SPLITTER);
-		
-		List allFields = CommonPluginUtils.getRequirableFields();
+		Collection<Field> fieldsSelected = getSelectedFields(args);
+		List<Field> allFields = CommonPluginUtils.getRequirableFields();
+
 		allFields.removeAll(fieldsSelected);
 		
 		velocityParams.put("val-fieldsListSelected", fieldsSelected);
@@ -64,12 +64,9 @@ public class WorkflowFieldsRequiredValidatorPluginFactory
 			Map velocityParams, AbstractDescriptor descriptor
 	) {
 		ValidatorDescriptor validatorDescriptor = (ValidatorDescriptor) descriptor;
-		Map args = validatorDescriptor.getArgs();
+		Map<String, Object> args = validatorDescriptor.getArgs();
 		
-		String strFieldsSelected = (String) args.get(SELECTED_FIELDS);
-		Collection fieldsSelected = WorkflowUtils.getFields(strFieldsSelected, WorkflowUtils.SPLITTER);
-		
-		velocityParams.put("val-fieldsListSelected", fieldsSelected);
+		velocityParams.put("val-fieldsListSelected", getSelectedFields(args));
 	}
 	
 	/* (non-Javadoc)
@@ -86,5 +83,17 @@ public class WorkflowFieldsRequiredValidatorPluginFactory
 		params.put(SELECTED_FIELDS, strFieldsSelected);
 		
 		return params;
+	}
+	
+	/**
+	 * Get fields were selected in UI.
+	 * 
+	 * @param args
+	 * @return
+	 */
+	public static Collection<Field> getSelectedFields(Map<String, Object> args) {
+		String strFieldsSelected = (String) args.get(SELECTED_FIELDS);
+		
+		return WorkflowUtils.getFields(strFieldsSelected, WorkflowUtils.SPLITTER);
 	}
 }
