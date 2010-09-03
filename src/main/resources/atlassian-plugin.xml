@@ -1,12 +1,11 @@
-<atlassian-plugin key="com.googlecode.jira-suite-utilities" 
-                  name="JIRA Suite Utilities"
-                  plugin-version="2">
+<atlassian-plugin key="${project.groupId}.${project.artifactId}" 
+                  name="${project.name}"
+                  plugins-version="2">
                       
     <plugin-info>
-        <description>Many objects to extend JIRA</description>
-        <version>@VERSION-REPLACED-BY-MAVEN@</version>
-        <application-version min="3.5" max="4.1"/>
-        <vendor name="Quadratica SRL" url="http://www.quadratica.com.ar"/>
+        <description>${project.description}</description>
+        <version>${project.version}</version>
+        <vendor name="${project.organization.name}" url="${project.organization.url}" />
     </plugin-info>   
 
 	<!-- Custom Fields -->

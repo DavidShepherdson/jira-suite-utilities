@@ -2,7 +2,7 @@
 
 	<modelVersion>4.0.0</modelVersion>
 
-	<groupId>jira-suite-utilities</groupId>
+	<groupId>com.googlecode</groupId>
 	<artifactId>jira-suite-utilities</artifactId>
 	<name>JIRA Suite Utilities</name>
 	<version>0.7.9-SNAPSHOT</version>
@@ -10,10 +10,12 @@
 
 	<organization>
 		<name>Quadratica SRL</name>
-		<url>www.quadratica.com.ar</url>
+		<url>http://www.quadratica.com.ar/</url>
 	</organization>
+	
+	<description>Many objects to extend JIRA</description>
 	<inceptionYear>2007</inceptionYear>
-
+	
 	<developers>
 		<developer>
 			<name>Gustavo Martin</name>
@@ -64,7 +66,6 @@
                 <artifactId>maven-source-plugin</artifactId>
                 <executions>
                     <execution>
-                        <id>package-source</id>
                         <phase>package</phase>
                         <goals>
                             <goal>jar</goal>
@@ -72,30 +73,6 @@
                     </execution>
                 </executions>
             </plugin>
-			<plugin>
-				<artifactId>maven-antrun-plugin</artifactId>
-				<executions>
-					<execution>
-						<phase>process-classes</phase>
-						<goals>
-							<goal>run</goal>
-						</goals>
-						<configuration>
-							<tasks>
-								<replace file="target/classes/atlassian-plugin.xml" token="@VERSION-REPLACED-BY-MAVEN@" value="${project.version}" />
-							</tasks>
-						</configuration>
-					</execution>
-				</executions>
-			</plugin>
-			<plugin>
-				<artifactId>maven-surefire-plugin</artifactId>
-				<configuration>
-					<excludes>
-						<exclude>**/*RemoteTest.java</exclude>
-					</excludes>
-				</configuration>
-			</plugin>
 			<plugin>
                 <artifactId>maven-jar-plugin</artifactId>
                 <executions>
@@ -139,6 +116,12 @@
     			</configuration>
 			</plugin>
       	</plugins>
+      	<resources>
+      		<resource>
+      			<directory>src/main/resources</directory>
+      			<filtering>true</filtering>
+      		</resource>
+      	</resources>
 	</build>
 
 	<dependencies>
@@ -152,6 +135,7 @@
 					<artifactId>junit</artifactId>
 				</exclusion>
 			</exclusions>
+			<scope>provided</scope>
 		</dependency>
 		<dependency>
 			<groupId>junit</groupId>
@@ -190,6 +174,6 @@
 	<properties>
 		<atlassian.jira.version>4.1</atlassian.jira.version>
 		
-		<scm.connection>scm:hg:ssh://hg@bitbucket.org/abashev/jira-suite-utilities</scm.connection>
+		<scm.connection>scm:hg:git+ssh://git@github.com:abashev/jira-suite-utilities.git</scm.connection>
 	</properties>
 </project>
