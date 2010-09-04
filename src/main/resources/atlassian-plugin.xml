@@ -206,8 +206,11 @@
     </issue-tabpanel>
     
     <!-- Components -->
-    <component key="conditionCheckerFactory" class="com.googlecode.jsu.helpers.ConditionCheckerFactory">
+    <component key="conditionCheckerFactory" 
+    		   class="com.googlecode.jsu.helpers.ConditionCheckerFactory"
+    		   interface="com.googlecode.jsu.helpers.ConditionCheckerFactory"
+    		   public="true">
+    		   
 		<description>Provide service for checking conditions</description>
-		<interface>com.googlecode.jsu.helpers.ConditionCheckerFactory</interface>
 	</component>
 </atlassian-plugin>
