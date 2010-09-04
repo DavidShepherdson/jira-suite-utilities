@@ -19,6 +19,8 @@ import com.atlassian.core.user.GroupUtils;
 import com.atlassian.core.user.UserUtils;
 import com.atlassian.jira.ComponentManager;
 import com.atlassian.jira.ManagerFactory;
+import com.atlassian.jira.bc.project.component.ProjectComponent;
+import com.atlassian.jira.bc.project.component.ProjectComponentManager;
 import com.atlassian.jira.config.properties.APKeys;
 import com.atlassian.jira.config.properties.ApplicationProperties;
 import com.atlassian.jira.issue.Issue;
@@ -389,14 +391,24 @@ public class WorkflowUtils {
 				//					retVal = null;
 				//				}
 			} else if (fieldId.equals(IssueFieldConstants.COMPONENTS)) {
-				throw new UnsupportedOperationException("Not implemented");
+				if (value == null) {
+					issue.setComponents(Collections.EMPTY_SET);
+				} else if (value instanceof String) {
+					ProjectComponentManager componentManager = ComponentManager.getInstance().getProjectComponentManager();
+					ProjectComponent v = componentManager.findByComponentName(
+							issue.getProjectObject().getId(), (String) value
+					);
 
-				//				retCollection = issue.getComponents();
-				//				if(retCollection==null || retCollection.isEmpty()){
-				//					isEmpty = true;
-				//				}else{
-				//					retVal = retCollection;
-				//				}
+					if (v != null) {
+						issue.setComponents(Arrays.asList(v.getGenericValue()));
+					}
+				} else if (value instanceof GenericValue) {
+					issue.setComponents(Arrays.asList((GenericValue) value));
+				} else if (value instanceof Collection) {
+                    issue.setComponents((Collection) value);
+				} else {
+					throw new IllegalArgumentException("Wrong component value");
+				}
 			} else if (fieldId.equals(IssueFieldConstants.FIX_FOR_VERSIONS)) {
 				if (value == null) {
 					issue.setFixVersions(Collections.EMPTY_SET);
