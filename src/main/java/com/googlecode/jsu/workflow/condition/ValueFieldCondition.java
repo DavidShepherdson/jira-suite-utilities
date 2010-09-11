@@ -67,7 +67,7 @@ public class ValueFieldCondition extends AbstractJiraCondition {
 				);
 			}
 		} catch (Exception e) {
-			log.error("Unable to caompare values for field '" + fieldId + "'", e);
+			log.error("Unable to compare values for field '" + fieldId + "'", e);
 		}
 		
 		return result;
