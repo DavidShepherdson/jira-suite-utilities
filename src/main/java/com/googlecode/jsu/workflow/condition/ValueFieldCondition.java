@@ -4,9 +4,11 @@ import java.util.Map;
 
 import org.apache.log4j.Logger;
 
+import com.atlassian.jira.ComponentManager;
 import com.atlassian.jira.issue.Issue;
 import com.atlassian.jira.issue.fields.Field;
 import com.atlassian.jira.workflow.condition.AbstractJiraCondition;
+import static com.atlassian.plugin.util.Assertions.notNull;
 import com.googlecode.jsu.helpers.ComparisonType;
 import com.googlecode.jsu.helpers.ConditionCheckerFactory;
 import com.googlecode.jsu.helpers.ConditionType;
@@ -23,11 +25,14 @@ public class ValueFieldCondition extends AbstractJiraCondition {
 	
 	private final ConditionCheckerFactory conditionCheckerFactory;
 	
-	/**
-	 * @param conditionCheckerFactory
-	 */
-	public ValueFieldCondition(ConditionCheckerFactory conditionCheckerFactory) {
-		this.conditionCheckerFactory = conditionCheckerFactory;
+	public ValueFieldCondition() {
+		// This code is specific for 4.0 version only. 
+		// At 4.1 must be constructor injection 
+		this.conditionCheckerFactory = ComponentManager.getOSGiComponentInstanceOfType(
+				ConditionCheckerFactory.class
+		);
+
+		notNull("conditionCheckerFactory", conditionCheckerFactory);
 	}
 
 	/* (non-Javadoc)
