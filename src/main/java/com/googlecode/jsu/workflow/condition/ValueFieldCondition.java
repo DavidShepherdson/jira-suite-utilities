@@ -22,24 +22,13 @@ import com.opensymphony.module.propertyset.PropertySet;
  */
 public class ValueFieldCondition extends AbstractJiraCondition {
 	private final Logger log = Logger.getLogger(ValueFieldCondition.class);
-	
-	private final ConditionCheckerFactory conditionCheckerFactory;
-	
-	public ValueFieldCondition() {
-		// This code is specific for 4.0 version only. 
-		// At 4.1 must be constructor injection 
-		this.conditionCheckerFactory = ComponentManager.getOSGiComponentInstanceOfType(
-				ConditionCheckerFactory.class
-		);
-
-		notNull("conditionCheckerFactory", conditionCheckerFactory);
-	}
 
 	/* (non-Javadoc)
 	 * @see com.opensymphony.workflow.Condition#passesCondition(java.util.Map, java.util.Map, com.opensymphony.module.propertyset.PropertySet)
 	 */
 	public boolean passesCondition(Map transientVars, Map args, PropertySet ps) {
-		Issue issue = getIssue(transientVars);
+		final ConditionCheckerFactory conditionCheckerFactory = getConditionCheckerFactory();
+		final Issue issue = getIssue(transientVars);
 
 		String fieldId = (String) args.get("fieldsList");
 		String valueForCompare = (String) args.get("fieldValue");
@@ -71,5 +60,16 @@ public class ValueFieldCondition extends AbstractJiraCondition {
 		}
 		
 		return result;
+	}
+	
+	private ConditionCheckerFactory getConditionCheckerFactory() {
+		// This code is specific for 4.0 version only. Another versions shold use getComponent
+		ConditionCheckerFactory ccf = ComponentManager.getOSGiComponentInstanceOfType(
+				ConditionCheckerFactory.class
+		);
+
+		notNull("conditionCheckerFactory", ccf);
+		
+		return ccf;
 	}
 }
