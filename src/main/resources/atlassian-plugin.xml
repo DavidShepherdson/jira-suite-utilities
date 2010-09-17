@@ -11,7 +11,7 @@
 	<!-- Custom Fields -->
     <customfield-type key="locationtextfield" 
                       name="Location Text Field"
-                      class="com.atlassian.jira.issue.customfields.impl.TextCFType"
+                      class="com.googlecode.jsu.customfields.LocationTextCFType"
                       i18n-name-key="custom.field.type.text_field.name">
 
 		<resource type="i18n" name="i18n" location="com.googlecode.jsu.maps.resources" />
@@ -19,14 +19,14 @@
         <description key="custom.field.type.text_field.description">Custom field type for saving locations and showing it at maps.</description>
         
         <resource type="velocity" name="view" location="templates/jira/fields/view/view-location.vm"/>
-        <resource type="velocity" name="edit" location="templates/plugins/fields/edit/edit-basictext.vm"/>
+        <resource type="velocity" name="edit" location="templates/plugins/fields/edit/edit-maxlengthtext.vm"/>
         <resource type="velocity" name="xml" location="templates/plugins/fields/xml/xml-basictext.vm"/>
     </customfield-type>
 
     <customfield-type key="locationselect" 
     				  name="Location Select List"
         			  i18n-name-key="custom.field.type.select_field.name"
-        			  class="com.atlassian.jira.issue.customfields.impl.SelectCFType">
+        			  class="com.googlecode.jsu.customfields.LocationSelectCFType">
     
     	<resource type="i18n" name="i18n" location="com.googlecode.jsu.maps.resources" />
         
@@ -38,15 +38,17 @@
     </customfield-type>
 
 	<!-- Searches -->
-    <customfield-searcher key="textsearcher" name="Free Text Searcher"
-        i18n-name-key="admin.customfield.searcher.textsearcher.name"
-        class="com.atlassian.jira.issue.customfields.searchers.TextSearcher">
+    <customfield-searcher key="textsearcher" 
+    					  name="Free Text Searcher"
+        				  i18n-name-key="admin.customfield.searcher.textsearcher.name"
+        				  class="com.googlecode.jsu.customfields.TextSearcher">
+        				  
         <description key="admin.customfield.searcher.textsearcher.desc">Search for values using a free text search.</description>
 
         <resource type="velocity" name="search" location="templates/plugins/fields/edit-searcher/search-basictext.vm"/>
         <resource type="velocity" name="view" location="templates/plugins/fields/view-searcher/view-searcher-basictext.vm"/>
         
-        <valid-customfield-type package="com.atlassian.jira.plugin.maps" key="locationtextfield"/>
+        <valid-customfield-type package="${project.groupId}.${project.artifactId}" key="locationtextfield"/>
     </customfield-searcher>
 
 	<!-- Conditions -->
