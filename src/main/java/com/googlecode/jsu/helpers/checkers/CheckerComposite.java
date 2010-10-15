@@ -9,59 +9,59 @@ import com.googlecode.jsu.helpers.ConditionChecker;
  * @version $Id$
  */
 class CheckerComposite implements ConditionChecker {
-	private final Logger log = Logger.getLogger(CheckerComposite.class);
-	
-	private final ValueConverter valueConverter;
-	private final ComparingSnipet comparingSnipet;
+    private final Logger log = Logger.getLogger(CheckerComposite.class);
 
-	/**
-	 * @param valueConverter
-	 * @param comparingSnipet
-	 */
-	public CheckerComposite(
-			ValueConverter valueConverter, ComparingSnipet comparingSnipet
-	) {
-		this.valueConverter = valueConverter;
-		this.comparingSnipet = comparingSnipet;
-	}
+    private final ValueConverter valueConverter;
+    private final ComparingSnipet comparingSnipet;
 
-	/* (non-Javadoc)
-	 * @see com.googlecode.jsu.helpers.ConditionChecker#checkValues(java.lang.Object, java.lang.Object)
-	 */
-	@SuppressWarnings("unchecked")
-	public final boolean checkValues(Object value1, Object value2) {
-		final Comparable comp1, comp2;
-		
-		try {
-			comp1 = valueConverter.getComparable(value1);
-		} catch (NumberFormatException e) {
-			log.warn("Wrong number format at [" + value1 + "]");
-			
-			return false;
-		} catch (Exception e) {
-			log.warn("Unable to get comparable from [" + value1 + "]", e);
-			
-			return false;
-		}
+    /**
+     * @param valueConverter
+     * @param comparingSnipet
+     */
+    public CheckerComposite(
+            ValueConverter valueConverter, ComparingSnipet comparingSnipet
+    ) {
+        this.valueConverter = valueConverter;
+        this.comparingSnipet = comparingSnipet;
+    }
 
-		try {
-			comp2 = valueConverter.getComparable(value2);
-		} catch (NumberFormatException e) {
-			log.warn("Wrong number format at [" + value2 + "]");
-			
-			return false;
-		} catch (Exception e) {
-			log.warn("Unable to get comparable from [" + value2 + "]", e);
-			
-			return false;
-		}
+    /* (non-Javadoc)
+     * @see com.googlecode.jsu.helpers.ConditionChecker#checkValues(java.lang.Object, java.lang.Object)
+     */
+    @SuppressWarnings("unchecked")
+    public final boolean checkValues(Object value1, Object value2) {
+        final Comparable comp1, comp2;
 
-		boolean result = comparingSnipet.compareObjects(comp1, comp2);
+        try {
+            comp1 = valueConverter.getComparable(value1);
+        } catch (NumberFormatException e) {
+            log.warn("Wrong number format at [" + value1 + "]");
 
-		if (log.isDebugEnabled()) {
-			log.debug("Compare values [" + comp1 + "] and [" + comp2 + "] with result [" + result + "]");
-		}
+            return false;
+        } catch (Exception e) {
+            log.warn("Unable to get comparable from [" + value1 + "]", e);
 
-		return result;
-	}
+            return false;
+        }
+
+        try {
+            comp2 = valueConverter.getComparable(value2);
+        } catch (NumberFormatException e) {
+            log.warn("Wrong number format at [" + value2 + "]");
+
+            return false;
+        } catch (Exception e) {
+            log.warn("Unable to get comparable from [" + value2 + "]", e);
+
+            return false;
+        }
+
+        boolean result = comparingSnipet.compareObjects(comp1, comp2);
+
+        if (log.isDebugEnabled()) {
+            log.debug("Compare values [" + comp1 + "] and [" + comp2 + "] with result [" + result + "]");
+        }
+
+        return result;
+    }
 }

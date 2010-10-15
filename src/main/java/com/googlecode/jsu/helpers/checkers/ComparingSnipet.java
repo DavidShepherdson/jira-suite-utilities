@@ -6,13 +6,13 @@ package com.googlecode.jsu.helpers.checkers;
  */
 @SuppressWarnings("unchecked")
 interface ComparingSnipet {
-	/**
-	 * Execute comparing action for objects.
-	 * 
-	 * @param <T>
-	 * @param comp1
-	 * @param comp2
-	 * @return
-	 */
-	boolean compareObjects(Comparable comp1, Comparable comp2);
+    /**
+     * Execute comparing action for objects.
+     *
+     * @param <T>
+     * @param comp1
+     * @param comp2
+     * @return
+     */
+    boolean compareObjects(Comparable comp1, Comparable comp2);
 }

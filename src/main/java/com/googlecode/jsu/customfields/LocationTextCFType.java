@@ -9,19 +9,19 @@ import com.atlassian.jira.issue.customfields.persistence.CustomFieldValuePersist
 
 /**
  * Wrapper on Jira RenderableTextCFType for using inside plugins v2.
- * 
+ *
  * @author <A href="mailto:abashev at gmail dot com">Alexey Abashev</A>
  * @version $Id$
  */
 public class LocationTextCFType extends RenderableTextCFType {
-	/**
-	 * Default constructor without injection.
-	 */
-	public LocationTextCFType() {
-		super(
-				getComponent(CustomFieldValuePersister.class), 
-				getComponent(StringConverter.class), 
-				getComponent(GenericConfigManager.class)
-		);
-	}
+    /**
+     * Default constructor without injection.
+     */
+    public LocationTextCFType() {
+        super(
+                getComponent(CustomFieldValuePersister.class),
+                getComponent(StringConverter.class),
+                getComponent(GenericConfigManager.class)
+        );
+    }
 }

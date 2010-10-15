@@ -7,9 +7,9 @@ import com.atlassian.jira.web.bean.I18nBean;
 
 /**
  * @author Gustavo Martin
- * 
+ *
  * This Comparator is used to compare two fields by its internationalized name.
- *  
+ *
  */
 public class NameComparatorEx implements Comparator<Field> {
     private final I18nBean i18nBean;

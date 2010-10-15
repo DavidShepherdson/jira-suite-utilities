@@ -16,61 +16,61 @@ import com.opensymphony.workflow.WorkflowException;
 
 /**
  * This validator verifies that certain fields must be required at execution of a transition.
- * 
+ *
  * @author Gustavo Martin
  */
 public class FieldsRequiredValidator extends GenericValidator {
-	private static final Logger log = Logger.getLogger(FieldsRequiredValidator.class);
-	
-	@Argument(SELECTED_FIELDS)
-	private String fieldList;
-	
-	/* (non-Javadoc)
-	 * @see com.opensymphony.workflow.Validator#validate(java.util.Map, java.util.Map, com.opensymphony.module.propertyset.PropertySet)
-	 */
-	protected void validate() throws InvalidInputException, WorkflowException {
-		// It obtains the fields that are required for the transition.
-		Collection<Field> fieldsSelected = WorkflowUtils.getFields(fieldList, WorkflowUtils.SPLITTER);
-		final Issue issue = getIssue();
-		String issueKey = issue.getKey();
-		
-		if (issueKey == null) {
-			issueKey = "'New issue'";
-		}
-		
-		if (log.isDebugEnabled()) {
-			log.debug(issueKey + ": Found " + fieldsSelected.size() + " fields for validation");
-		}
-		
-		for (Field field : fieldsSelected) {
-			if (isIssueHasField(issue, field)) {
-				Object fieldValue = WorkflowUtils.getFieldValueFromIssue(issue, field);
-				
-				if (log.isDebugEnabled()) {
-					log.debug(
-							issueKey + ": Field '" + field.getName() + 
-							" - " +	field.getId() + 
-							"' has value [" + fieldValue + "]"
-					);
-				}
-				
-				if (fieldValue == null) {
-					// Sets Exception message.
-					this.setExceptionMessage(
-							field, 
-							field.getName() + " is required.", 
-							field.getName() + " is required. But it is not present on screen."
-					);
-				}
-			} else {
-				if (log.isDebugEnabled()) {
-					log.debug(
-							issueKey + ": Field '" + field.getName() + 
-							" - " +	field.getId() + 
-							"' is not assigned for the issue"
-					);
-				}
-			}
-		}
-	}
+    private static final Logger log = Logger.getLogger(FieldsRequiredValidator.class);
+
+    @Argument(SELECTED_FIELDS)
+    private String fieldList;
+
+    /* (non-Javadoc)
+     * @see com.opensymphony.workflow.Validator#validate(java.util.Map, java.util.Map, com.opensymphony.module.propertyset.PropertySet)
+     */
+    protected void validate() throws InvalidInputException, WorkflowException {
+        // It obtains the fields that are required for the transition.
+        Collection<Field> fieldsSelected = WorkflowUtils.getFields(fieldList, WorkflowUtils.SPLITTER);
+        final Issue issue = getIssue();
+        String issueKey = issue.getKey();
+
+        if (issueKey == null) {
+            issueKey = "'New issue'";
+        }
+
+        if (log.isDebugEnabled()) {
+            log.debug(issueKey + ": Found " + fieldsSelected.size() + " fields for validation");
+        }
+
+        for (Field field : fieldsSelected) {
+            if (isIssueHasField(issue, field)) {
+                Object fieldValue = WorkflowUtils.getFieldValueFromIssue(issue, field);
+
+                if (log.isDebugEnabled()) {
+                    log.debug(
+                            issueKey + ": Field '" + field.getName() +
+                            " - " +	field.getId() +
+                            "' has value [" + fieldValue + "]"
+                    );
+                }
+
+                if (fieldValue == null) {
+                    // Sets Exception message.
+                    this.setExceptionMessage(
+                            field,
+                            field.getName() + " is required.",
+                            field.getName() + " is required. But it is not present on screen."
+                    );
+                }
+            } else {
+                if (log.isDebugEnabled()) {
+                    log.debug(
+                            issueKey + ": Field '" + field.getName() +
+                            " - " +	field.getId() +
+                            "' is not assigned for the issue"
+                    );
+                }
+            }
+        }
+    }
 }

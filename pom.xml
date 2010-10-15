@@ -1,68 +1,68 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 
-	<modelVersion>4.0.0</modelVersion>
+  <modelVersion>4.0.0</modelVersion>
 
-	<groupId>com.googlecode</groupId>
-	<artifactId>jira-suite-utilities</artifactId>
-	<name>JIRA Suite Utilities</name>
-	<version>0.7.14-SNAPSHOT</version>
+  <groupId>com.googlecode</groupId>
+  <artifactId>jira-suite-utilities</artifactId>
+  <name>JIRA Suite Utilities</name>
+  <version>0.7.14-SNAPSHOT</version>
     <packaging>atlassian-plugin</packaging>
 
-	<organization>
-		<name>Quadratica SRL</name>
-		<url>http://www.quadratica.com.ar/</url>
-	</organization>
-	
-	<description>Many objects to extend JIRA</description>
-	<inceptionYear>2007</inceptionYear>
-	
-	<developers>
-		<developer>
-			<name>Gustavo Martin</name>
-			<id>gmartin</id>
-			<email>gmartin@quadratica.com.ar</email>
-			<organization>Quadratica SRL</organization>
-			<roles>
-				<role>Developer</role>
-			</roles>
-		</developer>
-		<developer>
-			<name>Bettina Zucker</name>
-			<id>bettina</id>
-			<email>bettina.zucker@eu.panasonic.com</email>
-			<organization>PASE GmbH</organization>
-			<roles>
-				<role>Developer</role>
-			</roles>
-		</developer>
-		<developer>
-			<name>Alexey Abashev</name>
-			<id>abashev</id>
-			<email>abashev at gmail dot com</email>
-			<roles>
-				<role>Developer</role>
-			</roles>
-		</developer>
-		<developer>
-			<name>Cristiane Fontana</name>
-			<id>cfontana</id>
-			<email>no_spam@no_spam.com</email>
-			<roles>
-				<role>Developer</role>
-			</roles>
-		</developer>
-	</developers>
+  <organization>
+    <name>Quadratica SRL</name>
+    <url>http://www.quadratica.com.ar/</url>
+  </organization>
 
-	<build>
-		<plugins>
-			<plugin>
-				<artifactId>maven-compiler-plugin</artifactId>
-				<configuration>
-					<source>1.5</source>
-					<target>1.5</target>
-				</configuration>
-			</plugin>
-			<plugin>
+  <description>Many objects to extend JIRA</description>
+  <inceptionYear>2007</inceptionYear>
+
+  <developers>
+    <developer>
+      <name>Gustavo Martin</name>
+      <id>gmartin</id>
+      <email>gmartin@quadratica.com.ar</email>
+      <organization>Quadratica SRL</organization>
+      <roles>
+        <role>Developer</role>
+      </roles>
+    </developer>
+    <developer>
+      <name>Bettina Zucker</name>
+      <id>bettina</id>
+      <email>bettina.zucker@eu.panasonic.com</email>
+      <organization>PASE GmbH</organization>
+      <roles>
+        <role>Developer</role>
+      </roles>
+    </developer>
+    <developer>
+      <name>Alexey Abashev</name>
+      <id>abashev</id>
+      <email>abashev at gmail dot com</email>
+      <roles>
+        <role>Developer</role>
+      </roles>
+    </developer>
+    <developer>
+      <name>Cristiane Fontana</name>
+      <id>cfontana</id>
+      <email>no_spam@no_spam.com</email>
+      <roles>
+        <role>Developer</role>
+      </roles>
+    </developer>
+  </developers>
+
+  <build>
+    <plugins>
+      <plugin>
+        <artifactId>maven-compiler-plugin</artifactId>
+        <configuration>
+          <source>1.5</source>
+          <target>1.5</target>
+        </configuration>
+      </plugin>
+      <plugin>
                 <groupId>com.atlassian.maven.plugins</groupId>
                 <artifactId>maven-jira-plugin</artifactId>
                 <version>3.2</version>
@@ -72,7 +72,7 @@
                     <productDataVersion>${jira.data.version}</productDataVersion>
                 </configuration>
             </plugin>
-			<plugin>
+      <plugin>
                 <artifactId>maven-source-plugin</artifactId>
                 <executions>
                     <execution>
@@ -83,7 +83,7 @@
                     </execution>
                 </executions>
             </plugin>
-			<plugin>
+      <plugin>
                 <artifactId>maven-jar-plugin</artifactId>
                 <executions>
                     <execution>
@@ -94,101 +94,101 @@
                     </execution>
                 </executions>
             </plugin>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-release-plugin</artifactId>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-release-plugin</artifactId>
                 <version>2.0-beta-9</version>
-				<configuration>
-					<tagBase>https://jira-suite-utilities.googlecode.com/svn/tags</tagBase>
-					<releaseProfiles>release</releaseProfiles>
-					<goals>gcupload:gcupload</goals>
-				</configuration>
-			</plugin>
-			<plugin>
-    			<groupId>org.riedelcastro</groupId>
-    			<artifactId>gcupload-maven-plugin</artifactId>
-    			<version>0.9</version>
-    			<configuration>
-        			<projectName>jira-suite-utilities</projectName>
-        			<uploads>
-            			<upload>
-                			<summary>${project.name} version ${project.version} (binaries)</summary>
-                			<extensions>jar</extensions>
-							<labels>Type-Package,OpSys-All,Featured</labels>
-            			</upload>
-						<upload>
-							<summary>${project.name} version ${project.version} (sources)</summary>
-							<postfix>sources</postfix>
-							<extensions>jar</extensions>
-							<labels>Type-Source,OpSys-All</labels>
-						</upload>
-        			</uploads>
-    			</configuration>
-			</plugin>
-      	</plugins>
-      	<resources>
-      		<resource>
-      			<directory>src/main/resources</directory>
-      			<filtering>true</filtering>
-      		</resource>
-      	</resources>
-	</build>
+        <configuration>
+          <tagBase>https://jira-suite-utilities.googlecode.com/svn/tags</tagBase>
+          <releaseProfiles>release</releaseProfiles>
+          <goals>gcupload:gcupload</goals>
+        </configuration>
+      </plugin>
+      <plugin>
+          <groupId>org.riedelcastro</groupId>
+          <artifactId>gcupload-maven-plugin</artifactId>
+          <version>0.9</version>
+          <configuration>
+              <projectName>jira-suite-utilities</projectName>
+              <uploads>
+                  <upload>
+                      <summary>${project.name} version ${project.version} (binaries)</summary>
+                      <extensions>jar</extensions>
+              <labels>Type-Package,OpSys-All,Featured</labels>
+                  </upload>
+            <upload>
+              <summary>${project.name} version ${project.version} (sources)</summary>
+              <postfix>sources</postfix>
+              <extensions>jar</extensions>
+              <labels>Type-Source,OpSys-All</labels>
+            </upload>
+              </uploads>
+          </configuration>
+      </plugin>
+        </plugins>
+        <resources>
+          <resource>
+            <directory>src/main/resources</directory>
+            <filtering>true</filtering>
+          </resource>
+        </resources>
+  </build>
 
-	<dependencies>
-		<dependency>
-			<groupId>com.atlassian.jira</groupId>
-			<artifactId>atlassian-jira</artifactId>
-			<version>${jira.version}</version>
-			<exclusions>
-				<exclusion>
-					<groupId>junit</groupId>
-					<artifactId>junit</artifactId>
-				</exclusion>
-			</exclusions>
-			<scope>provided</scope>
-		</dependency>
-		<dependency>
-			<groupId>junit</groupId>
-			<artifactId>junit</artifactId>
-			<version>4.8.1</version>
-			<scope>test</scope>
-		</dependency>
-	</dependencies>
-	
-	<scm>
-		<connection>${scm.connection}</connection>
-		<developerConnection>${scm.connection}</developerConnection>
-	</scm>
-	
-	<repositories>
-		<repository>
-			<id>atlassian-m2</id>
-			<url>https://m2proxy.atlassian.com/repository/public</url>
-			<snapshots>
-				<enabled>true</enabled>
-				<updatePolicy>always</updatePolicy>
-			</snapshots>
-			<releases>
-				<enabled>true</enabled>
-			</releases>
-		</repository>
-	</repositories>
-	
-	<pluginRepositories>
-		<pluginRepository>
-			<id>atlassian-m2</id>
-			<url>https://m2proxy.atlassian.com/repository/public</url>
-		</pluginRepository>
-		<pluginRepository>
-        	<id>repository.riedelcastro.org</id>
-        	<url>http://repository.riedelcastro.org</url>
-		</pluginRepository>
-	</pluginRepositories>
+  <dependencies>
+    <dependency>
+      <groupId>com.atlassian.jira</groupId>
+      <artifactId>atlassian-jira</artifactId>
+      <version>${jira.version}</version>
+      <exclusions>
+        <exclusion>
+          <groupId>junit</groupId>
+          <artifactId>junit</artifactId>
+        </exclusion>
+      </exclusions>
+      <scope>provided</scope>
+    </dependency>
+    <dependency>
+      <groupId>junit</groupId>
+      <artifactId>junit</artifactId>
+      <version>4.8.1</version>
+      <scope>test</scope>
+    </dependency>
+  </dependencies>
 
-	<properties>
+  <scm>
+    <connection>${scm.connection}</connection>
+    <developerConnection>${scm.connection}</developerConnection>
+  </scm>
+
+  <repositories>
+    <repository>
+      <id>atlassian-m2</id>
+      <url>https://m2proxy.atlassian.com/repository/public</url>
+      <snapshots>
+        <enabled>true</enabled>
+        <updatePolicy>always</updatePolicy>
+      </snapshots>
+      <releases>
+        <enabled>true</enabled>
+      </releases>
+    </repository>
+  </repositories>
+
+  <pluginRepositories>
+    <pluginRepository>
+      <id>atlassian-m2</id>
+      <url>https://m2proxy.atlassian.com/repository/public</url>
+    </pluginRepository>
+    <pluginRepository>
+          <id>repository.riedelcastro.org</id>
+          <url>http://repository.riedelcastro.org</url>
+    </pluginRepository>
+  </pluginRepositories>
+
+  <properties>
         <jira.version>4.1.2</jira.version>
         <jira.data.version>4.1.1</jira.data.version>
-		
-		<scm.connection>scm:hg:git+ssh://git@github.com:abashev/jira-suite-utilities.git</scm.connection>
-	</properties>
+
+    <scm.connection>scm:hg:git+ssh://git@github.com:abashev/jira-suite-utilities.git</scm.connection>
+  </properties>
 </project>

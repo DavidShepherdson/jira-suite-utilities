@@ -11,26 +11,26 @@ import com.googlecode.jsu.transitionssummary.TransitionSummary;
  * @version $Id$
  */
 final class TransitionSummaryComparator implements Comparator<TransitionSummary> {
-	/* (non-Javadoc)
-	 * @see java.util.Comparator#compare(java.lang.Object, java.lang.Object)
-	 */
-	public int compare(TransitionSummary summary1, TransitionSummary summary2) {
-		if (summary1 == summary2) {
-			return 0;
-		}
+    /* (non-Javadoc)
+     * @see java.util.Comparator#compare(java.lang.Object, java.lang.Object)
+     */
+    public int compare(TransitionSummary summary1, TransitionSummary summary2) {
+        if (summary1 == summary2) {
+            return 0;
+        }
 
-		int result = (-1);
+        int result = (-1);
 
-		if ((summary1 != null) && (summary1.getLastUpdate() != null)) {
-			Timestamp ts = summary1.getLastUpdate();
-			
-			if (summary2 != null) {
-				return ts.compareTo(summary2.getLastUpdate());
-			} else {
-				return ts.compareTo(null);
-			}
-		}
-		
-		return result;
-	}
+        if ((summary1 != null) && (summary1.getLastUpdate() != null)) {
+            Timestamp ts = summary1.getLastUpdate();
+
+            if (summary2 != null) {
+                return ts.compareTo(summary2.getLastUpdate());
+            } else {
+                return ts.compareTo(null);
+            }
+        }
+
+        return result;
+    }
 }
