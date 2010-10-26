@@ -2,6 +2,9 @@ package com.googlecode.jsu.workflow.validator;
 
 import static com.googlecode.jsu.helpers.ConditionCheckerFactory.DATE;
 import static com.googlecode.jsu.helpers.ConditionCheckerFactory.DATE_WITHOUT_TIME;
+import static com.googlecode.jsu.util.CommonPluginUtils.isFieldRequired;
+import static com.googlecode.jsu.util.CommonPluginUtils.isIssueHasField;
+import static com.googlecode.jsu.util.ComponentUtils.getComponent;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -11,13 +14,13 @@ import org.apache.log4j.Logger;
 
 import com.atlassian.jira.config.properties.APKeys;
 import com.atlassian.jira.config.properties.ApplicationProperties;
+import com.atlassian.jira.issue.Issue;
 import com.atlassian.jira.issue.fields.Field;
 import com.googlecode.jsu.annotation.Argument;
 import com.googlecode.jsu.helpers.ComparisonType;
 import com.googlecode.jsu.helpers.ConditionChecker;
 import com.googlecode.jsu.helpers.ConditionCheckerFactory;
 import com.googlecode.jsu.helpers.ConditionType;
-import com.googlecode.jsu.util.CommonPluginUtils;
 import com.googlecode.jsu.util.WorkflowUtils;
 import com.opensymphony.workflow.InvalidInputException;
 import com.opensymphony.workflow.WorkflowException;
@@ -40,17 +43,14 @@ public class DateCompareValidator extends GenericValidator {
     private String includeTimeValue;
 
     private final Logger log = Logger.getLogger(DateCompareValidator.class);
-    private final ConditionCheckerFactory conditionCheckerFactory;
     private final ApplicationProperties applicationProperties;
 
     /**
      * @param conditionCheckerFactory
      */
     public DateCompareValidator(
-            ConditionCheckerFactory conditionCheckerFactory,
             ApplicationProperties applicationProperties
     ) {
-        this.conditionCheckerFactory = conditionCheckerFactory;
         this.applicationProperties = applicationProperties;
     }
 
@@ -58,6 +58,8 @@ public class DateCompareValidator extends GenericValidator {
      * @see com.googlecode.jsu.workflow.validator.GenericValidator#validate()
      */
     protected void validate() throws InvalidInputException, WorkflowException {
+        final ConditionCheckerFactory conditionCheckerFactory = getComponent(ConditionCheckerFactory.class);
+
         Field field1 = WorkflowUtils.getFieldFromKey(date1);
         Field field2 = WorkflowUtils.getFieldFromKey(date2);
 
@@ -131,8 +133,10 @@ public class DateCompareValidator extends GenericValidator {
      *
      * Throws an Exception if the field is null, but it is required.
      */
-    private void validateRequired(Field fldDate){
-        if (CommonPluginUtils.isFieldRequired(getIssue(), fldDate)) {
+    private void validateRequired(Field fldDate) {
+        final Issue issue = getIssue();
+
+        if (isFieldRequired(issue, fldDate)) {
             this.setExceptionMessage(
                     fldDate,
                     fldDate.getName() + " is required.",

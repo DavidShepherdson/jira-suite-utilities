@@ -240,11 +240,15 @@ public class CommonPluginUtils {
      * @param field: wished field
      * @return if a field is required.
      */
-    public static boolean isFieldRequired(Issue issue, Field field){
+    public static boolean isFieldRequired(Issue issue, Field field) {
         boolean retVal = false;
 
         try {
-            retVal = getFieldLayoutItem(issue, field).isRequired();
+            FieldLayoutItem fieldLayoutItem = getFieldLayoutItem(issue, field);
+
+            if (fieldLayoutItem != null) {
+                retVal = fieldLayoutItem.isRequired();
+            }
         } catch (FieldLayoutStorageException e) {
             log.error("Unable to check is field required", e);
         }

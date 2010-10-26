@@ -230,6 +230,8 @@ public class WorkflowUtils {
                     retVal = issue.getUpdated();
                 } else if (fieldId.equals(IssueFieldConstants.CREATED)) {
                     retVal = issue.getCreated();
+                } else if (fieldId.equals(IssueFieldConstants.RESOLUTION_DATE)) {
+                    retVal = issue.getResolutionDate();
                 } else {
                     log.warn("Issue field \"" + fieldId + "\" is not supported.");
 
