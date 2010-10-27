@@ -30,6 +30,8 @@ import com.atlassian.jira.issue.IssueRelationConstants;
 import com.atlassian.jira.issue.ModifiedValue;
 import com.atlassian.jira.issue.MutableIssue;
 import com.atlassian.jira.issue.customfields.CustomFieldType;
+import com.atlassian.jira.issue.customfields.impl.AbstractMultiCFType;
+import com.atlassian.jira.issue.customfields.impl.MultiSelectCFType;
 import com.atlassian.jira.issue.customfields.view.CustomFieldParams;
 import com.atlassian.jira.issue.customfields.view.CustomFieldParamsImpl;
 import com.atlassian.jira.issue.fields.CustomField;
@@ -303,13 +305,18 @@ public class WorkflowUtils {
 
                 newValue = cfType.getValueFromCustomFieldParams(fieldParams);
             } else if (newValue instanceof Collection<?>) {
-                //convert from string to Object
-                CustomFieldParams fieldParams = new CustomFieldParamsImpl(
-                        customField,
-                        StringUtils.join((Collection<?>) newValue, ",")
-                );
+                if ((customField.getCustomFieldType() instanceof MultiSelectCFType) ||
+                        (customField.getCustomFieldType() instanceof AbstractMultiCFType)) {
+                    // format already correct
+                } else {
+                    //convert from string to Object
+                    CustomFieldParams fieldParams = new CustomFieldParamsImpl(
+                            customField,
+                            StringUtils.join((Collection<?>) newValue, ",")
+                    );
 
-                newValue = cfType.getValueFromCustomFieldParams(fieldParams);
+                    newValue = cfType.getValueFromCustomFieldParams(fieldParams);
+                }
             }
 
             if (log.isDebugEnabled()) {
@@ -583,6 +590,24 @@ public class WorkflowUtils {
                     } catch (EntityNotFoundException e) {
                         throw new IllegalArgumentException(String.format("User \"%s\" not found", value));
                     }
+                }
+            } else if (fieldId.equals(IssueFieldConstants.SUMMARY)) {
+                if ((value == null) || (value instanceof String)) {
+                    issue.setSummary((String) value);
+                } else {
+                    throw new UnsupportedOperationException("Wrong value type for setting 'Summary'");
+                }
+            } else if (fieldId.equals(IssueFieldConstants.DESCRIPTION)) {
+                if ((value == null) || (value instanceof String)) {
+                    issue.setDescription((String) value);
+                } else {
+                    throw new UnsupportedOperationException("Wrong value type for setting 'Description'");
+                }
+            } else if (fieldId.equals(IssueFieldConstants.ENVIRONMENT)) {
+                if ((value == null) || (value instanceof String)) {
+                    issue.setEnvironment((String) value);
+                } else {
+                    throw new UnsupportedOperationException("Wrong value type for setting 'Environment'");
                 }
             } else {
                 log.error("Issue field \"" + fieldId + "\" is not supported for setting.");
