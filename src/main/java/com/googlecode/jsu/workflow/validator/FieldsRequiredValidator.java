@@ -1,6 +1,9 @@
 package com.googlecode.jsu.workflow.validator;
 
+import static com.googlecode.jsu.helpers.ConditionCheckerFactory.EQUAL;
+import static com.googlecode.jsu.helpers.ConditionCheckerFactory.STRING;
 import static com.googlecode.jsu.util.CommonPluginUtils.isIssueHasField;
+import static com.googlecode.jsu.util.ComponentUtils.getComponent;
 import static com.googlecode.jsu.workflow.WorkflowFieldsRequiredValidatorPluginFactory.SELECTED_FIELDS;
 
 import java.util.Collection;
@@ -10,6 +13,8 @@ import org.apache.log4j.Logger;
 import com.atlassian.jira.issue.Issue;
 import com.atlassian.jira.issue.fields.Field;
 import com.googlecode.jsu.annotation.Argument;
+import com.googlecode.jsu.helpers.ConditionChecker;
+import com.googlecode.jsu.helpers.ConditionCheckerFactory;
 import com.googlecode.jsu.util.WorkflowUtils;
 import com.opensymphony.workflow.InvalidInputException;
 import com.opensymphony.workflow.WorkflowException;
@@ -29,6 +34,9 @@ public class FieldsRequiredValidator extends GenericValidator {
      * @see com.opensymphony.workflow.Validator#validate(java.util.Map, java.util.Map, com.opensymphony.module.propertyset.PropertySet)
      */
     protected void validate() throws InvalidInputException, WorkflowException {
+        final ConditionCheckerFactory conditionCheckerFactory = getComponent(ConditionCheckerFactory.class);
+        final ConditionChecker checker = conditionCheckerFactory.getChecker(STRING, EQUAL);
+
         // It obtains the fields that are required for the transition.
         Collection<Field> fieldsSelected = WorkflowUtils.getFields(fieldList, WorkflowUtils.SPLITTER);
         final Issue issue = getIssue();
@@ -54,7 +62,7 @@ public class FieldsRequiredValidator extends GenericValidator {
                     );
                 }
 
-                if (fieldValue == null) {
+                if (checker.checkValues(fieldValue, null)) {
                     // Sets Exception message.
                     this.setExceptionMessage(
                             field,
