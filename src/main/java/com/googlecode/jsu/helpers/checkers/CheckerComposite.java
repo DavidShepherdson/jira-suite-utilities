@@ -30,10 +30,11 @@ class CheckerComposite implements ConditionChecker {
      */
     @SuppressWarnings("unchecked")
     public final boolean checkValues(Object value1, Object value2) {
-        final Comparable comp1, comp2;
+        final Comparable<Comparable<?>> comp1;
+        final Comparable<?> comp2;
 
         try {
-            comp1 = valueConverter.getComparable(value1);
+            comp1 = (Comparable<Comparable<?>>) valueConverter.getComparable(value1);
         } catch (NumberFormatException e) {
             log.warn("Wrong number format at [" + value1 + "]");
 

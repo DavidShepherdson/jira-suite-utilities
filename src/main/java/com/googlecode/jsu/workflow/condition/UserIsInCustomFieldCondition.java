@@ -1,5 +1,6 @@
 package com.googlecode.jsu.workflow.condition;
 
+import java.util.Collection;
 import java.util.Map;
 
 import org.apache.log4j.Logger;
@@ -24,6 +25,7 @@ public class UserIsInCustomFieldCondition extends AbstractJiraCondition {
     /* (non-Javadoc)
      * @see com.opensymphony.workflow.Condition#passesCondition(java.util.Map, java.util.Map, com.opensymphony.module.propertyset.PropertySet)
      */
+    @SuppressWarnings("rawtypes")
     public boolean passesCondition(Map transientVars, Map args, PropertySet ps) {
         boolean allowUser = false;
 
@@ -42,14 +44,17 @@ public class UserIsInCustomFieldCondition extends AbstractJiraCondition {
             Object fieldValue = WorkflowUtils.getFieldValueFromIssue(issue, field);
 
             if (fieldValue != null) {
-                if (fieldValue instanceof String) {
-                    if (fieldValue.equals(userLogged.toString())) {
-                        allowUser = true;
+                if (fieldValue instanceof Collection) {
+                    // support for MultiUser lists. user must be member of that list to pass condition
+                    for (Object value : (Collection) fieldValue) {
+                        allowUser = compareValues(value, userLogged);
+
+                        if (allowUser) {
+                            break;
+                        }
                     }
                 } else {
-                    if (fieldValue.equals(userLogged)) {
-                        allowUser = true;
-                    }
+                    allowUser = compareValues(fieldValue, userLogged);
                 }
             }
         } catch (EntityNotFoundException e) {
@@ -57,5 +62,21 @@ public class UserIsInCustomFieldCondition extends AbstractJiraCondition {
         }
 
         return allowUser;
+    }
+
+    private boolean compareValues(Object fieldValue, User user) {
+        boolean result = false;
+
+        if (fieldValue instanceof String) {
+            if (fieldValue.equals(user.toString())) {
+                result = true;
+            }
+        } else {
+            if (fieldValue.equals(user)) {
+                result = true;
+            }
+        }
+
+        return result;
     }
 }

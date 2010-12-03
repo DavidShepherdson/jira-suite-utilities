@@ -8,8 +8,7 @@ class ConverterNumber implements ValueConverter {
     /* (non-Javadoc)
      * @see com.googlecode.jsu.helpers.checkers.ValueConverter#getComparable(java.lang.Object)
      */
-    @SuppressWarnings("unchecked")
-    public Comparable getComparable(Object object) {
+    public Comparable<?> getComparable(Object object) {
         if (object == null) {
             return null;
         }
@@ -32,5 +31,4 @@ class ConverterNumber implements ValueConverter {
 
         return numberValue;
     }
-
 }

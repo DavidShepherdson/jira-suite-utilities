@@ -11,6 +11,5 @@ interface ValueConverter {
      * @param object
      * @return
      */
-    @SuppressWarnings("unchecked")
-    Comparable getComparable(Object object);
+    Comparable<?> getComparable(Object object);
 }

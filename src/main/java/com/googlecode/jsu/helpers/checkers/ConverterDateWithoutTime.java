@@ -10,9 +10,8 @@ class ConverterDateWithoutTime extends ConverterDate {
     /* (non-Javadoc)
      * @see com.googlecode.jsu.helpers.checkers.ConverterDate#getComparable(java.lang.Object)
      */
-    @SuppressWarnings("unchecked")
     @Override
-    public Comparable getComparable(Object object) {
+    public Comparable<?> getComparable(Object object) {
         if (object == null) {
             return null;
         }

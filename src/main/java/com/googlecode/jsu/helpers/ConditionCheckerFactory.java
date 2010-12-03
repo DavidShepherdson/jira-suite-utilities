@@ -34,8 +34,9 @@ public class ConditionCheckerFactory {
     private static final String COMPARISON_CLASS_TEMPLATE = PACKAGE + ".checkers.Converter";
 
     /** Cache for searching through conditions */
+    @SuppressWarnings("serial")
     private static final Map<Integer, ConditionType> CONDITIONS_CACHE =
-        new LinkedHashMap<Integer, ConditionType>() {{
+        new LinkedHashMap<Integer, ConditionType>(6) {{
             put(GREATER.getId(), GREATER);
             put(GREATER_EQUAL.getId(), GREATER_EQUAL);
             put(EQUAL.getId(), EQUAL);
@@ -45,8 +46,9 @@ public class ConditionCheckerFactory {
     }};
 
     /** Cache for searching through types */
+    @SuppressWarnings("serial")
     private static final Map<Integer, ComparisonType> COMPARISONS_CACHE =
-        new LinkedHashMap<Integer, ComparisonType>() {{
+        new LinkedHashMap<Integer, ComparisonType>(4) {{
             put(STRING.getId(), STRING);
             put(NUMBER.getId(), NUMBER);
             put(DATE.getId(), DATE);

@@ -8,8 +8,7 @@ class SnipetL implements ComparingSnipet {
     /* (non-Javadoc)
      * @see com.googlecode.jsu.helpers.checkers.ComparingSnipet#compareObjects(java.lang.Comparable, java.lang.Comparable)
      */
-    @SuppressWarnings("unchecked")
-    public boolean compareObjects(Comparable comp1, Comparable comp2) {
+    public boolean compareObjects(Comparable<Comparable<?>> comp1, Comparable<?> comp2) {
         if (comp1 == null) {
             return false;
         }
