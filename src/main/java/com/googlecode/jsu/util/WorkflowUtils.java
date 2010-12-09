@@ -31,7 +31,9 @@ import com.atlassian.jira.issue.ModifiedValue;
 import com.atlassian.jira.issue.MutableIssue;
 import com.atlassian.jira.issue.customfields.CustomFieldType;
 import com.atlassian.jira.issue.customfields.impl.AbstractMultiCFType;
+import com.atlassian.jira.issue.customfields.impl.CascadingSelectCFType;
 import com.atlassian.jira.issue.customfields.impl.MultiSelectCFType;
+import com.atlassian.jira.issue.customfields.option.Option;
 import com.atlassian.jira.issue.customfields.view.CustomFieldParams;
 import com.atlassian.jira.issue.customfields.view.CustomFieldParamsImpl;
 import com.atlassian.jira.issue.fields.CustomField;
@@ -46,6 +48,7 @@ import com.atlassian.jira.issue.util.IssueChangeHolder;
 import com.atlassian.jira.issue.worklog.WorkRatio;
 import com.atlassian.jira.project.version.Version;
 import com.atlassian.jira.project.version.VersionManager;
+import com.atlassian.jira.util.ObjectUtils;
 import com.atlassian.jira.workflow.WorkflowActionsBean;
 import com.opensymphony.user.Entity;
 import com.opensymphony.user.EntityNotFoundException;
@@ -123,24 +126,33 @@ public class WorkflowUtils {
                     CustomFieldParams params = (CustomFieldParams) value;
 
                     if (params != null) {
-                        Object parent = params.getFirstValueForNullKey();
-                        Object child = params.getFirstValueForKey("1");
+                        Option parent = (Option) params.getFirstValueForNullKey();
+                        Option child = (Option) params.getFirstValueForKey(CascadingSelectCFType.CHILD_KEY);
 
                         if (parent != null) {
-                            retVal = child.toString();
+                            if (ObjectUtils.isValueSelected(child)) {
+                                retVal = child.toString();
+                            } else {
+                                final List<Option> childOptions = parent.getChildOptions();
+
+                                if ((childOptions == null) || (childOptions.isEmpty())) {
+                                    retVal = parent.toString();
+                                }
+                            }
                         }
                     }
                 } else {
                     retVal = value;
                 }
 
-                log.debug(
-                        "Get field value [object=" +
-                        retVal +
-                        ";class=" +
-                        ((retVal != null) ? retVal.getClass() : "") +
-                        "]"
-                );
+                if (log.isDebugEnabled()) {
+                    log.debug(
+                            String.format(
+                                    "Got field value [object=%s;class=%s]",
+                                    retVal, ((retVal != null) ? retVal.getClass() : "")
+                            )
+                    );
+                }
             } else {
                 String fieldId = field.getId();
                 Collection<?> retCollection = null;
