@@ -275,11 +275,7 @@ public class CommonPluginUtils {
                 ATTACHMENT,
                 COMMENT,
                 COMPONENTS,
-// For issue #65
-//				IssueFieldConstants.FIX_FOR_VERSIONS,
-//				IssueFieldConstants.AFFECTED_VERSIONS,
                 ISSUE_LINKS,
-                SECURITY,
                 SUBTASKS,
                 THUMBNAIL,
                 TIMETRACKING
@@ -317,8 +313,6 @@ public class CommonPluginUtils {
                 ISSUE_TYPE,
                 PRIORITY,
                 PROJECT,
-                SECURITY,
-                STATUS,
                 SUBTASKS,
                 THUMBNAIL,
                 UPDATED,
@@ -358,8 +352,7 @@ public class CommonPluginUtils {
                 THUMBNAIL,
                 UPDATED,
                 VOTES,
-                WORKRATIO,
-                SECURITY
+                WORKRATIO
         );
     }
 

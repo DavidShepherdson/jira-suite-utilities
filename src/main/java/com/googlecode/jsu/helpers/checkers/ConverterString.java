@@ -1,6 +1,7 @@
 package com.googlecode.jsu.helpers.checkers;
 
 import org.apache.commons.lang.StringUtils;
+import org.ofbiz.core.entity.GenericValue;
 
 import com.atlassian.jira.issue.IssueConstant;
 import com.opensymphony.user.Entity;
@@ -24,6 +25,14 @@ class ConverterString implements ValueConverter {
             result = ((IssueConstant) object).getName();
         } else if (object instanceof Entity) {
             result = ((Entity) object).getName();
+        } else if (object instanceof GenericValue) {
+            final GenericValue gv = (GenericValue) object;
+
+            if ("SchemeIssueSecurityLevels".equals(gv.getEntityName())) { // We got security level
+                result = gv.getString("name");
+            } else {
+                result = object.toString();
+            }
         } else {
             result = object.toString();
         }

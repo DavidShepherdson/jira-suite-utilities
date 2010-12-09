@@ -297,6 +297,12 @@ public class WorkflowUtils {
                 newValue = ((IssueConstant) value).getName();
             } else if (value instanceof Entity) {
                 newValue = ((Entity) value).getName();
+            } else if (value instanceof GenericValue) {
+                final GenericValue gv = (GenericValue) value;
+
+                if ("SchemeIssueSecurityLevels".equals(gv.getEntityName())) { // We got security level
+                    newValue = gv.getString("name");
+                }
             }
 
             if (newValue instanceof String) {
@@ -368,7 +374,7 @@ public class WorkflowUtils {
                 //				}
             } else if (fieldId.equals(IssueFieldConstants.AFFECTED_VERSIONS)) {
                 if (value == null) {
-                    issue.setAffectedVersions(Collections.EMPTY_SET);
+                    issue.setAffectedVersions(Collections.<Version>emptySet());
                 } else if (value instanceof String) {
                     VersionManager versionManager = ComponentManager.getInstance().getVersionManager();
                     Version v = versionManager.getVersion(issue.getProjectObject().getId(), (String) value);
@@ -401,7 +407,7 @@ public class WorkflowUtils {
                 //				}
             } else if (fieldId.equals(IssueFieldConstants.COMPONENTS)) {
                 if (value == null) {
-                    issue.setComponents(Collections.EMPTY_SET);
+                    issue.setComponents(Collections.<GenericValue>emptySet());
                 } else if (value instanceof String) {
                     ProjectComponentManager componentManager = ComponentManager.getInstance().getProjectComponentManager();
                     ProjectComponent v = componentManager.findByComponentName(
@@ -420,7 +426,7 @@ public class WorkflowUtils {
                 }
             } else if (fieldId.equals(IssueFieldConstants.FIX_FOR_VERSIONS)) {
                 if (value == null) {
-                    issue.setFixVersions(Collections.EMPTY_SET);
+                    issue.setFixVersions(Collections.<Version>emptySet());
                 } else if (value instanceof String) {
                     VersionManager versionManager = ComponentManager.getInstance().getVersionManager();
                     Version v = versionManager.getVersion(issue.getProjectObject().getId(), (String) value);
@@ -531,6 +537,28 @@ public class WorkflowUtils {
             } else if (fieldId.equals(IssueFieldConstants.SECURITY)) {
                 if (value == null) {
                     issue.setSecurityLevel(null);
+                } else if (value instanceof GenericValue) {
+                    issue.setSecurityLevel((GenericValue) value);
+                } else if (value instanceof Long) {
+                    issue.setSecurityLevelId((Long) value);
+                } else if (value instanceof String) {
+                    Collection<GenericValue> levels;
+
+                    try {
+                        levels = ManagerFactory.getIssueSecurityLevelManager().getSecurityLevelsByName((String) value);
+                    } catch (GenericEntityException e) {
+                        throw new IllegalArgumentException("Unable to find security level \"" + value + "\"");
+                    }
+
+                    if (levels == null) {
+                        throw new IllegalArgumentException("Unable to find security level \"" + value + "\"");
+                    }
+
+                    if (levels.size() > 1) {
+                        throw new IllegalArgumentException("More that one security level with name \"" + value + "\"");
+                    }
+
+                    issue.setSecurityLevel(levels.iterator().next());
                 } else {
                     throw new UnsupportedOperationException("Not implemented");
                 }
