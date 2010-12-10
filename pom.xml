@@ -181,10 +181,10 @@
             <id>atlassian-m2</id>
             <url>https://m2proxy.atlassian.com/repository/public</url>
         </pluginRepository>
-<!--        <pluginRepository>-->
-<!--            <id>repository.riedelcastro.org</id>-->
-<!--            <url>http://repository.riedelcastro.org</url>-->
-<!--        </pluginRepository>-->
+        <pluginRepository>
+            <id>repository.riedelcastro.org</id>
+            <url>http://repository.riedelcastro.org</url>
+        </pluginRepository>
     </pluginRepositories>
 
     <properties>
