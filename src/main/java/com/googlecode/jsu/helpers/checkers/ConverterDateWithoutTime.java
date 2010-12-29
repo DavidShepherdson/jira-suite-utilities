@@ -7,23 +7,22 @@ import java.util.Calendar;
  * @version $Id$
  */
 class ConverterDateWithoutTime extends ConverterDate {
-	/* (non-Javadoc)
-	 * @see com.googlecode.jsu.helpers.checkers.ConverterDate#getComparable(java.lang.Object)
-	 */
-	@SuppressWarnings("unchecked")
-	@Override
-	public Comparable getComparable(Object object) {
-		if (object == null) {
-			return null;
-		}
-		
-		Calendar cal = (Calendar) super.getComparable(object);
+    /* (non-Javadoc)
+     * @see com.googlecode.jsu.helpers.checkers.ConverterDate#getComparable(java.lang.Object)
+     */
+    @Override
+    public Comparable<?> getComparable(Object object) {
+        if (object == null) {
+            return null;
+        }
 
-		cal.set(Calendar.HOUR_OF_DAY, 0);
-		cal.set(Calendar.MINUTE, 0);
-		cal.set(Calendar.SECOND, 0);
-		cal.set(Calendar.MILLISECOND, 0);
+        Calendar cal = (Calendar) super.getComparable(object);
 
-		return cal;
-	}
+        cal.set(Calendar.HOUR_OF_DAY, 0);
+        cal.set(Calendar.MINUTE, 0);
+        cal.set(Calendar.SECOND, 0);
+        cal.set(Calendar.MILLISECOND, 0);
+
+        return cal;
+    }
 }

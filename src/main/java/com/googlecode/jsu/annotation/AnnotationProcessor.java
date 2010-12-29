@@ -10,23 +10,23 @@ import java.util.List;
  * @version $Id: AnnotationProcessor.java 105 2007-10-09 13:34:25Z abashev $
  */
 public class AnnotationProcessor {
-	private List<AbstractVisitor> visitors = new ArrayList<AbstractVisitor>();
-	
-	public void addVisitor(AbstractVisitor visitor) {
-		this.visitors.add(visitor);
-	}
-	
-	public void processAnnotations(Object object) {
-		Class<?> clazz = object.getClass();
-		
-		for (Field field : clazz.getDeclaredFields()) {
-			for (AbstractVisitor visitor : visitors) {
-				Annotation a = field.getAnnotation(visitor.getAnnotation());
-				
-				if (a != null) {
-					visitor.visitField(object, field, a);
-				}
-			}
-		}
-	}
+    private List<AbstractVisitor> visitors = new ArrayList<AbstractVisitor>();
+
+    public void addVisitor(AbstractVisitor visitor) {
+        this.visitors.add(visitor);
+    }
+
+    public void processAnnotations(Object object) {
+        Class<?> clazz = object.getClass();
+
+        for (Field field : clazz.getDeclaredFields()) {
+            for (AbstractVisitor visitor : visitors) {
+                Annotation a = field.getAnnotation(visitor.getAnnotation());
+
+                if (a != null) {
+                    visitor.visitField(object, field, a);
+                }
+            }
+        }
+    }
 }

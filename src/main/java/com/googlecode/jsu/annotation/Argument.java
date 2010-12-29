@@ -17,5 +17,5 @@ import java.lang.annotation.Target;
 @Retention(RUNTIME)
 @Target(FIELD)
 public @interface Argument {
-	String value() default "";
+    String value() default "";
 }

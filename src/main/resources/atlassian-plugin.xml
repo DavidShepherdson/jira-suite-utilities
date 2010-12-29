@@ -1,35 +1,35 @@
-<atlassian-plugin key="${project.groupId}.${project.artifactId}" 
+<atlassian-plugin key="${project.groupId}.${project.artifactId}"
                   name="${project.name}"
                   plugins-version="2">
-                      
+
     <plugin-info>
         <description>${project.description}</description>
         <version>${project.version}</version>
         <vendor name="${project.organization.name}" url="${project.organization.url}" />
-    </plugin-info>   
+    </plugin-info>
 
-	<!-- Custom Fields -->
-    <customfield-type key="locationtextfield" 
+  <!-- Custom Fields -->
+    <customfield-type key="locationtextfield"
                       name="Location Text Field"
                       class="com.googlecode.jsu.customfields.LocationTextCFType"
                       i18n-name-key="custom.field.type.text_field.name">
 
-		<resource type="i18n" name="i18n" location="com.googlecode.jsu.maps.resources" />
-        
+    <resource type="i18n" name="i18n" location="com.googlecode.jsu.maps.resources" />
+
         <description key="custom.field.type.text_field.description">Custom field type for saving locations and showing it at maps.</description>
-        
+
         <resource type="velocity" name="view" location="templates/jira/fields/view/view-location.vm"/>
         <resource type="velocity" name="edit" location="templates/plugins/fields/edit/edit-maxlengthtext.vm"/>
         <resource type="velocity" name="xml" location="templates/plugins/fields/xml/xml-basictext.vm"/>
     </customfield-type>
 
-    <customfield-type key="locationselect" 
-    				  name="Location Select List"
-        			  i18n-name-key="custom.field.type.select_field.name"
-        			  class="com.googlecode.jsu.customfields.LocationSelectCFType">
-    
-    	<resource type="i18n" name="i18n" location="com.googlecode.jsu.maps.resources" />
-        
+    <customfield-type key="locationselect"
+              name="Location Select List"
+                i18n-name-key="custom.field.type.select_field.name"
+                class="com.googlecode.jsu.customfields.LocationSelectCFType">
+
+      <resource type="i18n" name="i18n" location="com.googlecode.jsu.maps.resources" />
+
         <description key="custom.field.type.select_field.description">A single select list for locations.</description>
 
         <resource type="velocity" name="view" location="templates/jira/fields/view/view-location.vm"/>
@@ -37,126 +37,126 @@
         <resource type="velocity" name="xml" location="templates/plugins/fields/xml/xml-basictext.vm"/>
     </customfield-type>
 
-	<!-- Searches -->
-    <customfield-searcher key="textsearcher" 
-    					  name="Free Text Searcher"
-        				  i18n-name-key="admin.customfield.searcher.textsearcher.name"
-        				  class="com.googlecode.jsu.customfields.TextSearcher">
-        				  
+  <!-- Searches -->
+    <customfield-searcher key="textsearcher"
+                name="Free Text Searcher"
+                  i18n-name-key="admin.customfield.searcher.textsearcher.name"
+                  class="com.googlecode.jsu.customfields.TextSearcher">
+
         <description key="admin.customfield.searcher.textsearcher.desc">Search for values using a free text search.</description>
 
         <resource type="velocity" name="search" location="templates/plugins/fields/edit-searcher/search-basictext.vm"/>
         <resource type="velocity" name="view" location="templates/plugins/fields/view-searcher/view-searcher-basictext.vm"/>
-        
+
         <valid-customfield-type package="${project.groupId}.${project.artifactId}" key="locationtextfield"/>
     </customfield-searcher>
 
-	<!-- Conditions -->
-	<workflow-condition key="userIsInAnyGroups-condition" name="User Is In Any Groups" 
+  <!-- Conditions -->
+  <workflow-condition key="userIsInAnyGroups-condition" name="User Is In Any Groups"
         class="com.googlecode.jsu.workflow.WorkflowUserIsInAnyGroupsConditionPluginFactory">
         <description>It allows only users in any given groups to execute the transition.</description>
 
-		<condition-class>
-			com.googlecode.jsu.workflow.condition.UserIsInAnyGroupsCondition
-		</condition-class>
+    <condition-class>
+      com.googlecode.jsu.workflow.condition.UserIsInAnyGroupsCondition
+    </condition-class>
 
         <resource type="velocity" name="view" location="templates/jira/workflow/condition/userIsInAnyGroups-condition-view.vm"/>
         <resource type="velocity" name="input-parameters" location="templates/jira/workflow/condition/userIsInAnyGroups-condition-edit.vm"/>
         <resource type="velocity" name="edit-parameters" location="templates/jira/workflow/condition/userIsInAnyGroups-condition-edit.vm"/>
-	</workflow-condition>
-    
-	<workflow-condition key="valueField-condition" name="Value Field" 
+  </workflow-condition>
+
+  <workflow-condition key="valueField-condition" name="Value Field"
         class="com.googlecode.jsu.workflow.WorkflowValueFieldConditionPluginFactory">
         <description>It allows to only execute the transition if the given value of the field is equal to a specified value.</description>
 
-		<condition-class>
-			com.googlecode.jsu.workflow.condition.ValueFieldCondition
-		</condition-class>
+    <condition-class>
+      com.googlecode.jsu.workflow.condition.ValueFieldCondition
+    </condition-class>
 
         <resource type="velocity" name="view" location="templates/jira/workflow/condition/fieldvalue-condition-view.vm"/>
         <resource type="velocity" name="input-parameters" location="templates/jira/workflow/condition/fieldvalue-condition-edit.vm"/>
         <resource type="velocity" name="edit-parameters" location="templates/jira/workflow/condition/fieldvalue-condition-edit.vm"/>
-	</workflow-condition>
-    
-	<workflow-condition key="UserIsInCustomField-Condition" name="User Is In Custom field" 
+  </workflow-condition>
+
+  <workflow-condition key="UserIsInCustomField-Condition" name="User Is In Custom field"
         class="com.googlecode.jsu.workflow.WorkflowUserIsInCustomFieldConditionPluginFactory">
         <description>It allows only users in custom field to execute the transition.</description>
 
-		<condition-class>
-			com.googlecode.jsu.workflow.condition.UserIsInCustomFieldCondition
-		</condition-class>
+    <condition-class>
+      com.googlecode.jsu.workflow.condition.UserIsInCustomFieldCondition
+    </condition-class>
 
         <resource type="velocity" name="view" location="templates/jira/workflow/condition/UserIsInCustomField-Condition-view.vm"/>
         <resource type="velocity" name="input-parameters" location="templates/jira/workflow/condition/UserIsInCustomField-Condition-edit.vm"/>
         <resource type="velocity" name="edit-parameters" location="templates/jira/workflow/condition/UserIsInCustomField-Condition-edit.vm"/>
-	</workflow-condition>
-    
-	<!-- Validators -->
-	<workflow-validator key="dateCompare-validator" name="Date Compare" 
-		class="com.googlecode.jsu.workflow.WorkflowDateCompareValidatorPluginFactory">
-		<description>Compare two date fields during a workflow transition.</description>
-		
-		<validator-class>
-			com.googlecode.jsu.workflow.validator.DateCompareValidator
-		</validator-class>
-		
-		<resource type="velocity" name="view" location="templates/jira/workflow/validator/datecompare-validator-view.vm"/>
-		<resource type="velocity" name="input-parameters" location="templates/jira/workflow/validator/datecompare-validator-input.vm"/>
-		<resource type="velocity" name="edit-parameters" location="templates/jira/workflow/validator/datecompare-validator-edit.vm"/>
-	</workflow-validator>  
+  </workflow-condition>
 
-	<workflow-validator key="fieldsRequired-validator" name="Fields Required" 
-		class="com.googlecode.jsu.workflow.WorkflowFieldsRequiredValidatorPluginFactory">
-		<description>Fields required during a workflow transition.</description>
-		
-		<validator-class>
-			com.googlecode.jsu.workflow.validator.FieldsRequiredValidator
-		</validator-class>
-		
-		<resource type="velocity" name="view" location="templates/jira/workflow/validator/fieldsrequired-validator-view.vm"/>
-		<resource type="velocity" name="input-parameters" location="templates/jira/workflow/validator/fieldsrequired-validator-edit.vm"/>
-		<resource type="velocity" name="edit-parameters" location="templates/jira/workflow/validator/fieldsrequired-validator-edit.vm"/>
-	</workflow-validator>  
+  <!-- Validators -->
+  <workflow-validator key="dateCompare-validator" name="Date Compare"
+    class="com.googlecode.jsu.workflow.WorkflowDateCompareValidatorPluginFactory">
+    <description>Compare two date fields during a workflow transition.</description>
 
-	<workflow-validator key="windowsDate-validator" name="Window Dates" 
-		class="com.googlecode.jsu.workflow.WorkflowWindowsDateValidatorPluginFactory">
-		<description>It compares two fields dates, adding a window of days to one of them.</description>
-		
-		<validator-class>
-			com.googlecode.jsu.workflow.validator.WindowsDateValidator
-		</validator-class>
-		
-		<resource type="velocity" name="view" location="templates/jira/workflow/validator/windowsdate-validator-view.vm"/>
-		<resource type="velocity" name="input-parameters" location="templates/jira/workflow/validator/windowsdate-validator-input.vm"/>
-		<resource type="velocity" name="edit-parameters" location="templates/jira/workflow/validator/windowsdate-validator-edit.vm"/>
-	</workflow-validator>  
+    <validator-class>
+      com.googlecode.jsu.workflow.validator.DateCompareValidator
+    </validator-class>
 
-	<!-- Functions -->
-	<workflow-function key="copyValueFromOtherField-function" name="Copy Value From Other Field" 
-		class="com.googlecode.jsu.workflow.WorkflowCopyValueFromOtherFieldPostFunctionPluginFactory">
+    <resource type="velocity" name="view" location="templates/jira/workflow/validator/datecompare-validator-view.vm"/>
+    <resource type="velocity" name="input-parameters" location="templates/jira/workflow/validator/datecompare-validator-input.vm"/>
+    <resource type="velocity" name="edit-parameters" location="templates/jira/workflow/validator/datecompare-validator-edit.vm"/>
+  </workflow-validator>
+
+  <workflow-validator key="fieldsRequired-validator" name="Fields Required"
+    class="com.googlecode.jsu.workflow.WorkflowFieldsRequiredValidatorPluginFactory">
+    <description>Fields required during a workflow transition.</description>
+
+    <validator-class>
+      com.googlecode.jsu.workflow.validator.FieldsRequiredValidator
+    </validator-class>
+
+    <resource type="velocity" name="view" location="templates/jira/workflow/validator/fieldsrequired-validator-view.vm"/>
+    <resource type="velocity" name="input-parameters" location="templates/jira/workflow/validator/fieldsrequired-validator-edit.vm"/>
+    <resource type="velocity" name="edit-parameters" location="templates/jira/workflow/validator/fieldsrequired-validator-edit.vm"/>
+  </workflow-validator>
+
+  <workflow-validator key="windowsDate-validator" name="Window Dates"
+    class="com.googlecode.jsu.workflow.WorkflowWindowsDateValidatorPluginFactory">
+    <description>It compares two fields dates, adding a window of days to one of them.</description>
+
+    <validator-class>
+      com.googlecode.jsu.workflow.validator.WindowsDateValidator
+    </validator-class>
+
+    <resource type="velocity" name="view" location="templates/jira/workflow/validator/windowsdate-validator-view.vm"/>
+    <resource type="velocity" name="input-parameters" location="templates/jira/workflow/validator/windowsdate-validator-input.vm"/>
+    <resource type="velocity" name="edit-parameters" location="templates/jira/workflow/validator/windowsdate-validator-edit.vm"/>
+  </workflow-validator>
+
+  <!-- Functions -->
+  <workflow-function key="copyValueFromOtherField-function" name="Copy Value From Other Field"
+    class="com.googlecode.jsu.workflow.WorkflowCopyValueFromOtherFieldPostFunctionPluginFactory">
         <description>It copies the value of one field to another.</description>
 
         <function-class>
-        	com.googlecode.jsu.workflow.function.CopyValueFromOtherFieldPostFunction
+          com.googlecode.jsu.workflow.function.CopyValueFromOtherFieldPostFunction
         </function-class>
 
         <orderable>true</orderable>
         <unique>false</unique>
-        <deletable>true</deletable>        
+        <deletable>true</deletable>
         <default>false</default>
 
-		<resource type="velocity" name="view" location="templates/jira/workflow/function/copyvaluefromfield-function-view.vm"/>
-		<resource type="velocity" name="input-parameters" location="templates/jira/workflow/function/copyvaluefromfield-function-input.vm"/>
-		<resource type="velocity" name="edit-parameters" location="templates/jira/workflow/function/copyvaluefromfield-function-edit.vm"/>
+    <resource type="velocity" name="view" location="templates/jira/workflow/function/copyvaluefromfield-function-view.vm"/>
+    <resource type="velocity" name="input-parameters" location="templates/jira/workflow/function/copyvaluefromfield-function-input.vm"/>
+    <resource type="velocity" name="edit-parameters" location="templates/jira/workflow/function/copyvaluefromfield-function-edit.vm"/>
     </workflow-function>
-    
-    <workflow-function key="updateIssueCustomField-function" 
-    				   name="Update Issue Custom Field" 
-    				   class="com.googlecode.jsu.workflow.WorkflowUpdateIssueCustomFieldFunctionPluginFactory">
+
+    <workflow-function key="updateIssueCustomField-function"
+               name="Update Issue Custom Field"
+               class="com.googlecode.jsu.workflow.WorkflowUpdateIssueCustomFieldFunctionPluginFactory">
         <description>Updates an issue custom field to a given value.</description>
 
         <function-class>
-        	com.googlecode.jsu.workflow.function.UpdateIssueCustomFieldPostFunction
+          com.googlecode.jsu.workflow.function.UpdateIssueCustomFieldPostFunction
         </function-class>
 
         <orderable>true</orderable>
@@ -168,13 +168,13 @@
         <resource type="velocity" name="edit-parameters" location="templates/jira/workflow/function/updateissuefield-function-input.vm"/>
     </workflow-function>
 
-    <workflow-function key="clearFieldValue-function" 
-    				   name="Clear Field Value" 
-    				   class="com.googlecode.jsu.workflow.WorkflowClearFieldValueFunctionPluginFactory">
+    <workflow-function key="clearFieldValue-function"
+               name="Clear Field Value"
+               class="com.googlecode.jsu.workflow.WorkflowClearFieldValueFunctionPluginFactory">
         <description>Clear field value.</description>
 
         <function-class>
-        	com.googlecode.jsu.workflow.function.ClearFieldValuePostFunction
+          com.googlecode.jsu.workflow.function.ClearFieldValuePostFunction
         </function-class>
 
         <orderable>true</orderable>
@@ -185,34 +185,34 @@
         <resource type="velocity" name="input-parameters" location="templates/jira/workflow/function/clearfieldvalue-function-edit.vm"/>
         <resource type="velocity" name="edit-parameters" location="templates/jira/workflow/function/clearfieldvalue-function-edit.vm"/>
     </workflow-function>
-    
-	<!-- Reports -->
 
-	<!-- Portlets -->
+  <!-- Reports -->
 
-	<!-- Issue Panels -->
-	
-    <issue-tabpanel key="transitions-summary-tabpanel" 
-    				name="Transitions Summary Tab Panel" 
-    				class="com.googlecode.jsu.transitionssummary.issuetabpanel.TransitionsSummaryTabPanel">
+  <!-- Portlets -->
 
-		<description key="transition.summary.description" />
-		<label key="transition.summary.transitions" />
+  <!-- Issue Panels -->
 
-    	<resource type="i18n" 
-    			  name="i18n" 
-    			  location="com.googlecode.jsu.transitionssummary.transitionssummary" />
-        <resource type="velocity" 
-        		  name="view" 
-        		  location="templates/jira/issuetabpanel/transitionssummary/transitions-summary-view.vm" />
+    <issue-tabpanel key="transitions-summary-tabpanel"
+            name="Transitions Summary Tab Panel"
+            class="com.googlecode.jsu.transitionssummary.issuetabpanel.TransitionsSummaryTabPanel">
+
+    <description key="transition.summary.description" />
+    <label key="transition.summary.transitions" />
+
+      <resource type="i18n"
+            name="i18n"
+            location="com.googlecode.jsu.transitionssummary.transitionssummary" />
+        <resource type="velocity"
+              name="view"
+              location="templates/jira/issuetabpanel/transitionssummary/transitions-summary-view.vm" />
     </issue-tabpanel>
-    
+
     <!-- Components -->
-    <component key="conditionCheckerFactory" 
-    		   class="com.googlecode.jsu.helpers.ConditionCheckerFactory"
-    		   interface="com.googlecode.jsu.helpers.ConditionCheckerFactory"
-    		   public="true">
-    		   
-		<description>Provide service for checking conditions</description>
-	</component>
+    <component key="conditionCheckerFactory"
+           class="com.googlecode.jsu.helpers.ConditionCheckerFactory"
+           interface="com.googlecode.jsu.helpers.ConditionCheckerFactory"
+           public="true">
+
+    <description>Provide service for checking conditions</description>
+  </component>
 </atlassian-plugin>

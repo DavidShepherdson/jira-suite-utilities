@@ -15,68 +15,68 @@ import com.opensymphony.workflow.WorkflowException;
 
 /**
  * Class related to the execution of the plugin.
- * 
+ *
  * @author Cristiane Fontana
  * @version 1.0
  *
  */
 public class UpdateIssueCustomFieldPostFunction extends AbstractPreserveChangesPostFunction {
-	/* (non-Javadoc)
-	 * @see com.googlecode.jsu.workflow.function.AbstractPreserveChangesPostFunction#executeFunction(java.util.Map, java.util.Map, com.opensymphony.module.propertyset.PropertySet, com.atlassian.jira.issue.util.IssueChangeHolder)
-	 */
-	@Override
-	protected void executeFunction(
-			Map<String, Object> transientVars, Map<String, String> args, 
-			PropertySet ps, IssueChangeHolder holder
-	) throws WorkflowException {
-		String fieldKey = (String) args.get(TARGET_FIELD_NAME);
+    /* (non-Javadoc)
+     * @see com.googlecode.jsu.workflow.function.AbstractPreserveChangesPostFunction#executeFunction(java.util.Map, java.util.Map, com.opensymphony.module.propertyset.PropertySet, com.atlassian.jira.issue.util.IssueChangeHolder)
+     */
+    @Override
+    protected void executeFunction(
+            Map<String, Object> transientVars, Map<String, String> args,
+            PropertySet ps, IssueChangeHolder holder
+    ) throws WorkflowException {
+        String fieldKey = (String) args.get(TARGET_FIELD_NAME);
 
-		final Field field = (Field) WorkflowUtils.getFieldFromKey(fieldKey);
-		final String fieldName = (field != null) ? field.getName() : "null";
+        final Field field = (Field) WorkflowUtils.getFieldFromKey(fieldKey);
+        final String fieldName = (field != null) ? field.getName() : "null";
 
-		String fieldValue = (String) args.get(TARGET_FIELD_VALUE);
-		
-		if ((fieldValue != null) && ("null".equals(fieldValue))) {
-			fieldValue = null;
-		}
+        String fieldValue = (String) args.get(TARGET_FIELD_VALUE);
 
-		if (fieldValue.equals("%%CURRENT_USER%%")) {
+        if ((fieldValue != null) && ("null".equals(fieldValue))) {
+            fieldValue = null;
+        }
+
+        if (fieldValue.equals("%%CURRENT_USER%%")) {
             try {
                 User currentUser = getCaller(transientVars, args);
 
-    			fieldValue = currentUser.toString();
-			} catch (Exception e) {
-				log.error("Unable to find caller for function", e);
-			}
-		}
-		
-		MutableIssue issue = null;
+                fieldValue = currentUser.toString();
+            } catch (Exception e) {
+                log.error("Unable to find caller for function", e);
+            }
+        }
 
-		try {
-			issue = getIssue(transientVars);
+        MutableIssue issue = null;
 
-			if (log.isDebugEnabled()) {
-				log.debug(String.format(
-						"Updating custom field '%s - %s' in issue [%s] with value [%s]",
-						fieldKey, fieldName, 
+        try {
+            issue = getIssue(transientVars);
+
+            if (log.isDebugEnabled()) {
+                log.debug(String.format(
+                        "Updating custom field '%s - %s' in issue [%s] with value [%s]",
+                        fieldKey, fieldName,
                         issueToString(issue),
                         fieldValue
-				));
-			}
+                ));
+            }
 
-			WorkflowUtils.setFieldValue(issue, fieldKey, fieldValue, holder);
-		} catch (Exception e) {
-			final String message = String.format(
-					"Unable to update custom field '%s - %s' in issue [%s]",
-					fieldKey, fieldName, 
+            WorkflowUtils.setFieldValue(issue, fieldKey, fieldValue, holder);
+        } catch (Exception e) {
+            final String message = String.format(
+                    "Unable to update custom field '%s - %s' in issue [%s]",
+                    fieldKey, fieldName,
                     issueToString(issue)
-			);
-			
-			log.error(message, e);
-			
-			throw new WorkflowException(message);
-		}
-	}
+            );
+
+            log.error(message, e);
+
+            throw new WorkflowException(message);
+        }
+    }
 
     private String issueToString(MutableIssue issue) {
         return ((issue != null) ? ((issue.getKey() == null) ? "new issue" : issue.getKey()) : "null");

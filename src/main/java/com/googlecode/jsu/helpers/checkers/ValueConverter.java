@@ -5,12 +5,11 @@ package com.googlecode.jsu.helpers.checkers;
  * @version $Id$
  */
 interface ValueConverter {
-	/**
-	 * Get comparable value from object.
-	 * @param <T>
-	 * @param object
-	 * @return
-	 */
-	@SuppressWarnings("unchecked")
-	Comparable getComparable(Object object);
+    /**
+     * Get comparable value from object.
+     * @param <T>
+     * @param object
+     * @return
+     */
+    Comparable<?> getComparable(Object object);
 }
