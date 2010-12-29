@@ -54,6 +54,9 @@ public class WorkflowUserIsInCustomFieldConditionPluginFactory
 		if (field != null) {
 			velocityParams.put("val-fieldSelected", field);
 		}
+		
+		boolean allowUserInField = Boolean.valueOf((String) args.get("allowUserInField"));
+		velocityParams.put("allowUserInField-selected", allowUserInField);
 	}
 
 
@@ -79,6 +82,9 @@ public class WorkflowUserIsInCustomFieldConditionPluginFactory
 		} else {
 			velocityParams.put("val-errorMessage", "Unable to find field '" + sField + "'");
 		}
+		
+		boolean allowUserInField = Boolean.valueOf((String) args.get("allowUserInField"));
+		velocityParams.put("allowUserInField-selected", allowUserInField);
 	}
 
 	/* (non-Javadoc)
@@ -90,8 +96,10 @@ public class WorkflowUserIsInCustomFieldConditionPluginFactory
 		
 		try {
 			String field = extractSingleParam(conditionParams, "fieldsList");
+			String allowUser = extractSingleParam(conditionParams, "allowUserInField");
 			
 			params.put("fieldsList", field);
+			params.put("allowUserInField", allowUser);
 			
 		} catch(IllegalArgumentException iae) {
 			// Aggregate so that Transitions can be added.

@@ -35,6 +35,9 @@ public class UserIsInCustomFieldCondition extends AbstractJiraCondition {
 			// If there aren't groups selected, hidGroupsList is equal to "".
 			// And groupsSelected will be an empty collection.
 			String fieldKey = (String) args.get("fieldsList");
+			
+			boolean allowUserInField = Boolean.valueOf((String) args.get("allowUserInField"));
+			allowUser = !allowUserInField;
 
 			Field field = (Field) WorkflowUtils.getFieldFromKey(fieldKey);
 			Issue issue = getIssue(transientVars);
@@ -44,11 +47,11 @@ public class UserIsInCustomFieldCondition extends AbstractJiraCondition {
 			if (fieldValue != null) {
 				if (fieldValue instanceof String) {
 					if (fieldValue.equals(userLogged.toString())) {
-						allowUser = true;
+						allowUser = allowUserInField;
 					}
 				} else {
 					if (fieldValue.equals(userLogged)) {
-						allowUser = true;
+						allowUser = allowUserInField;
 					}
 				}
 			}

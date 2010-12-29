@@ -1,7 +1,11 @@
 #if (${val-errorMessage})
 	<div style="background: red; color: white">${val-errorMessage}</div>
 #else  
-	The field 
+	Current user must
+	#if (!${allowUserInField-selected})
+		<b>not</b>
+	#end
+	match the field 
 	#if (${val-fieldSelected})
 		<b>${val-fieldSelected.name}</b>
 	#end 

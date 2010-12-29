@@ -1,5 +1,21 @@
 <tr bgcolor=ffffff>
   <td align="right" valign="top" bgcolor="fffff0">
+    <span class="label">User must be:</span>
+  </td>
+  <td bgcolor="ffffff" nowrap>
+    <select id="allowUserInField" name="allowUserInField">
+	  <option value="true"
+	  #if($!{allowUserInField-selected}) selected #end
+	  >in field</option>
+	  <option value="false"
+	  #if(!$!{allowUserInField-selected}) selected #end
+	  >not in field</option>
+    </select>
+	<br><font size="1">Decide whether to allow only the user in the field, or anyone *except* the user in the field.</font>
+  </td>
+</tr>
+<tr bgcolor=ffffff>
+  <td align="right" valign="top" bgcolor="fffff0">
     <span class="label">Field:</span>
   </td>
   <td bgcolor="ffffff" nowrap>
